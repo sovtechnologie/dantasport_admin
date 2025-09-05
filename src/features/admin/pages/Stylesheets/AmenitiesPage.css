@@ -1,0 +1,67 @@
+.amenities-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  gap: 7rem;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-direction: row;
+}
+
+.amenities-form {
+  display: flex;
+  gap: 7rem;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+/* Sport Name input field */
+.input-box {
+  flex: 1;
+  min-width: 28vw;
+  height: 56px;
+  border-radius: 12px;
+}
+
+/* Button styling */
+.add-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+
+}
+
+.add-button {
+  padding: 10px 16px;
+  /* background-color:#1163C7;
+    color: #fff; */
+}
+
+.upload-button {
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-bottom: 21px;
+}
+
+.amenity-item {
+  padding-left: 8px;
+  font-size: 14px;
+  color: #000;
+}
+
+.amenity-row {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-start;
+}
