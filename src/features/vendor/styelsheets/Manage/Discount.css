@@ -130,23 +130,42 @@
   gap: 4px;
 }
 
-/* Status Button Styling */
-.action-btn.status-btn.activate {
-  color: #52c41a;
+/* Status Toggle Styling */
+.status-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.action-btn.status-btn.activate:hover {
-  background-color: #f6ffed;
-  color: #389e0d;
+.status-cell .ant-switch {
+  min-width: 80px;
 }
 
-.action-btn.status-btn.deactivate {
-  color: #ff4d4f;
+.status-cell .ant-switch-checked {
+  background-color: #52c41a !important;
 }
 
-.action-btn.status-btn.deactivate:hover {
-  background-color: #fff2f0;
-  color: #cf1322;
+.status-cell .ant-switch:not(.ant-switch-checked) {
+  background-color: #ff4d4f !important;
+}
+
+.status-cell .ant-switch-checked .ant-switch-handle::before {
+  background-color: #ffffff;
+}
+
+.status-cell .ant-switch .ant-switch-handle::before {
+  background-color: #ffffff;
+}
+
+.status-cell .ant-switch-checked .ant-switch-inner {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.status-cell .ant-switch .ant-switch-inner {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 12px;
 }
 
 /* Expiry Cell */

@@ -1,29 +1,22 @@
 import "../../styelsheets/Manage/Discount.css";
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Table, Button, Tag, Radio, Popconfirm, message, Spin, Tooltip, Space, Typography, Card, Badge, Select } from "antd";
+import { Table, Button, Tag, Radio, Popconfirm, message, Spin, Tooltip, Space, Typography, Card, Badge, Switch } from "antd";
 import { DeleteOutlined, PlusOutlined, CalendarOutlined, PercentageOutlined, TagOutlined, EditOutlined } from "@ant-design/icons";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetCouponList } from "../../../../hooks/vendor/coupons/useGetCouponList";
 import { useDeleteCoupon } from "../../../../hooks/vendor/coupons/useDeleteCoupon";
-import { useSoftDeleteCoupon } from "../../../../hooks/vendor/coupons/useUpdateCoupon";
-import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
-
-const { Option } = Select;
+import { useSoftDeleteCoupon, useUpdateCoupon } from "../../../../hooks/vendor/coupons/useUpdateCoupon";
 
 const DiscountPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const id = useSelector((state) => state.auth.user.id);
-  const [selectedVenueId, setSelectedVenueId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
   const [isProcessing, setIsProcessing] = useState(false);
   const [deletingCouponId, setDeletingCouponId] = useState(null);
-
-  // Fetch venue list
-  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorVenueList();
+  const [updatingCouponId, setUpdatingCouponId] = useState(null);
 
   // Fetch coupons data using getCouponList API
   const { data: couponsData, loading: couponsLoading, error: couponsError, isFetching: couponsFetching, refetch: refetchCoupons } = useGetCouponList(id, 1);
@@ -33,24 +26,9 @@ const DiscountPage = () => {
   
   // Soft delete coupon mutation
   const softDeleteCouponMutation = useSoftDeleteCoupon();
-
-  // Set default venue when venue list loads
-  useEffect(() => {
-    if (venueList?.resutl?.length && !selectedVenueId) {
-      setSelectedVenueId(venueList.resutl[0].venue_id);
-    }
-  }, [venueList, selectedVenueId]);
-
-  // Handle venue change
-  const handleVenueChange = useCallback((venueId) => {
-    setSelectedVenueId(venueId);
-    setCurrentPage(1); // Reset to first page when venue changes
-  }, []);
-
-  // Memoized selected venue for performance
-  const selectedVenue = useMemo(() => {
-    return venueList?.resutl?.find(venue => venue.venue_id === selectedVenueId);
-  }, [venueList?.resutl, selectedVenueId]);
+  
+  // Update coupon mutation for status changes
+  const updateCouponMutation = useUpdateCoupon();
 
   // Memoized coupons data source
   const dataSource = useMemo(() => {
@@ -84,21 +62,16 @@ const DiscountPage = () => {
 
   // Handle errors
   useEffect(() => {
-    if (venueError) {
-      message.error("Failed to load venue list");
-    }
     if (couponsError) {
       message.error("Failed to load coupons");
     }
-  }, [venueError, couponsError]);
+  }, [couponsError]);
 
   // Refetch coupons when component mounts (user navigates back from add/edit forms)
   useEffect(() => {
-    if (selectedVenueId) {
-      console.log("🔄 Component mounted, refetching coupons...");
-      refetchCoupons();
-    }
-  }, [refetchCoupons, selectedVenueId]);
+    console.log("🔄 Component mounted, refetching coupons...");
+    refetchCoupons();
+  }, [refetchCoupons]);
 
   // Pagination logic
   const startIndex = (currentPage - 1) * pageSize;
@@ -138,6 +111,33 @@ const DiscountPage = () => {
   const handleEditCoupon = useCallback((coupon) => {
     navigate('/vendor/manage/editcoupon', { state: { couponData: coupon } });
   }, [navigate]);
+
+  const handleStatusToggle = useCallback(async (coupon) => {
+    try {
+      setUpdatingCouponId(coupon.id);
+      
+      const newStatus = coupon.rawStatus === 1 ? 0 : 1; // Toggle between active (1) and inactive (0)
+      const payload = {
+        couponId: coupon.id,
+        status: newStatus
+      };
+      
+      const response = await updateCouponMutation.mutateAsync(payload);
+      
+      if (response.status === 200) {
+        message.success(`Coupon ${newStatus === 1 ? 'activated' : 'deactivated'} successfully`);
+        // Refetch the coupons list to update the UI
+        await refetchCoupons();
+      } else {
+        throw new Error(response.message || 'Failed to update coupon status');
+      }
+      
+    } catch (error) {
+      message.error(error.message || "Failed to update coupon status");
+    } finally {
+      setUpdatingCouponId(null);
+    }
+  }, [updateCouponMutation, refetchCoupons]);
 
   const columns = [
     {
@@ -188,45 +188,6 @@ const DiscountPage = () => {
       ),
     },
     {
-      title: 'Sports',
-      key: 'sports',
-      width: 150,
-      render: (_, record) => (
-        <div className="sports-cell">
-          {record.isAllSports ? (
-            <Tag color="blue" style={{ borderRadius: 12 }}>
-              All Sports
-            </Tag>
-          ) : (
-            <div>
-              {record.sportsIds?.length > 0 ? (
-                record.sportsIds.map(sportId => (
-                  <Tag key={sportId} color="green" style={{ borderRadius: 12, margin: '2px' }}>
-                    Sport {sportId}
-                  </Tag>
-                ))
-              ) : (
-                <Typography.Text type="secondary">No sports</Typography.Text>
-              )}
-            </div>
-          )}
-        </div>
-      ),
-    },
-    {
-      title: 'Banner Display',
-      key: 'banner',
-      width: 120,
-      render: (_, record) => (
-        <div className="banner-cell">
-          <Radio.Group value={record.banner} disabled>
-            <Radio value="Yes">Yes</Radio>
-            <Radio value="No">No</Radio>
-          </Radio.Group>
-        </div>
-      ),
-    },
-    {
       title: 'Expiry',
       key: 'expiry',
       width: 120,
@@ -240,12 +201,30 @@ const DiscountPage = () => {
     {
       title: 'Status',
       key: 'status',
-      width: 100,
-      render: (_, record) => (
-        <Tag color="green" style={{ borderRadius: 12 }}>
-          {record.status}
-        </Tag>
-      ),
+      width: 120,
+      render: (_, record) => {
+        const isUpdatingThisCoupon = updatingCouponId === record.id;
+        const isAnyProcessing = isProcessing || updateCouponMutation.isPending || softDeleteCouponMutation.isPending || couponsFetching;
+        
+        return (
+          <div className="status-cell">
+            <Switch
+              checked={record.rawStatus === 1} // 1 = active, 0 = inactive
+              loading={isUpdatingThisCoupon}
+              disabled={isAnyProcessing}
+              onChange={() => handleStatusToggle(record)}
+              checkedChildren="Active"
+              unCheckedChildren="Inactive"
+              style={{
+                backgroundColor: record.rawStatus === 1 ? '#52c41a' : '#ff4d4f'
+              }}
+            />
+            {isUpdatingThisCoupon && (
+              <Spin size="small" style={{ marginLeft: 8 }} />
+            )}
+          </div>
+        );
+      },
     },
     {
       title: 'Created',
@@ -269,7 +248,8 @@ const DiscountPage = () => {
       width: 120,
       render: (_, record) => {
         const isDeletingThisCoupon = deletingCouponId === record.id;
-        const isAnyProcessing = isProcessing || softDeleteCouponMutation.isPending || couponsFetching;
+        const isUpdatingThisCoupon = updatingCouponId === record.id;
+        const isAnyProcessing = isProcessing || updateCouponMutation.isPending || softDeleteCouponMutation.isPending || couponsFetching;
         
         return (
           <Space size="small">
@@ -309,58 +289,13 @@ const DiscountPage = () => {
     },
   ];
 
-  // Show loading state when venues are loading
-  if (venueLoading) {
+  // Show loading state when coupons are loading
+  if (couponsLoading) {
     return (
       <div className="venue-card">
         <div className="page-loading-container">
           <Spin size="large" />
-          <div className="page-loading-text">Loading venues...</div>
-        </div>
-      </div>
-    );
-  }
-
-  // Show loading state when no venue is selected or when coupons are loading
-  if (!selectedVenueId || couponsLoading) {
-    return (
-      <div className="venue-card">
-        <div className="venue-toolbar">
-          <Select
-            placeholder="Select Venue"
-            className="venue-select"
-            loading={venueLoading}
-            onChange={handleVenueChange}
-            value={selectedVenueId || undefined}
-            disabled={venueLoading || !venueList?.resutl?.length}
-          >
-            {venueList?.resutl?.map((venue) => (
-              <Option key={venue.venue_id} value={venue.venue_id}>
-                {venue.venue_name}
-              </Option>
-            ))}
-          </Select>
-          <Button 
-            type="primary" 
-            className="add-btn"
-            disabled={true}
-          >
-            + Add Discount Coupon
-          </Button>
-        </div>
-
-        <h3 className="venue-title">
-          {selectedVenue?.venue_name || "Select a venue to view coupons"}
-        </h3>
-
-        <div className="page-loading-container">
-          <Spin size="large" />
-          <div className="page-loading-text">
-            {!selectedVenueId 
-              ? "Please select a venue to view coupons" 
-              : "Loading coupons..."
-            }
-          </div>
+          <div className="page-loading-text">Loading coupons...</div>
         </div>
       </div>
     );
@@ -369,35 +304,21 @@ const DiscountPage = () => {
   return (
     <div className="venue-card">
       <div className="venue-toolbar">
-        <Select
-          placeholder="Select Venue"
-          className="venue-select"
-          loading={venueLoading}
-          onChange={handleVenueChange}
-          value={selectedVenueId || undefined}
-          disabled={venueLoading || !venueList?.resutl?.length}
-        >
-          {venueList?.resutl?.map((venue) => (
-            <Option key={venue.venue_id} value={venue.venue_id}>
-              {venue.venue_name}
-            </Option>
-          ))}
-        </Select>
         <Button 
           type="primary" 
           className="add-btn"
-          disabled={!selectedVenueId || isProcessing || softDeleteCouponMutation.isPending || couponsFetching}
+          disabled={isProcessing || updateCouponMutation.isPending || softDeleteCouponMutation.isPending || couponsFetching}
           onClick={handleAddCoupon}
         >
           + Add Discount Coupon
-          {(isProcessing || softDeleteCouponMutation.isPending || couponsFetching) && (
+          {(isProcessing || updateCouponMutation.isPending || softDeleteCouponMutation.isPending || couponsFetching) && (
             <span className="processing-indicator"> (Processing...)</span>
           )}
         </Button>
       </div>
 
       <h3 className="venue-title">
-        Discount Coupons - {selectedVenue?.venue_name || 'Select a venue'}
+        Discount Coupons 
         {couponsFetching && !couponsLoading && (
           <Spin size="small" style={{ marginLeft: 8 }} />
         )}
@@ -432,7 +353,7 @@ const DiscountPage = () => {
             rowKey="id"
             className="enterprise-coupons-table"
             size="middle"
-            loading={couponsLoading || softDeleteCouponMutation.isPending}
+            loading={couponsLoading || updateCouponMutation.isPending || softDeleteCouponMutation.isPending}
           />
         ) : (
           // Show empty state message
