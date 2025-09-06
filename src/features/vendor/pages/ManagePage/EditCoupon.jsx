@@ -47,10 +47,7 @@ export default function EditCoupon() {
                 value: parseFloat(data.value.replace(/[%₹]/g, '')),
                 startDate: data.startDate ? dayjs(data.startDate) : null,
                 endDate: data.rawExpiryDate ? dayjs(data.rawExpiryDate) : null,
-                used: data.totalUsage,
-                singleUser: data.perUser,
-                description: data.description,
-                bannerDisplay: 'No'
+                description: data.description
             });
 
             // Set selected sports - check if it's actually all sports or specific sports
@@ -181,8 +178,8 @@ export default function EditCoupon() {
                 couponCode: values.couponCode,
                 couponType: values.couponType, // "percentage" or "flat"
                 value: values.value,
-                maxDiscount: values.maxDiscount || null,
-                minimumBookingValue: values.minimumBookingValue || null,
+                // maxDiscount: values.maxDiscount || null,
+                // minimumBookingValue: values.minimumBookingValue || null,
                 description: values.description,
                 startDate: values.startDate?.format('YYYY-MM-DD'),
                 endDate: values.endDate?.format('YYYY-MM-DD'),
@@ -191,9 +188,6 @@ export default function EditCoupon() {
                 status: 1
             };
 
-            // Add optional fields if they exist in form values
-            if (values.used) payload.totalUsage = values.used;
-            if (values.singleUser) payload.perUser = values.singleUser;
 
             console.log('API Payload:', payload);
 
@@ -202,6 +196,9 @@ export default function EditCoupon() {
             
             if (response.status === 200) {
                 message.success("Discount coupon updated successfully!");
+                // Show loading message while list refreshes
+                message.loading("Refreshing coupon list...", 1);
+                // Navigate back to discount page
                 navigate('/vendor/manage/discount');
             } else {
                 throw new Error(response.message || 'Failed to update coupon');
@@ -377,35 +374,6 @@ export default function EditCoupon() {
                                 />
                             </Form.Item>
 
-                            {/* Total Usage */}
-                            <Form.Item 
-                                name="used" 
-                                label="Total Usage" 
-                                rules={[{ required: true, message: 'Please enter total usage' }]}
-                                className="form-item-compact"
-                            >
-                                <InputNumber 
-                                    placeholder="e.g., 100" 
-                                    style={{ width: '100%' }}
-                                    className="form-input-compact"
-                                    min={1}
-                                />
-                            </Form.Item>
-
-                            {/* Per User Limit */}
-                            <Form.Item 
-                                name="singleUser" 
-                                label="Per User" 
-                                rules={[{ required: true, message: 'Please enter per user limit' }]}
-                                className="form-item-compact"
-                            >
-                                <InputNumber 
-                                    placeholder="e.g., 5" 
-                                    style={{ width: '100%' }}
-                                    className="form-input-compact"
-                                    min={1}
-                                />
-                            </Form.Item>
                         </div>
                     </div>
 
@@ -425,17 +393,6 @@ export default function EditCoupon() {
                             />
                         </Form.Item>
 
-                        {/* Banner Display */}
-                        <Form.Item 
-                            name="bannerDisplay" 
-                            label="Display on Banner"
-                            className="form-item-compact"
-                        >
-                            <Radio.Group defaultValue="No" className="radio-group-compact">
-                                <Radio value="Yes" className="radio-btn-compact">Yes</Radio>
-                                <Radio value="No" className="radio-btn-compact">No</Radio>
-                            </Radio.Group>
-                        </Form.Item>
 
                         {/* Applicable Sports */}
                         <Form.Item 

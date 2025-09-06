@@ -1,25 +1,56 @@
 import "../../styelsheets/Manage/Discount.css";
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Table, Button, Tag, Radio, Popconfirm, message, Spin, Tooltip, Space, Typography, Card, Badge } from "antd";
+import { Table, Button, Tag, Radio, Popconfirm, message, Spin, Tooltip, Space, Typography, Card, Badge, Select } from "antd";
 import { DeleteOutlined, PlusOutlined, CalendarOutlined, PercentageOutlined, TagOutlined, EditOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetCouponList } from "../../../../hooks/vendor/coupons/useGetCouponList";
 import { useDeleteCoupon } from "../../../../hooks/vendor/coupons/useDeleteCoupon";
+import { useSoftDeleteCoupon } from "../../../../hooks/vendor/coupons/useUpdateCoupon";
+import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+
+const { Option } = Select;
 
 const DiscountPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const id = useSelector((state) => state.auth.user.id);
+  const [selectedVenueId, setSelectedVenueId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(8);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [deletingCouponId, setDeletingCouponId] = useState(null);
+
+  // Fetch venue list
+  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorVenueList();
 
   // Fetch coupons data using getCouponList API
-  const { data: couponsData, loading: couponsLoading, error: couponsError } = useGetCouponList(id, 1);
+  const { data: couponsData, loading: couponsLoading, error: couponsError, isFetching: couponsFetching, refetch: refetchCoupons } = useGetCouponList(id, 1);
   
   // Delete coupon mutation
   const deleteCouponMutation = useDeleteCoupon();
+  
+  // Soft delete coupon mutation
+  const softDeleteCouponMutation = useSoftDeleteCoupon();
+
+  // Set default venue when venue list loads
+  useEffect(() => {
+    if (venueList?.resutl?.length && !selectedVenueId) {
+      setSelectedVenueId(venueList.resutl[0].venue_id);
+    }
+  }, [venueList, selectedVenueId]);
+
+  // Handle venue change
+  const handleVenueChange = useCallback((venueId) => {
+    setSelectedVenueId(venueId);
+    setCurrentPage(1); // Reset to first page when venue changes
+  }, []);
+
+  // Memoized selected venue for performance
+  const selectedVenue = useMemo(() => {
+    return venueList?.resutl?.find(venue => venue.venue_id === selectedVenueId);
+  }, [venueList?.resutl, selectedVenueId]);
 
   // Memoized coupons data source
   const dataSource = useMemo(() => {
@@ -53,10 +84,21 @@ const DiscountPage = () => {
 
   // Handle errors
   useEffect(() => {
+    if (venueError) {
+      message.error("Failed to load venue list");
+    }
     if (couponsError) {
       message.error("Failed to load coupons");
     }
-  }, [couponsError]);
+  }, [venueError, couponsError]);
+
+  // Refetch coupons when component mounts (user navigates back from add/edit forms)
+  useEffect(() => {
+    if (selectedVenueId) {
+      console.log("🔄 Component mounted, refetching coupons...");
+      refetchCoupons();
+    }
+  }, [refetchCoupons, selectedVenueId]);
 
   // Pagination logic
   const startIndex = (currentPage - 1) * pageSize;
@@ -70,11 +112,17 @@ const DiscountPage = () => {
   const handleDeleteCoupon = useCallback(async (coupon) => {
     try {
       setIsProcessing(true);
+      setDeletingCouponId(coupon.id);
       
-      const response = await deleteCouponMutation.mutateAsync(coupon.id);
+      // Use soft delete with PUT API call
+      const response = await softDeleteCouponMutation.mutateAsync(coupon.id);
       
       if (response.status === 200) {
         message.success("Coupon deleted successfully");
+        // Explicitly refetch the coupons list
+        console.log("🔄 Refreshing coupons list after delete...");
+        await refetchCoupons();
+        message.loading("Refreshing list...", 1);
       } else {
         throw new Error(response.message || 'Failed to delete coupon');
       }
@@ -83,8 +131,9 @@ const DiscountPage = () => {
       message.error(error.message || "Failed to delete coupon");
     } finally {
       setIsProcessing(false);
+      setDeletingCouponId(null);
     }
-  }, [deleteCouponMutation]);
+  }, [softDeleteCouponMutation, refetchCoupons]);
 
   const handleEditCoupon = useCallback((coupon) => {
     navigate('/vendor/manage/editcoupon', { state: { couponData: coupon } });
@@ -218,49 +267,100 @@ const DiscountPage = () => {
       title: 'Actions',
       key: 'actions',
       width: 120,
-      render: (_, record) => (
-        <Space size="small">
-          <Tooltip title="Edit Coupon">
-            <Button 
-              type="text" 
-              icon={<EditOutlined />} 
-              size="small"
-              disabled={isProcessing}
-              onClick={() => handleEditCoupon(record)}
-              className="action-btn edit-btn"
-            />
-          </Tooltip>
-          <Tooltip title="Delete Coupon">
-            <Popconfirm
-              title="Are you sure you want to delete this coupon?"
-              description="This action cannot be undone."
-              onConfirm={() => handleDeleteCoupon(record)}
-              okText="Yes, Delete"
-              cancelText="Cancel"
-              disabled={isProcessing}
-            >
+      render: (_, record) => {
+        const isDeletingThisCoupon = deletingCouponId === record.id;
+        const isAnyProcessing = isProcessing || softDeleteCouponMutation.isPending || couponsFetching;
+        
+        return (
+          <Space size="small">
+            <Tooltip title="Edit Coupon">
               <Button 
                 type="text" 
-                danger
-                icon={<DeleteOutlined />} 
+                icon={<EditOutlined />} 
                 size="small"
-                disabled={isProcessing}
-                className="action-btn delete-btn"
+                disabled={isAnyProcessing}
+                onClick={() => handleEditCoupon(record)}
+                className="action-btn edit-btn"
               />
-            </Popconfirm>
-          </Tooltip>
-        </Space>
-      ),
+            </Tooltip>
+            <Tooltip title={isDeletingThisCoupon ? "Deleting..." : "Delete Coupon"}>
+              <Popconfirm
+                title="Are you sure you want to delete this coupon?"
+                description="This action cannot be undone."
+                onConfirm={() => handleDeleteCoupon(record)}
+                okText="Yes, Delete"
+                cancelText="Cancel"
+                disabled={isAnyProcessing}
+              >
+                <Button 
+                  type="text" 
+                  danger
+                  icon={isDeletingThisCoupon ? <Spin size="small" /> : <DeleteOutlined />} 
+                  size="small"
+                  loading={isDeletingThisCoupon}
+                  disabled={isAnyProcessing}
+                  className="action-btn delete-btn"
+                />
+              </Popconfirm>
+            </Tooltip>
+          </Space>
+        );
+      },
     },
   ];
 
-  // Show loading state when coupons are loading
-  if (couponsLoading) {
+  // Show loading state when venues are loading
+  if (venueLoading) {
     return (
       <div className="venue-card">
         <div className="page-loading-container">
           <Spin size="large" />
-          <div className="page-loading-text">Loading coupons...</div>
+          <div className="page-loading-text">Loading venues...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state when no venue is selected or when coupons are loading
+  if (!selectedVenueId || couponsLoading) {
+    return (
+      <div className="venue-card">
+        <div className="venue-toolbar">
+          <Select
+            placeholder="Select Venue"
+            className="venue-select"
+            loading={venueLoading}
+            onChange={handleVenueChange}
+            value={selectedVenueId || undefined}
+            disabled={venueLoading || !venueList?.resutl?.length}
+          >
+            {venueList?.resutl?.map((venue) => (
+              <Option key={venue.venue_id} value={venue.venue_id}>
+                {venue.venue_name}
+              </Option>
+            ))}
+          </Select>
+          <Button 
+            type="primary" 
+            className="add-btn"
+            disabled={true}
+          >
+            + Add Discount Coupon
+          </Button>
+        </div>
+
+        <h3 className="venue-title">
+          {selectedVenue?.venue_name || "Select a venue to view coupons"}
+        </h3>
+
+        <div className="page-loading-container">
+          <Spin size="large" />
+          <div className="page-loading-text">
+            {!selectedVenueId 
+              ? "Please select a venue to view coupons" 
+              : "Loading coupons..."
+            }
+          </div>
         </div>
       </div>
     );
@@ -269,24 +369,61 @@ const DiscountPage = () => {
   return (
     <div className="venue-card">
       <div className="venue-toolbar">
+        <Select
+          placeholder="Select Venue"
+          className="venue-select"
+          loading={venueLoading}
+          onChange={handleVenueChange}
+          value={selectedVenueId || undefined}
+          disabled={venueLoading || !venueList?.resutl?.length}
+        >
+          {venueList?.resutl?.map((venue) => (
+            <Option key={venue.venue_id} value={venue.venue_id}>
+              {venue.venue_name}
+            </Option>
+          ))}
+        </Select>
         <Button 
           type="primary" 
           className="add-btn"
-          disabled={isProcessing}
+          disabled={!selectedVenueId || isProcessing || softDeleteCouponMutation.isPending || couponsFetching}
           onClick={handleAddCoupon}
         >
           + Add Discount Coupon
-          {isProcessing && (
+          {(isProcessing || softDeleteCouponMutation.isPending || couponsFetching) && (
             <span className="processing-indicator"> (Processing...)</span>
           )}
         </Button>
       </div>
 
       <h3 className="venue-title">
-        Discount Coupons
+        Discount Coupons - {selectedVenue?.venue_name || 'Select a venue'}
+        {couponsFetching && !couponsLoading && (
+          <Spin size="small" style={{ marginLeft: 8 }} />
+        )}
       </h3>
 
-      <div className="coupons-table-container">
+      <div className="coupons-table-container" style={{ position: 'relative' }}>
+        {couponsFetching && !couponsLoading && (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            borderRadius: '6px'
+          }}>
+            <div style={{ textAlign: 'center' }}>
+              <Spin size="large" />
+              <div style={{ marginTop: 8, color: '#666' }}>Refreshing coupon list...</div>
+            </div>
+          </div>
+        )}
         {paginatedCoupons?.length > 0 ? (
           <Table
             columns={columns}
@@ -295,7 +432,7 @@ const DiscountPage = () => {
             rowKey="id"
             className="enterprise-coupons-table"
             size="middle"
-            loading={couponsLoading}
+            loading={couponsLoading || softDeleteCouponMutation.isPending}
           />
         ) : (
           // Show empty state message

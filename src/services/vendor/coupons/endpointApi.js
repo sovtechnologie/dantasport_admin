@@ -40,6 +40,20 @@ export const updateCoupon = async (payload) => {
     }
 };
 
+export const softDeleteCoupon = async (couponId) => {
+    try {
+        const payload = {
+            couponId: couponId,
+            isDelete: 1
+        };
+        const response = await api.put('vendor/coupon/updateCoupon', payload);
+        return response.data;
+    } catch (error) {
+        console.error("Error soft deleting coupon:", error);
+        throw error;
+    }
+};
+
 export const deleteCoupon = async (couponId) => {
     try {
         const response = await api.delete(`vendor/coupon/deleteCoupon/${couponId}`);
