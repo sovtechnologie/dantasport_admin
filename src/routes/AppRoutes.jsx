@@ -41,6 +41,21 @@ const AvailableDetails = lazy(() => import("../features/vendor/pages/Dayslot/Ava
 const VenRepRevenue = lazy(() => import("../features/vendor/pages/ReportPage/RevenuePage"));
 const VenRepRating = lazy(() => import("../features/vendor/pages/ReportPage/Rating"));
 const VenRepCoupon = lazy(() => import("../features/vendor/pages/ReportPage/CouponPage"));
+const VenGymList = lazy(() => import("../features/vendor/pages/Gym/GymList"));
+const VenGymAdd = lazy(() => import("../features/vendor/pages/Gym/AddGym"));
+const VenGymEdit = lazy(() => import("../features/vendor/pages/Gym/EditGym"));
+const VenGymMember = lazy(() => import("../features/vendor/pages/Gym/GymMember"));
+const VenGymImages = lazy(() => import("../features/vendor/pages/Gym/GymImages"));
+const VenGymDiscount = lazy(() => import("../features/vendor/pages/Gym/GymDiscount"));
+const VenGymAddDiscount = lazy(() => import("../features/vendor/pages/Gym/AddGymDiscount"));
+const VenGymEditDiscount = lazy(() => import("../features/vendor/pages/Gym/EditGymDiscount"));
+const VenGymBooking = lazy(() => import("../features/vendor/pages/Gym/GymBooking"));
+const VenGymCoaches = lazy(() => import("../features/vendor/pages/Gym/GymCoaches"));
+const VenGymAddCoach = lazy(() => import("../features/vendor/pages/Gym/AddGymCoach"));
+const VenGymEditCoach = lazy(() => import("../features/vendor/pages/Gym/EditGymCoach"));
+const VenGymTimeSlots = lazy(() => import("../features/vendor/pages/Gym/GymTimeSlots"));
+const VenGymAddTimeSlot = lazy(() => import("../features/vendor/pages/Gym/AddGymTimeSlot"));
+const VenGymEditTimeSlot = lazy(() => import("../features/vendor/pages/Gym/EditGymTimeSlot"));
 
 // Admin routes
 const AdmSportService = lazy(() => import("../features/admin/pages/SportServicesPage"));
@@ -134,6 +149,22 @@ const AppRoutes = () => {
             <Route path='/vendor/dayslots' element={<VenDaySlots />} />
             <Route path="/vendor/dayslots/booked-details/:id" element={<BookedDetails />} />
             <Route path="/vendor/dayslots/available-details/:id" element={<AvailableDetails />} />
+            {/* Gym routes */}
+            <Route path="/vendor/gym/list" element={<VenGymList />} />
+            <Route path="/vendor/gym/add" element={<VenGymAdd />} />
+            <Route path="/vendor/gym/edit/:id" element={<VenGymEdit />} />
+            <Route path="/vendor/gym/member" element={<VenGymMember />} />
+            <Route path="/vendor/gym/images" element={<VenGymImages />} />
+            <Route path="/vendor/gym/discount" element={<VenGymDiscount />} />
+            <Route path="/vendor/gym/adddiscount" element={<VenGymAddDiscount />} />
+            <Route path="/vendor/gym/editdiscount/:id" element={<VenGymEditDiscount />} />
+            <Route path="/vendor/gym/booking" element={<VenGymBooking />} />
+                <Route path="/vendor/gym/coaches" element={<VenGymCoaches />} />
+                <Route path="/vendor/gym/addcoach" element={<VenGymAddCoach />} />
+                <Route path="/vendor/gym/editcoach/:id" element={<VenGymEditCoach />} />
+                <Route path="/vendor/gym/timeslots" element={<VenGymTimeSlots />} />
+                <Route path="/vendor/gym/addtimeslot" element={<VenGymAddTimeSlot />} />
+                <Route path="/vendor/gym/edittimeslot/:id" element={<VenGymEditTimeSlot />} />
             {/* Revenue routes */}
             <Route path="/vendor/reports/booking" element={<VendorBookingPage />} />
             <Route path="/vendor/reports/revenue" element={<VenRepRevenue />} />

@@ -403,22 +403,12 @@ const VendorSidebar = ({ onSelect }) => {
                         <ul className={`sidebar-submenu ${openMenus.gym ? 'open' : ''}`}>
                             <li>
                                 <Link
-                                    to="/vendor/gym/basicInfo"
-                                    className={`sidebar-submenu-item ${isActive('/vendor/gym/basicInfo') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Gym')}
-                                >
-                                    <UserOutlined className="sidebar-menu-icon" />
-                                    Basic Info
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    to="/vendor/gym/gymInfo"
-                                    className={`sidebar-submenu-item ${isActive('/vendor/gym/gymInfo') ? 'active' : ''}`}
+                                    to="/vendor/gym/list"
+                                    className={`sidebar-submenu-item ${isActive('/vendor/gym/list') ? 'active' : ''}`}
                                     onClick={() => onSelect('Gym')}
                                 >
                                     <HomeOutlined className="sidebar-menu-icon" />
-                                    Gym Info
+                                    Gym List
                                 </Link>
                             </li>
                             <li>
@@ -469,6 +459,26 @@ const VendorSidebar = ({ onSelect }) => {
                                 >
                                     <GiftOutlined className="sidebar-menu-icon" />
                                     Discount
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/vendor/gym/coaches"
+                                    className={`sidebar-submenu-item ${isActive('/vendor/gym/coaches') ? 'active' : ''}`}
+                                    onClick={() => onSelect('Gym')}
+                                >
+                                    <TeamOutlined className="sidebar-menu-icon" />
+                                    Coaches
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/vendor/gym/timeslots"
+                                    className={`sidebar-submenu-item ${isActive('/vendor/gym/timeslots') ? 'active' : ''}`}
+                                    onClick={() => onSelect('Gym')}
+                                >
+                                    <ClockCircleOutlined className="sidebar-menu-icon" />
+                                    Time Slots
                                 </Link>
                             </li>
                             <li>
