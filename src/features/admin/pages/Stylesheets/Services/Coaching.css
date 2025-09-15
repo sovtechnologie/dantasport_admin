@@ -1,0 +1,103 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1661D4;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0px 30px 40px -20px rgba(0, 0, 0, 0.25);
+    margin-bottom: 2rem;
+}
+
+.filter-box {
+    padding: 0.3rem;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-item {
+    min-width: 40vw;
+}
+
+.search-input {
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+
+
+.search-button {
+    background-color: #fff;
+    color: #1163c7;
+    font-weight: bold;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #1163c7;
+    color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.vendor-page-container {
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+}
+
+.vendor-header-form {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+
+.status-select {
+    width: 120px;
+}
+
+.vendor-table .ant-table-container {
+    border-radius: 8px;
+}
+
+.active {
+    color: #0CAF60;
+    padding: 4px 18px;
+    background-color: #E7F7EF;
+    border-radius: 6px;
+    font-weight: 500px;
+}
+
+.inactive {
+    color: #1163c7;
+    padding: 4px 18px;
+    background-color:  #DEEDFF;
+    border-radius: 6px;
+    font-weight: 500px;
+}
+
+.gamePlayed {
+    color: #1163c7;
+    padding: 4px 25px;
+    border: 1px solid #1163c7;
+    border-radius: 6px;
+    font-weight: 600px;
+}

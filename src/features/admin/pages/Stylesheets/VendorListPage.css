@@ -1,0 +1,114 @@
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1661D4;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0px 30px 40px -20px rgba(0, 0, 0, 0.25);
+  margin-bottom: 2rem;
+}
+
+.filter-box {
+  padding: 0.3rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.filter-item{
+  min-width: 40vw;
+}
+.search-input{
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+
+
+.search-button {
+  background-color: #fff;
+  color: #1163c7;
+  font-weight: bold;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #1163c7;
+  color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.vendor-page-container {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.vendor-header-form {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+.add-vendor-button {
+  background-color: #1163c7;
+  color: #fff;
+  font-weight: bold;
+}
+
+.status-select {
+  width: 120px;
+}
+
+.pagination-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.vendor-table .ant-table-container {
+  border-radius: 8px;
+}
+
+/* Style when status is Active: green background/text */
+.status-active .ant-select-selector {
+  background-color: #e6fffb !important;
+  color: #006d75 !important;
+}
+.status-active .ant-select-selection-item {
+  color: #006d75 !important;
+}
+
+/* Style when status is Inactive: red background/text */
+.status-inactive .ant-select-selector {
+  background-color: #fff1f0 !important;
+  color: #a8071a !important;
+}
+.status-inactive .ant-select-selection-item {
+  color: #a8071a !important;
+}
+
+/* Optional: change dropdown menu list items for visual consistency */
+.status-active .ant-select-item-option-selected {
+  background-color: #e6fffb !important;
+}
+.status-inactive .ant-select-item-option-selected {
+  background-color: #fff1f0 !important;
+}
