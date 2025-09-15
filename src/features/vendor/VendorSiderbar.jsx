@@ -20,7 +20,8 @@ import {
     ClockCircleOutlined,
     FileTextOutlined,
     MessageOutlined,
-    ControlOutlined
+    ControlOutlined,
+    CheckCircleOutlined
 } from '@ant-design/icons';
 
 const VendorSidebar = ({ onSelect }) => {
@@ -61,7 +62,21 @@ const VendorSidebar = ({ onSelect }) => {
                         </Link>
                     </li>
 
-                    {/* Manage - Submenu */}
+                    {/* Venue - Submenu (renamed from Manage) */}
+                    
+                    {/* Basic Info moved to main menu */}
+                    <li>
+                        <Link
+                            to="/vendor/manage/basic-info"
+                            className={`sidebar-menu-item ${isActive('/vendor/manage/basic-info') ? 'active' : ''}`}
+                            onClick={() => onSelect('Basic Info')}
+                        >
+                            <UserOutlined className="sidebar-menu-icon" />
+                            <span>Basic Info</span>
+                        </Link>
+                    </li>
+
+                    {/* Venue - Submenu */}
                     <li>
                         <button
                             onClick={() => toggleMenu('manage')}
@@ -69,7 +84,7 @@ const VendorSidebar = ({ onSelect }) => {
                         >
                             <div className="flex items-center">
                                 <SettingOutlined className="sidebar-menu-icon" />
-                                <span>Manage</span>
+                                <span>Venue</span>
                             </div>
                             {openMenus.manage ? 
                                 <DownOutlined className="sidebar-arrow" /> : 
@@ -79,19 +94,9 @@ const VendorSidebar = ({ onSelect }) => {
                         <ul className={`sidebar-submenu ${openMenus.manage ? 'open' : ''}`}>
                             <li>
                                 <Link
-                                    to="/vendor/manage/basic-info"
-                                    className={`sidebar-submenu-item ${isActive('/vendor/manage/basic-info') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
-                                >
-                                    <UserOutlined className="sidebar-menu-icon" />
-                                    Basic Info
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
                                     to="/vendor/manage/venuelist"
                                     className={`sidebar-submenu-item ${isActive('/vendor/manage/venuelist') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
+                                    onClick={() => onSelect('Venue')}
                                 >
                                     <HomeOutlined className="sidebar-menu-icon" />
                                     Venue List
@@ -101,7 +106,7 @@ const VendorSidebar = ({ onSelect }) => {
                                 <Link
                                     to="/vendor/manage/sports"
                                     className={`sidebar-submenu-item ${isActive('/vendor/manage/sports') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
+                                    onClick={() => onSelect('Venue')}
                                 >
                                     <TrophyOutlined className="sidebar-menu-icon" />
                                     Sports
@@ -111,7 +116,7 @@ const VendorSidebar = ({ onSelect }) => {
                                 <Link
                                     to="/vendor/manage/court"
                                     className={`sidebar-submenu-item ${isActive('/vendor/manage/court') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
+                                    onClick={() => onSelect('Venue')}
                                 >
                                     <TrophyOutlined className="sidebar-menu-icon" />
                                     Sports Court
@@ -121,7 +126,7 @@ const VendorSidebar = ({ onSelect }) => {
                                 <Link
                                     to="/vendor/manage/slotpricing"
                                     className={`sidebar-submenu-item ${isActive('/vendor/manage/slotpricing') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
+                                    onClick={() => onSelect('Venue')}
                                 >
                                     <DollarOutlined className="sidebar-menu-icon" />
                                     Slot Pricing
@@ -131,7 +136,7 @@ const VendorSidebar = ({ onSelect }) => {
                                 <Link
                                     to="/vendor/manage/images"
                                     className={`sidebar-submenu-item ${isActive('/vendor/manage/images') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
+                                    onClick={() => onSelect('Venue')}
                                 >
                                     <CameraOutlined className="sidebar-menu-icon" />
                                     Images
@@ -139,9 +144,19 @@ const VendorSidebar = ({ onSelect }) => {
                             </li>
                             <li>
                                 <Link
+                                    to="/vendor/booking"
+                                    className={`sidebar-submenu-item ${isActive('/vendor/booking') ? 'active' : ''}`}
+                                    onClick={() => onSelect('Venue')}
+                                >
+                                    <CalendarOutlined className="sidebar-menu-icon" />
+                                    Booking
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
                                     to="/vendor/manage/member"
                                     className={`sidebar-submenu-item ${isActive('/vendor/manage/member') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
+                                    onClick={() => onSelect('Venue')}
                                 >
                                     <TeamOutlined className="sidebar-menu-icon" />
                                     Member
@@ -151,7 +166,7 @@ const VendorSidebar = ({ onSelect }) => {
                                 <Link
                                     to="/vendor/manage/discount"
                                     className={`sidebar-submenu-item ${isActive('/vendor/manage/discount') ? 'active' : ''}`}
-                                    onClick={() => onSelect('Manage')}
+                                    onClick={() => onSelect('Venue')}
                                 >
                                     <GiftOutlined className="sidebar-menu-icon" />
                                     Discount
@@ -160,17 +175,7 @@ const VendorSidebar = ({ onSelect }) => {
                         </ul>
                     </li>
 
-                    {/* Booking */}
-                    <li>
-                        <Link
-                            to="/vendor/dayslots"
-                            className={`sidebar-menu-item ${isActive('/vendor/dayslots') ? 'active' : ''}`}
-                            onClick={() => onSelect('Dayslots')}
-                        >
-                            <CalendarOutlined className="sidebar-menu-icon" />
-                            <span>Booking</span>
-                        </Link>
-                    </li>
+                    
 
                     {/* Reports - Submenu */}
                     <li>
@@ -483,12 +488,12 @@ const VendorSidebar = ({ onSelect }) => {
                             </li>
                             <li>
                                 <Link
-                                    to="/vendor/gym/control"
-                                    className={`sidebar-submenu-item ${isActive('/vendor/gym/control') ? 'active' : ''}`}
+                                    to="/vendor/gym/checkinout"
+                                    className={`sidebar-submenu-item ${isActive('/vendor/gym/checkinout') ? 'active' : ''}`}
                                     onClick={() => onSelect('Gym')}
                                 >
-                                    <ControlOutlined className="sidebar-menu-icon" />
-                                    Control
+                                    <CheckCircleOutlined className="sidebar-menu-icon" />
+                                    Check-in/out
                                 </Link>
                             </li>
                         </ul>

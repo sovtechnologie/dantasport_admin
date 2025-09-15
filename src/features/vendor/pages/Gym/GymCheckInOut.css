@@ -1,0 +1,492 @@
+/* Gym Check-in/Check-out Styles */
+.venue-card {
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding: 24px;
+  margin: 0;
+  width: 100%;
+}
+
+.venue-card .ant-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.venue-card .ant-card-head {
+  border-bottom: 2px solid #f0f0f0;
+  padding: 16px 24px;
+}
+
+.venue-card .ant-card-head-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1163C7;
+}
+
+.venue-card .ant-card-body {
+  padding: 24px;
+}
+
+/* Header Styles */
+.venue-card h3 {
+  color: #1163C7;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Gym Selection Card */
+.venue-card .ant-card:first-of-type {
+  margin-bottom: 24px;
+}
+
+.venue-card .ant-card:first-of-type .ant-card-body {
+  padding: 16px 24px;
+}
+
+/* Table Styles */
+.venue-card .ant-table {
+  background: white;
+  width: 100%;
+}
+
+.venue-card .ant-table-thead > tr > th {
+  background: #fafafa;
+  border-bottom: 2px solid #f0f0f0;
+  font-weight: 600;
+  color: #1163C7;
+  padding: 16px 12px;
+  white-space: nowrap;
+}
+
+.venue-card .ant-table-tbody > tr > td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+}
+
+.venue-card .ant-table-tbody > tr:hover > td {
+  background: #f8f9ff;
+}
+
+/* Full Width Table Container */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.table-container .ant-table {
+  margin: 0;
+  border-radius: 12px;
+}
+
+.table-container .ant-table-container {
+  border-radius: 12px;
+}
+
+/* Table Header */
+.table-header {
+  background: linear-gradient(135deg, #1163C7 0%, #0d4a9e 100%);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.table-header .anticon {
+  font-size: 20px;
+}
+
+/* User Info Cell */
+.member-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.member-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.member-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.member-id {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Radio Button Styles */
+.venue-card .ant-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.venue-card .ant-radio-wrapper {
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.venue-card .ant-radio-wrapper:hover {
+  border-color: #1163C7;
+  background: #f8f9ff;
+}
+
+.venue-card .ant-radio-wrapper-checked {
+  border-color: #1163C7;
+  background: #f0f7ff;
+}
+
+.venue-card .ant-radio-wrapper .ant-radio {
+  margin-right: 8px;
+}
+
+/* Button Styles */
+.venue-card .ant-btn-primary {
+  background: #1163C7;
+  border-color: #1163C7;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.venue-card .ant-btn-primary:hover {
+  background: #0d4a9e;
+  border-color: #0d4a9e;
+}
+
+.venue-card .ant-btn-text {
+  color: #1163C7;
+  border: none;
+  padding: 4px 8px;
+}
+
+.venue-card .ant-btn-text:hover {
+  background: #f8f9ff;
+  color: #0d4a9e;
+}
+
+/* Tag Styles */
+.venue-card .ant-tag {
+  border-radius: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+}
+
+.venue-card .ant-tag-green {
+  background: #f6ffed;
+  border-color: #b7eb8f;
+  color: #52c41a;
+}
+
+.venue-card .ant-tag-blue {
+  background: #e6f7ff;
+  border-color: #91d5ff;
+  color: #1890ff;
+}
+
+/* Select Styles */
+.venue-card .ant-select {
+  border-radius: 6px;
+}
+
+.venue-card .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+  border-color: #1163C7;
+}
+
+.venue-card .ant-select-focused .ant-select-selector {
+  border-color: #1163C7;
+  box-shadow: 0 0 0 2px rgba(17, 99, 199, 0.2);
+}
+
+/* Professional QR Code Modal - Paytm Style */
+.qr-modal .ant-modal-content {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.qr-modal .ant-modal-header {
+  background: linear-gradient(135deg, #1163C7 0%, #0d4a9e 100%);
+  border: none;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.qr-modal .ant-modal-title {
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  margin: 0;
+}
+
+.qr-modal .ant-modal-close {
+  color: white;
+  font-size: 18px;
+  top: 24px;
+  right: 24px;
+}
+
+.qr-modal .ant-modal-close:hover {
+  color: #f0f0f0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.qr-modal .ant-modal-body {
+  padding: 40px 32px;
+  background: #fafafa;
+}
+
+/* QR Code Container */
+.qr-container {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.qr-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1163C7, #0d4a9e, #1163C7);
+}
+
+/* QR Code Styling */
+.qr-code-wrapper {
+  position: relative;
+  display: inline-block;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 3px solid #f0f0f0;
+}
+
+.qr-code-wrapper .ant-qrcode {
+  border-radius: 12px;
+}
+
+/* QR Code Info */
+.qr-info {
+  margin-top: 24px;
+}
+
+.qr-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1163C7;
+  margin-bottom: 8px;
+}
+
+.qr-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.qr-gym-info {
+  background: #f8f9ff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  border: 1px solid #e6f0ff;
+}
+
+.qr-gym-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1163C7;
+  margin-bottom: 4px;
+}
+
+.qr-gym-location {
+  font-size: 14px;
+  color: #666;
+}
+
+/* QR Code Actions */
+.qr-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.qr-action-btn {
+  background: #1163C7;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.qr-action-btn:hover {
+  background: #0d4a9e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 99, 199, 0.3);
+}
+
+.qr-action-btn.secondary {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.qr-action-btn.secondary:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* QR Code Status */
+.qr-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f6ffed;
+  color: #52c41a;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 16px;
+}
+
+.qr-status .anticon {
+  font-size: 16px;
+}
+
+/* Loading States */
+.venue-card .ant-spin-container {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .venue-card {
+    padding: 16px;
+  }
+  
+  .venue-card .ant-card-body {
+    padding: 16px;
+  }
+  
+  .venue-card .ant-table-thead > tr > th,
+  .venue-card .ant-table-tbody > tr > td {
+    padding: 12px 8px;
+  }
+  
+  .member-info-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* Empty State */
+.venue-card .ant-empty {
+  padding: 40px 20px;
+}
+
+.venue-card .ant-empty-description {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Action Buttons */
+.venue-card .ant-btn-group .ant-btn {
+  border-radius: 6px;
+}
+
+.venue-card .ant-btn + .ant-btn {
+  margin-left: 8px;
+}
+
+/* Card Head Icons */
+.venue-card .ant-card-head .anticon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+/* Table Scroll */
+.venue-card .ant-table-scroll {
+  border-radius: 8px;
+}
+
+/* Status Indicators */
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-indicator.qr {
+  color: #52c41a;
+}
+
+.status-indicator.manual {
+  color: #1890ff;
+}
+
+/* Check-in Type Selection */
+.checkin-type-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+}
+
+.checkin-type-selection .ant-radio-wrapper {
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background: white;
+  transition: all 0.3s;
+}
+
+.checkin-type-selection .ant-radio-wrapper:hover {
+  border-color: #1163C7;
+  background: #f8f9ff;
+}
+
+.checkin-type-selection .ant-radio-wrapper-checked {
+  border-color: #1163C7;
+  background: #f0f7ff;
+  box-shadow: 0 0 0 2px rgba(17, 99, 199, 0.1);
+}

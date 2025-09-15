@@ -256,3 +256,54 @@ export const deleteGymTimeSlot = async (payload) => {
     throw error;
   }
 };
+
+// Get Pending Gym Check-ins API
+// Endpoint: /vendor/gym/getPendingGymCheckingByGym (POST)
+// Payload: { gymId: number }
+// Returns: { status: 200, message: true, result: [{ gym_name, gym_id, booking_id, full_name, user_id, state, city, booking_date }] }
+export const getPendingGymCheckins = async (payload) => {
+  try {
+    const response = await api.post("/vendor/gym/getPendingGymCheckingByGym", payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Get Recent Gym Check-ins API
+// Endpoint: /vendor/gym/getRecentCheckingByGym (POST)
+// Payload: { gymId: number }
+// Returns: { status: 200, message: true, result: [{ gym_name, gym_id, booking_id, full_name, user_id, state, city, check_in_time, check_in_type }] }
+export const getRecentGymCheckins = async (payload) => {
+  try {
+    const response = await api.post("/vendor/gym/getRecentCheckingByGym", payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Gym Check-in API
+// Endpoint: /vendor/gym/checkIn (POST)
+// Payload: { gymId: number, bookingId: number, userId: number, checkInType: 'QR' | 'Manual' }
+// Returns: { status: 200, message: true, result: {...} }
+export const gymCheckIn = async (payload) => {
+  try {
+    const response = await api.post("/vendor/gym/checkIn", payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

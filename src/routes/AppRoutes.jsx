@@ -56,6 +56,8 @@ const VenGymEditCoach = lazy(() => import("../features/vendor/pages/Gym/EditGymC
 const VenGymTimeSlots = lazy(() => import("../features/vendor/pages/Gym/GymTimeSlots"));
 const VenGymAddTimeSlot = lazy(() => import("../features/vendor/pages/Gym/AddGymTimeSlot"));
 const VenGymEditTimeSlot = lazy(() => import("../features/vendor/pages/Gym/EditGymTimeSlot"));
+const VenGymCheckInOut = lazy(() => import("../features/vendor/pages/Gym/GymCheckInOut"));
+const VenBooking = lazy(() => import("../features/vendor/pages/Booking/Booking"));
 
 // Admin routes
 const AdmSportService = lazy(() => import("../features/admin/pages/SportServicesPage"));
@@ -149,6 +151,8 @@ const AppRoutes = () => {
             <Route path='/vendor/dayslots' element={<VenDaySlots />} />
             <Route path="/vendor/dayslots/booked-details/:id" element={<BookedDetails />} />
             <Route path="/vendor/dayslots/available-details/:id" element={<AvailableDetails />} />
+            {/* Booking grid view */}
+            <Route path="/vendor/booking" element={<VenBooking />} />
             {/* Gym routes */}
             <Route path="/vendor/gym/list" element={<VenGymList />} />
             <Route path="/vendor/gym/add" element={<VenGymAdd />} />
@@ -165,6 +169,7 @@ const AppRoutes = () => {
                 <Route path="/vendor/gym/timeslots" element={<VenGymTimeSlots />} />
                 <Route path="/vendor/gym/addtimeslot" element={<VenGymAddTimeSlot />} />
                 <Route path="/vendor/gym/edittimeslot/:id" element={<VenGymEditTimeSlot />} />
+                <Route path="/vendor/gym/checkinout" element={<VenGymCheckInOut />} />
             {/* Revenue routes */}
             <Route path="/vendor/reports/booking" element={<VendorBookingPage />} />
             <Route path="/vendor/reports/revenue" element={<VenRepRevenue />} />
