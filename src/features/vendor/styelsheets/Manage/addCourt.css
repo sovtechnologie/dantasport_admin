@@ -1,5 +1,5 @@
 .add-Court-Container {
-    padding: 24px;
+    padding: 16px;
     background-color: #ffffff;
     border-radius: 12px;
 }
@@ -9,6 +9,86 @@
     color: #1163C7;
     margin: 20px 0 10px;
     font-weight: 600;
+}
+
+.add-court-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.available-courts-wrap {
+    background: #f2f4f5;
+    padding: 16px 16px 8px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.available-courts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.available-card {
+    border: 1px solid #e8e8e8;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.available-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.available-card.selected {
+    border-color: #3363EB;
+    box-shadow: 0 0 0 2px rgba(51,99,235,0.2);
+}
+
+.available-card .ant-card-body {
+    padding: 16px;
+}
+
+.available-card-date {
+    font-size: 12px;
+    color: #8c8c8c;
+}
+
+.available-card-title {
+    font-weight: 600;
+}
+
+.available-card-subtitle {
+    font-size: 12px;
+    color: #8c8c8c;
+}
+
+.available-time-text {
+    font-size: 12px;
+}
+
+.available-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.available-meta {
+    font-size: 12px;
+    color: #8c8c8c;
+}
+
+.available-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.book-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
 }
 
 .court-form-row {

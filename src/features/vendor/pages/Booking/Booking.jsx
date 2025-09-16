@@ -3,6 +3,8 @@ import { Card, Spin, Empty, Typography, Space, Select, Button, DatePicker, Table
 import { CalendarOutlined, MoreOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { useGetBookingDetails } from "../../../../hooks/vendor/booking/useGetBookingDetails";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchSportsByCategory } from "../../../../hooks/vendor/sports/useFetchSportsByCategory";
 import "./Booking.css";
@@ -11,8 +13,10 @@ const { Text } = Typography;
 
 const Booking = () => {
   const vendorId = useSelector((state) => state.auth.user?.id);
+  const navigate = useNavigate();
   const [venueId, setVenueId] = useState(null);
   const [sportId, setSportId] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs());
 
   const { data: venueList, loading: venueLoading } = useFetchVendorVenueList();
   const { data: sportsData, loading: sportsLoading } = useFetchSportsByCategory(1);
@@ -52,6 +56,27 @@ const Booking = () => {
     });
   }, [result]);
 
+  const handleCreateBooking = (slot) => {
+    const payload = {
+      courtIds: (slot?.courts || []).map(c => c.court_id).filter(Boolean),
+      type: 2,
+      startTime: slot.slot_start?.slice(0,5) + "0", // backend example uses 06:000
+      endTime: slot.slot_end?.slice(0,5) + "0",
+      date: selectedDate.format("YYYY-MM-DD"),
+    };
+
+    navigate('/vendor/manage/addcourt', {
+      state: {
+        availableCourtsPayload: payload,
+        slot,
+        context: {
+          venueId,
+          sportId,
+        }
+      }
+    });
+  };
+
   const columns = [
     {
       title: 'Time Slot',
@@ -90,12 +115,14 @@ const Booking = () => {
       key: 'action',
       align: 'center',
       width: 100,
-      render: () => (
+      render: (_, record) => (
         <div className="action-cell">
           <Dropdown
             menu={{ items: [
-              { key: '1', label: 'View details' },
-              { key: '2', label: 'Create booking' },
+              { key: 'create', label: 'Book court', onClick: () => {
+                const slot = (result?.slots || []).find(s => `${s.slot_start}-${s.slot_end}` === record.key) || null;
+                if (slot) handleCreateBooking(slot);
+              } },
             ]}}
             trigger={["click"]}
           >
@@ -146,6 +173,7 @@ const Booking = () => {
                 <CalendarOutlined />
                 <Text>{formatTimeRange(result.start_time, result.end_time)}</Text>
               </Space>
+              <DatePicker value={selectedDate} onChange={setSelectedDate} />
             </div>
             <Table
               columns={columns}
