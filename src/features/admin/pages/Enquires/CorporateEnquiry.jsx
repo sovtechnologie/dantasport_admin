@@ -54,29 +54,27 @@ export default function CorporateEnquiry() {
     async function fetchData() {
       try {
         setLoading(true);
-        setError(null);
 
         const response = await getBookingEnquires();
 
-        if (!response || !Array.isArray(response?.result)) {
-          throw new Error("Invalid API response");
+        if (response?.status === 200 && Array.isArray(response?.result)) {
+          const formattedData = response.result.map((item, index) => ({
+            key: item.enquiry_id || index,
+            companyName: item.organization_name || "N/A",
+            phoneNumber: item.mobile_number || "N/A",
+            email: item.email || "N/A",
+            location: item.booking_type === "1" ? "Corporate" : "Individual",
+            remark: item.message || "",
+            status: item.status || "Not Connected",
+            subStatus: "Switched Off",
+          }));
+
+          setData(formattedData);
+        } else {
+          setData([]);
         }
-
-        const formattedData = response.result.map((item, index) => ({
-          key: item.enquiry_id || index,
-          companyName: item.organization_name || "N/A",
-          phoneNumber: item.mobile_number || "N/A",
-          email: item.email || "N/A",
-          location: item.booking_type === "1" ? "Corporate" : "Individual",
-          remark: item.message || "",
-          status: item.status || "Not Connected",
-          subStatus: "Switched Off",
-        }));
-
-        setData(formattedData);
       } catch (err) {
         console.error("Error fetching corporate enquiries:", err);
-        setError(err.message || "Something went wrong while fetching data.");
       } finally {
         setLoading(false);
       }
@@ -212,14 +210,6 @@ export default function CorporateEnquiry() {
           <div style={{ textAlign: "center", padding: "2rem" }}>
             <Spin size="large" />
           </div>
-        ) : error ? (
-          <Alert
-            message="Error"
-            description={error}
-            type="error"
-            showIcon
-            style={{ marginBottom: "1rem" }}
-          />
         ) : (
           <Table
             columns={columns}

@@ -34,3 +34,27 @@ export const getUserTotalPlayGames = async () => {
     throw err;
   }
 };
+
+//gym
+export const getUserTotalGymPassesAvailable = async () => {
+  try {
+    const res = await api.get("/admin/services/getUserTotalGymPassesAvaliable");
+    console.log("GYM PASSES ===>", res);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching User Total Gym Passes:", err);
+    throw err;
+  }
+};
+
+// Coaches / Academy Data By Users API
+export const getCoachesOrAcademyDataByUsers = async () => {
+  try {
+    const res = await api.get("/admin/services/getCoachesOrAcademyDataByUsers");
+    console.log("COACH/ACADEMY DATA ===>", res);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching Coaches/Academy Data:", err);
+    throw err;
+  }
+};

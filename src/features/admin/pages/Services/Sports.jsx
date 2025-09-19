@@ -37,28 +37,24 @@ export default function SportsPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      setError(null);
       try {
         const res = await getUserTotalBookingTuf();
 
-        // Check kar lo console me res structure
         console.log("API Response:", res);
 
-        // Agar res.result hai
-        const resultData = res?.result || res?.data?.result;
-
-        if (resultData && resultData.length > 0) {
-          const formattedData = resultData.map((item) => ({
+        if (res?.status === 200 && Array.isArray(res?.result)) {
+          const formattedData = res.result.map((item) => ({
             ...item,
             key: item.id,
           }));
           setData(formattedData);
         } else {
-          setError("No data found.");
+          setData([]);
         }
       } catch (err) {
         console.error("Error fetching data:", err);
-        setError("Failed to fetch data. Please try again later.");
+        setLoading(false);
+        setData([]);
       } finally {
         setLoading(false);
       }
@@ -66,9 +62,6 @@ export default function SportsPage() {
 
     fetchData();
   }, []);
-
-  if (loading) return <Spin tip="Loading..." className="table-loading" />;
-  if (error) return <Alert message={error} type="error" showIcon />;
 
   return (
     <>
@@ -86,12 +79,18 @@ export default function SportsPage() {
           SEARCH
         </Button>
       </div>
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={{ pageSize: 10 }}
-        className="sports-table"
-      />
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "2rem" }}>
+          <Spin size="large" />
+        </div>
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={{ pageSize: 10 }}
+          className="sports-table"
+        />
+      )}
     </>
   );
 }

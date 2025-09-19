@@ -38,28 +38,23 @@ export default function EventPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      setError(null);
       try {
         const res = await getUserTotalAttendEvents();
 
-        // API ka response console me check kar lo
         console.log("API Response:", res);
 
-        // response structure ke hisab se result nikal lo
-        const resultData = res?.result || res?.data?.result;
-
-        if (resultData && resultData.length > 0) {
-          const formattedData = resultData.map((item) => ({
+        if (res?.status === 200 && Array.isArray(res?.result)) {
+          const formattedData = res.result.map((item) => ({
             ...item,
             key: item.id,
           }));
           setData(formattedData);
         } else {
-          setError("No data found.");
+          setData([]);
         }
       } catch (err) {
         console.error("Error fetching data:", err);
-        setError("Failed to fetch data. Please try again later.");
+        setData([]);
       } finally {
         setLoading(false);
       }
@@ -86,9 +81,9 @@ export default function EventPage() {
       </div>
 
       {loading ? (
-        <Spin tip="Loading..." />
-      ) : error ? (
-        <Alert message={error} type="warning" />
+        <div style={{ textAlign: "center", padding: "2rem" }}>
+          <Spin size="large" />
+        </div>
       ) : (
         <Table
           columns={columns}
