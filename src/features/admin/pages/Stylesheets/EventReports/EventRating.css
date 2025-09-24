@@ -1,0 +1,61 @@
+/* Search bar */
+.search-bar-container {
+  display: flex;
+  justify-content: space-between;
+  background: #1661d4;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.search-input-field {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.search-btn {
+  background: #fff;
+  color: #1163c7;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 0 1rem;
+}
+
+.search-btn:hover {
+  background: #1163c7;
+  color: #fff;
+}
+
+/* Rating page */
+.rating-page {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+}
+
+.export-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.rating-table .ant-table-cell {
+  font-size: 13px;
+  padding: 10px;
+}
+
+.rating-star {
+  color: #ccc;
+}
+
+.rating-star.filled {
+  color: #f5b50a;
+}
+
+.rating-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}

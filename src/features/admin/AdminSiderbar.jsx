@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/DantaSportslogo.png";
 
 const AdminSidebar = () => {
@@ -11,6 +11,8 @@ const AdminSidebar = () => {
     enquires: false,
     banners: false,
     services: false,
+    gymReports: false,
+    eventReports: false,
   });
 
   const toggleMenu = (key) =>
@@ -30,8 +32,11 @@ const AdminSidebar = () => {
         <li>
           <Link
             to="/admin"
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${isActive('/admin') ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
-              }`}
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${
+              isActive("/admin")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
           >
             {/* <LayoutDashboard size={18} /> */}
             Dashboard
@@ -42,8 +47,11 @@ const AdminSidebar = () => {
         <li>
           <Link
             to="/admin/sport-services"
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${isActive('/admin/sports') ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
-              }`}
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${
+              isActive("/admin/sports")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
           >
             {/* <BarChart3 size={18} /> */}
             Sports/Services
@@ -53,7 +61,7 @@ const AdminSidebar = () => {
         {/* Reports - Submenu */}
         <li>
           <button
-            onClick={() => toggleMenu('reports')}
+            onClick={() => toggleMenu("reports")}
             className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
           >
             <div className="flex items-center gap-3">
@@ -66,7 +74,7 @@ const AdminSidebar = () => {
             <ul className="ml-8 mt-1 space-y-1">
               <li>
                 <Link
-                  to="/admin/reports/bookings"
+                  to="/admin/ReportsAdmin/bookings"
                   className="block px-2 py-1 rounded hover:bg-gray-100"
                 >
                   Bookings
@@ -74,7 +82,7 @@ const AdminSidebar = () => {
               </li>
               <li>
                 <Link
-                  to="/admin/reports/revenue"
+                  to="/admin/ReportsAdmin/revenue"
                   className="block px-2 py-1 rounded hover:bg-gray-100"
                 >
                   Revenue
@@ -82,7 +90,7 @@ const AdminSidebar = () => {
               </li>
               <li>
                 <Link
-                  to="/admin/reports/rating"
+                  to="/admin/ReportsAdmin/rating"
                   className="block px-2 py-1 rounded hover:bg-gray-100"
                 >
                   Rating
@@ -90,7 +98,7 @@ const AdminSidebar = () => {
               </li>
               <li>
                 <Link
-                  to="/admin/reports/coupan"
+                  to="/admin/ReportsAdmin/coupan"
                   className="block px-2 py-1 rounded hover:bg-gray-100"
                 >
                   Coupan
@@ -107,11 +115,72 @@ const AdminSidebar = () => {
             </ul>
           )}
         </li>
+        <li>
+          <button
+            onClick={() => toggleMenu("gymReports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              {/* <BarChart3 size={18} /> */}
+              Gym Reports
+            </div>
+          </button>
 
+          {openMenus.gymReports && (
+            <ul className="ml-8 mt-2 space-y-2">
+              <li>
+                <Link to="/admin/GymReports/gym-booking">Gym Booking</Link>
+              </li>
+              <li>
+                <Link to="/admin/GymReports/gym-revenue">Gym Revenue</Link>
+              </li>
+              <li>
+                <Link to="/admin/GymReports/gym-rating">Gym Rating</Link>
+              </li>
+              <li>
+                <Link to="/admin/GymReports/gym-coupon">Gym Coupon</Link>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Event Reports */}
+        <li>
+          <button
+            onClick={() => toggleMenu("eventReports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              {/* <BarChart3 size={18} /> */}
+              Event Reports
+            </div>
+          </button>
+
+          {openMenus.eventReports && (
+            <ul className="ml-8 mt-2 space-y-2">
+              <li>
+                <Link to="/admin/EventReports/event-booking">
+                  Event Booking
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/EventReports/event-revenue">
+                  Event Revenue
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/EventReports/event-rating">Event Rating</Link>
+              </li>
+              <li>
+                <Link to="/admin/EventReports/event-coupon">Event Coupon</Link>
+              </li>
+            </ul>
+          )}
+        </li>
         {/* Enquires - Submenu */}
         <li>
           <button
-            onClick={() => toggleMenu('enquires')}
+            onClick={() => toggleMenu("enquires")}
             className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
           >
             <div className="flex items-center gap-3">
@@ -170,8 +239,11 @@ const AdminSidebar = () => {
         <li>
           <Link
             to="/admin/vendors"
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${isActive('/admin/vendors') ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
-              }`}
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${
+              isActive("/admin/vendors")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
           >
             {/* <Users size={18} /> */}
             Vendors
@@ -182,8 +254,11 @@ const AdminSidebar = () => {
         <li>
           <Link
             to="/admin/venues"
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${isActive('/admin/venues') ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
-              }`}
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${
+              isActive("/admin/venues")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
           >
             {/* <MessageSquare size={18} /> */}
             Venues
@@ -194,8 +269,11 @@ const AdminSidebar = () => {
         <li>
           <Link
             to="/admin/amenities"
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${isActive('/admin/amenities') ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
-              }`}
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg ${
+              isActive("/admin/amenities")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+            }`}
           >
             {/* <Settings size={18} /> */}
             Amenities
@@ -205,7 +283,7 @@ const AdminSidebar = () => {
         {/* Banners - Submenu */}
         <li>
           <button
-            onClick={() => toggleMenu('banners')}
+            onClick={() => toggleMenu("banners")}
             className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
           >
             <div className="flex items-center gap-3">
@@ -239,7 +317,7 @@ const AdminSidebar = () => {
         {/* Services - Submenu */}
         <li>
           <button
-            onClick={() => toggleMenu('services')}
+            onClick={() => toggleMenu("services")}
             className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
           >
             <div className="flex items-center gap-3">

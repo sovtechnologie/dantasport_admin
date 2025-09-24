@@ -1,0 +1,98 @@
+/* RatingAdmin.css */
+
+/* reuse booking-like top bar */
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1661d4;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0px 30px 40px -20px rgba(0,0,0,0.25);
+  margin-bottom: 1.5rem;
+}
+
+.filter-section {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-item {
+  min-width: 40vw;
+}
+
+.search-input-field {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+/* Search button */
+.search-btn {
+  background-color: #fff;
+  color: #1163c7;
+  font-weight: bold;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Export section (right aligned) */
+.export-wrapper { margin-bottom: 0.75rem; }
+.export-section {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
+}
+.export-btn {
+  background: none;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+/* Page wrapper */
+.rating-page {
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+/* Table styling */
+.rating-table .ant-table-cell {
+  vertical-align: middle;
+}
+
+/* Rating stars */
+.rating-stars { display: inline-flex; align-items: center; gap: 6px; }
+.rating-star {
+  font-size: 16px;
+  color: #ddd;           /* empty star color */
+  line-height: 1;
+}
+.rating-star.filled {
+  color: #FFC107;        /* yellow filled star */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+.rating-value {
+  font-size: 13px;
+  color: #333;
+}
+
+/* Review cell wrap */
+.rating-table .ant-table-cell .review-cell {
+  white-space: normal;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-item { min-width: 100%; }
+  .search-input-field { width: 100%; }
+}

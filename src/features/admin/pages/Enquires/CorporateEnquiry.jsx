@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, Alert } from "antd";
+import { Table, Input, Button, Select, Spin, Alert, message } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/Enquires/CorporateEnquiry.css";
-import { getBookingEnquires } from "../../../../services/admin/Enquiryes/endpintApi";
+import {
+  getBookingEnquires,
+  updateEnquiryStatus,
+} from "../../../../services/admin/Enquiryes/endpintApi";
 
 const { Option } = Select;
 
@@ -45,6 +48,61 @@ const subStatusOptions = {
   Disqualified: ["Not Target Audience", "Duplicate Entry", "Fake Lead"],
 };
 
+// ✅ Numeric mapping for backend
+const statusMapping = {
+  "Not Connected": 1,
+  "Connected(Not Interested)": 2,
+  "Connected(Interested)": 3,
+  "Follow-up": 4,
+  "Closed Won": 5,
+  "Closed Lost": 6,
+  Disqualified: 7,
+};
+
+const subStatusMapping = {
+  // Not Connected
+  "Switched Off": 1,
+  "Out of Coverage": 2,
+  "Invalid Number": 3,
+  "Number Busy": 4,
+  "No Answer": 5,
+  "Call Later/Callback Requested": 6,
+
+  // Connected (Not Interested)
+  Generic: 7,
+  "Already Using Competitor": 8,
+  "Not the Right Time": 9,
+  "Not Relevant/Wrong Contact": 10,
+
+  // Connected (Interested)
+  "Send Details": 11,
+  "Schedule Follow-up": 12,
+  "Schedule Demo/Meeting": 13,
+  "Wants to Discuss with Team": 14,
+  "Ask to Call Letter": 15,
+
+  // Follow-up
+  "Follow-up Scheduled": 16,
+  "Waiting for Client Response": 17,
+  "Sent Proposal/Brochure": 18,
+
+  // Closed Won
+  onboarded: 19,
+
+  // Closed Lost
+  Lost: 20,
+  "No Response": 21,
+  "Not Interested After Demo": 22,
+  "Pricing Too High": 23,
+  "Chose Competior": 24,
+  "Internal Reasons": 25,
+
+  // Disqualified
+  "Not Target Audience": 26,
+  "Duplicate Entry": 27,
+  "Fake Lead": 28,
+};
+
 export default function CorporateEnquiry() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -82,26 +140,61 @@ export default function CorporateEnquiry() {
     fetchData();
   }, []);
 
-  const handleStatusChange = (recordKey, newStatus) => {
+  const handleStatusChange = async (recordKey, newStatus) => {
+    const updatedSubStatus = subStatusOptions[newStatus]?.[0] || "";
+
     setData((prev) =>
       prev.map((item) =>
         item.key === recordKey
-          ? {
-              ...item,
-              status: newStatus,
-              subStatus: subStatusOptions[newStatus]?.[0] || "",
-            }
+          ? { ...item, status: newStatus, subStatus: updatedSubStatus }
           : item
       )
     );
+
+    try {
+      const res = await updateEnquiryStatus({
+        enquiryId: recordKey,
+        status: statusMapping[newStatus],
+        subStatus: subStatusMapping[updatedSubStatus],
+      });
+
+      if (
+        (res?.messsage === true || res?.message === true) &&
+        res?.status === 200
+      ) {
+        alert("Status updated successfully");
+      } else {
+        alert("Failed to update status");
+      }
+    } catch {
+      message.error("Failed to update status");
+    }
   };
 
-  const handleSubStatusChange = (recordKey, newSubStatus) => {
+  const handleSubStatusChange = async (recordKey, newSubStatus) => {
     setData((prev) =>
       prev.map((item) =>
         item.key === recordKey ? { ...item, subStatus: newSubStatus } : item
       )
     );
+
+    try {
+      const res = await updateEnquiryStatus({
+        enquiryId: recordKey,
+        subStatus: subStatusMapping[newSubStatus],
+      });
+
+      if (
+        (res?.messsage === true || res?.message === true) &&
+        res?.status === 200
+      ) {
+        alert(" Sub-Status updated successfully");
+      } else {
+        message.error("Failed to update status");
+      }
+    } catch {
+      message.error("Failed to update sub-status");
+    }
   };
 
   const columns = [

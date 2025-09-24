@@ -9,6 +9,7 @@ const LoginPage = lazy(() => import("../pages/Login.jsx"));
 const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
 // Temporary fix for dynamic import issue
 import VendorLayout from "../layouts/VendorLayout";
+import RevenuePage from "../features/vendor/pages/ReportPage/RevenuePage";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
 const VendorDashboard = lazy(() => import("../pages/vendor/Dashboard"));
@@ -130,12 +131,58 @@ const VenGymEditTimeSlot = lazy(() =>
 );
 
 // Admin routes
+
+// ✅ Admin Gym Reports
+const GymBookingAdminPage = lazy(() =>
+  import("../features/admin/pages/GymReports/GymBooking.jsx")
+);
+const GymRevenueAdminPage = lazy(() =>
+  import("../features/admin/pages/GymReports/GymRevenue.jsx")
+);
+const GymRatingAdminPage = lazy(() =>
+  import("../features/admin/pages/GymReports/GymRating.jsx")
+);
+const GymCouponAdminPage = lazy(() =>
+  import("../features/admin/pages/GymReports/GymCoupan.jsx")
+);
+
+// ✅ Admin Event Reports
+const EventBookingAdminPage = lazy(() =>
+  import("../features/admin/pages/EventReports/EventBooking.jsx")
+);
+const EventRevenueAdminPage = lazy(() =>
+  import("../features/admin/pages/EventReports/EventRevenue.jsx")
+);
+const EventRatingAdminPage = lazy(() =>
+  import("../features/admin/pages/EventReports/EventRating.jsx")
+);
+const EventCouponAdminPage = lazy(() =>
+  import("../features/admin/pages/EventReports/EventCoupan.jsx")
+);
+
 const AdmSportService = lazy(() =>
   import("../features/admin/pages/SportServicesPage")
 );
 const VendorEnquiry = lazy(() =>
   import("../features/admin/pages/Enquires/VendorEnquiry")
 );
+
+const BookingAdmin = lazy(() =>
+  import("../features/admin/pages/ReportsAdmin/BookingAdmin.jsx")
+);
+
+const RevenueAdmin = lazy(() =>
+  import("../features/admin/pages/ReportsAdmin/RevenueAdmin")
+);
+
+const RatingAdmin = lazy(() =>
+  import("../features/admin/pages/ReportsAdmin/RatingAdmin")
+);
+
+const CoupanAdmin = lazy(() =>
+  import("../features/admin/pages/ReportsAdmin/CoupanAdmin")
+);
+
 const CorporateEnquiry = lazy(() =>
   import("../features/admin/pages/Enquires/CorporateEnquiry")
 );
@@ -213,6 +260,58 @@ const AppRoutes = () => {
               path="/admin/enquires/corporate"
               element={<CorporateEnquiry />}
             />
+            <Route
+              path="/admin/ReportsAdmin/bookings"
+              element={<BookingAdmin />}
+            />
+
+            <Route
+              path="/admin/ReportsAdmin/revenue"
+              element={<RevenueAdmin />}
+            />
+            <Route
+              path="/admin/ReportsAdmin/rating"
+              element={<RatingAdmin />}
+            />
+            <Route
+              path="/admin/ReportsAdmin/coupan"
+              element={<CoupanAdmin />}
+            />
+            <Route
+              path="/admin/GymReports/gym-booking"
+              element={<GymBookingAdminPage />}
+            />
+            <Route
+              path="/admin/GymReports/gym-revenue"
+              element={<GymRevenueAdminPage />}
+            />
+            <Route
+              path="/admin/GymReports/gym-rating"
+              element={<GymRatingAdminPage />}
+            />
+            <Route
+              path="/admin/GymReports/gym-coupon"
+              element={<GymCouponAdminPage />}
+            />
+
+            {/* Events */}
+            <Route
+              path="/admin/EventReports/event-booking"
+              element={<EventBookingAdminPage />}
+            />
+            <Route
+              path="/admin/EventReports/event-revenue"
+              element={<EventRevenueAdminPage />}
+            />
+            <Route
+              path="/admin/EventReports/event-rating"
+              element={<EventRatingAdminPage />}
+            />
+            <Route
+              path="/admin/EventReports/event-coupon"
+              element={<EventCouponAdminPage />}
+            />
+
             {/* Vendor */}
             <Route path="/admin/vendors" element={<VendorListPage />} />
             <Route path="/admin/vendors/add-vendor" element={<AddVendor />} />
