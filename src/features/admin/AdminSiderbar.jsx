@@ -296,7 +296,7 @@ const AdminSidebar = () => {
             <ul className="ml-8 mt-1 space-y-1">
               <li>
                 <Link
-                  to="/admin/banners/home"
+                  to="/admin/banners/bannerlist"
                   className="block px-2 py-1 rounded hover:bg-gray-100"
                 >
                   By Admin

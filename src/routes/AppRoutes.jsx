@@ -147,6 +147,8 @@ const GymCouponAdminPage = lazy(() =>
 );
 
 // ✅ Admin Event Reports
+const BannerList = lazy(() => import("../features/admin/pages/BannerList"));
+const EditBanner = lazy(() => import("../features/admin/pages/EditBanner"));
 const EventBookingAdminPage = lazy(() =>
   import("../features/admin/pages/EventReports/EventBooking.jsx")
 );
@@ -264,7 +266,7 @@ const AppRoutes = () => {
               path="/admin/ReportsAdmin/bookings"
               element={<BookingAdmin />}
             />
-
+            <Route path="/admin/banners/edit/:id" element={<EditBanner />} />
             <Route
               path="/admin/ReportsAdmin/revenue"
               element={<RevenueAdmin />}
@@ -328,7 +330,14 @@ const AppRoutes = () => {
             />
             {/* Banners */}
             <Route path="/admin/banners/home" element={<AddBannerAdmin />} />
-            <Route path="/admin/banners/vendor" element={<AddBannerVendor />} />
+
+            <Route path="/admin/banners/bannerlist" element={<BannerList />} />
+            <Route path="/admin/banners/vendor" element={<BannerList />} />
+
+            <Route
+              path="/admin/banners/vendorBanner"
+              element={<AddBannerVendor />}
+            />
             {/* Services */}
             <Route path="/admin/services/sports" element={<SportsPage />} />
             <Route path="/admin/services/runEvent" element={<RunEventPage />} />
@@ -365,7 +374,7 @@ const AppRoutes = () => {
               element={<VenManAddSport />}
             />
             <Route
-              path="/vendor/manage/editsport/:id"
+              path="/vendor/manage/editsport/:venueId/:vendorSportsId"
               element={<VenManEditSport />}
             />
             <Route path="/vendor/manage/court" element={<VenManCourt />} />

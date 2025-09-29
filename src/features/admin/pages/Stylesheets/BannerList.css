@@ -1,0 +1,71 @@
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1661d4;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+ 
+.filter-section {
+  flex: 1;
+}
+ 
+.search-input-field {
+  width: 100%;
+  padding: 0.5rem;
+}
+ 
+.search-btn {
+  margin-left: 10px;
+  background: #fff;
+  color: #1163c7;
+  font-weight: bold;
+  border-radius: 8px;
+  height: 40px;
+}
+ 
+.bookings-page {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+}
+ 
+.export-section {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+ 
+.export-btn {
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 6px;
+  padding: 4px 12px;
+}
+ 
+.admin-vendor-tabs {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+ 
+.admin-vendor-tabs div {
+  cursor: pointer;
+  padding-bottom: 5px;
+  color: #555;
+}
+ 
+.admin-vendor-tabs .active {
+  color: #1677ff;
+  font-weight: bold;
+  border-bottom: 2px solid #1677ff;
+}
+ 
+.bookings-table .ant-table-cell {
+  vertical-align: middle;
+  font-size: 13px;
+  padding: 10px;
+}

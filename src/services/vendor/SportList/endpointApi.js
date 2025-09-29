@@ -29,7 +29,15 @@ export const UpdateSportVenue = async(payload) =>{
         throw error;
     }
 }
-
+export const UpdatePriceSlot = async (payload) => {
+    try {
+        const response = await api.put("vendor/slotPrice/updatePriceSlot", payload);
+        return response.data;
+    } catch (error) {
+        console.error("Error updating price slots:", error);
+        throw error;
+    }
+};
 export const getSportsListByCategory = async (payload) => {
     try {
         const response = await api.post('vendor/sports/getSportsListByCategory', payload);

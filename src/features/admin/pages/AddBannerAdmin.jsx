@@ -1,14 +1,13 @@
-import { Form, Input, DatePicker, Select, Upload, Button } from 'antd';
-import './Stylesheets/AdminBanner.css';
+import { Form, Input, DatePicker, Select, Upload, Button } from "antd";
+import "./Stylesheets/AdminBanner.css";
 import uploadImage from "../../../assets/UploadIcon.png";
-import { useCreateBanner } from '../../../hooks/admin/banners/useCreateBanner';
-import { useUpdateBanner } from '../../../hooks/admin/banners/useUpdateBanner';
-import { useFetchCustomCity } from '../../../hooks/admin/banners/useFetchCustomCity';
-import { useState } from 'react';
+import { useCreateBanner } from "../../../hooks/admin/banners/useCreateBanner";
+import { useUpdateBanner } from "../../../hooks/admin/banners/useUpdateBanner";
+import { useFetchCustomCity } from "../../../hooks/admin/banners/useFetchCustomCity";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
-
-
 
 export default function AddBannerForm() {
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -17,50 +16,50 @@ export default function AddBannerForm() {
   const updateBanner = useUpdateBanner();
   const { data: customCityList, isLoading: cityloading } = useFetchCustomCity();
   const customCities = customCityList?.result || [];
-
+  const navigate = useNavigate();
 
   const onFinish = (values) => {
     setUpdateLoading(true);
     const formData = new FormData();
 
-    formData.append('startDate', values.startDate?.format('YYYY-MM-DD'));
-    formData.append('endDate', values.endDate?.format('YYYY-MM-DD'));
-    formData.append('url', values.pageLink);
-    formData.append('bannerType', '1');
-
+    formData.append("startDate", values.startDate?.format("YYYY-MM-DD"));
+    formData.append("endDate", values.endDate?.format("YYYY-MM-DD"));
+    formData.append("url", values.pageLink);
+    formData.append("bannerType", "1");
 
     if (values.desktopBanner?.length > 0) {
-      formData.append('desktopImage', values.desktopBanner[0].originFileObj);
+      formData.append("desktopImage", values.desktopBanner[0].originFileObj);
     }
     if (values.mobileBanner?.length > 0) {
-      formData.append('mobileImage', values.mobileBanner[0].originFileObj);
+      formData.append("mobileImage", values.mobileBanner[0].originFileObj);
     }
 
-
-    console.log('Submitted values:', formData);
+    console.log("Submitted values:", formData);
     // Call mutation
     createBanner.mutate(formData, {
       onSuccess: (data) => {
+        navigate("/admin/banners/bannerlist");
         const payload = {
           bannerId: data?.result,
           location: values.location,
           page: values.page.map(Number),
-          position: Number(values.position)
-        }
+          position: Number(values.position),
+        };
         updateBanner.mutate(payload, {
           onSettled: () => {
             setUpdateLoading(false);
-          }
-        })
+          },
+        });
         form.resetFields();
       },
-      onError: () => setUpdateLoading(false)
+      onError: () => setUpdateLoading(false),
     });
   };
 
   return (
     <div className="banner-form-container">
       <h3 className="form-title">Add Banners</h3>
+
       <Form
         form={form}
         layout="vertical"
@@ -68,11 +67,19 @@ export default function AddBannerForm() {
         className="banner-form"
       >
         <div className="form-row">
-          <Form.Item label="Start Date" name="startDate" rules={[{ required: true }]}>
-            <DatePicker style={{ width: '100%' }} />
+          <Form.Item
+            label="Start Date"
+            name="startDate"
+            rules={[{ required: true }]}
+          >
+            <DatePicker style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item label="End Date" name="endDate" rules={[{ required: true }]}>
-            <DatePicker style={{ width: '100%' }} />
+          <Form.Item
+            label="End Date"
+            name="endDate"
+            rules={[{ required: true }]}
+          >
+            <DatePicker style={{ width: "100%" }} />
           </Form.Item>
         </div>
 
@@ -88,7 +95,11 @@ export default function AddBannerForm() {
               <Option value="gurugram">Gurugram</Option>
             </Select>
           </Form.Item> */}
-          <Form.Item label="Location" name="location" rules={[{ required: true }]}>
+          <Form.Item
+            label="Location"
+            name="location"
+            rules={[{ required: true }]}
+          >
             <Select
               placeholder="Select Location"
               mode="multiple"
@@ -130,7 +141,11 @@ export default function AddBannerForm() {
             </Select>
           </Form.Item>
 
-          <Form.Item label="BannerPosition" name="position" rules={[{ required: true }]}>
+          <Form.Item
+            label="BannerPosition"
+            name="position"
+            rules={[{ required: true }]}
+          >
             <Select placeholder="Select Banner Position">
               <Option value="1">1</Option>
               <Option value="2">2</Option>
@@ -150,10 +165,18 @@ export default function AddBannerForm() {
             getValueFromEvent={(e) => e?.fileList}
             rules={[{ required: true }]}
           >
-            <Upload listType="picture" beforeUpload={() => false} className='upload-banner-image'>
-              <div className='upload-banner'>
-                <img src={uploadImage} alt="Upload" className='desktop-image' />
-                <div>Upload Image<br />(Size 430px * 200px)</div>
+            <Upload
+              listType="picture"
+              beforeUpload={() => false}
+              className="upload-banner-image"
+            >
+              <div className="upload-banner">
+                <img src={uploadImage} alt="Upload" className="desktop-image" />
+                <div>
+                  Upload Image
+                  <br />
+                  (Size 430px * 200px)
+                </div>
               </div>
             </Upload>
           </Form.Item>
@@ -165,17 +188,30 @@ export default function AddBannerForm() {
             getValueFromEvent={(e) => e?.fileList}
             rules={[{ required: true }]}
           >
-            <Upload listType="picture" beforeUpload={() => false} className='upload-banner-image'>
-              <div className='upload-banner'>
-                <img src={uploadImage} alt="Upload" className='desktop-image' />
-                <div>Upload Image<br />(Size 430px * 200px)</div>
+            <Upload
+              listType="picture"
+              beforeUpload={() => false}
+              className="upload-banner-image"
+            >
+              <div className="upload-banner">
+                <img src={uploadImage} alt="Upload" className="desktop-image" />
+                <div>
+                  Upload Image
+                  <br />
+                  (Size 430px * 200px)
+                </div>
               </div>
             </Upload>
           </Form.Item>
         </div>
 
-        <Form.Item style={{ textAlign: 'center' }}>
-          <Button type="primary" htmlType="submit" className="submit-btn" loading={updateLoading}>
+        <Form.Item style={{ textAlign: "center" }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="submit-btn"
+            loading={updateLoading}
+          >
             UPDATE BANNER
           </Button>
         </Form.Item>
@@ -183,7 +219,6 @@ export default function AddBannerForm() {
     </div>
   );
 }
-
 
 // const fileToBase64 = (file) => {
 //   return new Promise((resolve, reject) => {
