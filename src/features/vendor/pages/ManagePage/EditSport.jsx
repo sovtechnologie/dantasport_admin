@@ -32,24 +32,30 @@ const days = [
 ];
 
 export default function EditSport() {
-  const { venueId, sportId } = useParams();
+  const { venueId, vendorSportsId } = useParams();
+  console.log("Venue ID:", venueId);
+  console.log("Vendor Sports ID:", vendorSportsId);
+
   const [form] = Form.useForm();
   const [slots, setSlots] = useState(
     days.reduce((acc, day) => ({ ...acc, [day]: [] }), {})
   );
 
   const { data: sportsList, loading: sportsLoading } = useFetchSports();
+
   const { data: sportPriceData, loading: sportPriceLoading } =
-    useFetchSportPrice({ venueId, sportId });
+    useFetchSportPrice({
+      venueId: Number(venueId),
+      vendorSportsId: Number(vendorSportsId),
+    });
 
   const { mutate: updateVendorSports } = useUpdateVendorSport();
   const { mutate: updatePriceSlot } = useUpdatePriceSlot();
 
-  // Correct vendorSportsId
-  const vendorSportsId = sportPriceData?.result?.[0]?.vendor_sports_id;
   const sPortsId = sportPriceData?.result?.[0]?.sport_id;
+  console.log("sPortsIdsPortsIdsPortsId", sPortsId);
   const navigate = useNavigate();
-  // Prefill form and slots
+
   useEffect(() => {
     if (sportPriceData?.result?.length) {
       const sportData = sportPriceData.result[0];
@@ -62,12 +68,9 @@ export default function EditSport() {
         minduration: sportData.minimum_booking_duration,
         courtNO: sportData.courts_count,
         description: sportData.description,
-        vendor_sports_id: sportData.vendor_sports_id,
       });
 
-      // Initialize empty slots for each day
       const newSlots = days.reduce((acc, day) => ({ ...acc, [day]: [] }), {});
-
       const dayKeys = [
         "monday",
         "tuesday",
@@ -77,33 +80,33 @@ export default function EditSport() {
         "saturday",
         "sunday",
       ];
-
-      // Track already pushed slot IDs to avoid duplicates
       const addedSlotIds = new Set();
 
-      sportData.price_slots.forEach((slot) => {
-        dayKeys.forEach((dayKey, i) => {
-          if (
-            slot[dayKey] === 1 &&
-            !addedSlotIds.has(slot.price_slot_id + dayKey)
-          ) {
-            const dayName = days[i];
-            newSlots[dayName].push({
-              startTime: slot.start_time
-                ? dayjs(slot.start_time, "HH:mm:ss.SSSSSS")
-                : null,
-              endTime: slot.end_time
-                ? dayjs(slot.end_time, "HH:mm:ss.SSSSSS")
-                : null,
-              price: slot.price,
-              price_slot_id: slot.price_slot_id,
-            });
-            addedSlotIds.add(slot.price_slot_id + dayKey);
-          }
+      if (sportData.price_slots) {
+        sportData.price_slots.forEach((slot) => {
+          dayKeys.forEach((dayKey, i) => {
+            if (
+              slot[dayKey] === 1 &&
+              !addedSlotIds.has(slot.price_slot_id + dayKey)
+            ) {
+              const dayName = days[i];
+              newSlots[dayName].push({
+                startTime: slot.start_time
+                  ? dayjs(slot.start_time, "HH:mm:ss.SSSSSS")
+                  : null,
+                endTime: slot.end_time
+                  ? dayjs(slot.end_time, "HH:mm:ss.SSSSSS")
+                  : null,
+                price: slot.price,
+                price_slot_id: slot.price_slot_id,
+              });
+              addedSlotIds.add(slot.price_slot_id + dayKey);
+            }
+          });
         });
-      });
+      }
 
-      setSlots(newSlots); // only set once
+      setSlots(newSlots);
     }
   }, [sportPriceData, form]);
 
@@ -125,11 +128,10 @@ export default function EditSport() {
     setSlots({ ...slots, [day]: updated });
   };
 
-  // Update vendor sport info
   const handleUpdateVendorSports = (values) => {
     const payload = {
-      vendorSportsId: vendorSportsId,
-      sportId: values.sport_id,
+      vendorSportsId: Number(vendorSportsId),
+      sportId: values.selectSport,
       slotDuration: values.duration,
       minimumBookingDuration: values.minduration,
       description: values.description,
@@ -145,8 +147,6 @@ export default function EditSport() {
     });
   };
 
-  // Update slots
-  // Update slots
   const handleUpdateSlots = () => {
     let slotArray = [];
     days.forEach((day) => {
@@ -154,7 +154,7 @@ export default function EditSport() {
         slotArray.push({
           startTime: slot.startTime?.format("HH:mm"),
           endTime: slot.endTime?.format("HH:mm"),
-          pricePerHour: slot.price, // ✅ match backend key
+          pricePerHour: slot.price,
           monday: day === "Monday" ? 1 : 0,
           tuesday: day === "Tuesday" ? 1 : 0,
           wednesday: day === "Wednesday" ? 1 : 0,
@@ -168,14 +168,13 @@ export default function EditSport() {
 
     const payload = {
       venueId: Number(venueId),
-      sportId: Number(sport_id),
+      sportId: Number(sPortsId),
       slots: slotArray,
     };
 
     updatePriceSlot(payload, {
       onSuccess: () => {
         message.success("Slots updated successfully!");
-
         navigate("/vendor/manage/sports");
       },
       onError: (err) =>
@@ -201,21 +200,18 @@ export default function EditSport() {
             >
               <Select placeholder="Select Sport" loading={sportsLoading}>
                 {sportsList?.result?.map((sport) => (
-                  <Option key={sport.id} value={sport.sport_id}>
-                    {" "}
-                    {/* value is ID */}
-                    {sport.sports_name} {/* display name */}
+                  <Option key={sport.id} value={sport.id}>
+                    {sport.sports_name}
                   </Option>
                 ))}
               </Select>
             </Form.Item>
-
             <Form.Item
               name="minduration"
               label="Minimum Booking Duration"
               rules={[{ required: true }]}
             >
-              <Input disabled className="disabled-input" />
+              <Input className="disaed-input" />
             </Form.Item>
           </div>
 
