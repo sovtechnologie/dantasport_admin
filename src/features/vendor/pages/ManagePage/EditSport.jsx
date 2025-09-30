@@ -51,8 +51,14 @@ export default function EditSport() {
 
   const { mutate: updateVendorSports } = useUpdateVendorSport();
   const { mutate: updatePriceSlot } = useUpdatePriceSlot();
+  const [sPortsId, setSPortsId] = useState(null);
 
-  const sPortsId = sportPriceData?.result?.[0]?.sport_id;
+  useEffect(() => {
+    if (sportPriceData?.result?.length) {
+      setSPortsId(sportPriceData.result[0].sport_id);
+    }
+  }, [sportPriceData]);
+  // const sPortsId = sportPriceData?.result?.[0]?.sport_id;
   console.log("sPortsIdsPortsIdsPortsId", sPortsId);
   const navigate = useNavigate();
 
@@ -139,7 +145,10 @@ export default function EditSport() {
     };
 
     updateVendorSports(payload, {
-      onSuccess: () => message.success("Sport info updated successfully!"),
+      onSuccess: () => {
+        message.success("Vandor updated successfully!");
+        navigate("/vendor/manage/sports");
+      },
       onError: (err) =>
         message.error(
           err?.response?.data?.message || "Failed to update sport info"
@@ -168,7 +177,7 @@ export default function EditSport() {
 
     const payload = {
       venueId: Number(venueId),
-      sportId: Number(sPortsId),
+      sportId: Number(form.getFieldValue("selectSport")),
       slots: slotArray,
     };
 
@@ -198,7 +207,12 @@ export default function EditSport() {
               label="Select Sport"
               rules={[{ required: true }]}
             >
-              <Select placeholder="Select Sport" loading={sportsLoading}>
+              <Select
+                placeholder="Select Sport"
+                disabled={true}
+                className="disabled-input"
+                loading={sportsLoading}
+              >
                 {sportsList?.result?.map((sport) => (
                   <Option key={sport.id} value={sport.id}>
                     {sport.sports_name}
@@ -232,6 +246,8 @@ export default function EditSport() {
               rules={[{ required: true }]}
             >
               <InputNumber
+                disabled
+                className="disabled-input"
                 style={{ width: "100%" }}
                 placeholder="No. of Courts"
               />
@@ -266,6 +282,7 @@ export default function EditSport() {
                     onChange={(time) =>
                       handleSlotChange(day, index, "startTime", time)
                     }
+                     use12Hours
                   />
                   <TimePicker
                     format="HH:mm"
@@ -273,6 +290,7 @@ export default function EditSport() {
                     onChange={(time) =>
                       handleSlotChange(day, index, "endTime", time)
                     }
+                     use12Hours
                   />
                   <InputNumber
                     min={0}

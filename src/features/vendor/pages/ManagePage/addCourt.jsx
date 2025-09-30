@@ -1,56 +1,120 @@
 import "../../styelsheets/Manage/addCourt.css";
-import { Form, Input, Button, Upload, Select } from 'antd';
+import { Form, Input, Button, Select, message, Spin } from "antd";
+import { useState } from "react";
+import { AddSingleCourt } from "../../../../services/vendor/Court/endpointsApi";
+import { useFetchSports } from "../../../../hooks/admin/sport/useFetchSport";
+import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+import { useNavigate } from "react-router-dom";
+
+const { Option } = Select;
 const { TextArea } = Input;
 
 export default function AddCourt() {
+  const [form] = Form.useForm();
+  const [selectedVenue, setSelectedVenue] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const [form] = Form.useForm();
+  const { data: sportsData, isLoading: sportsLoading } = useFetchSports();
+  const { data: venuesData, isLoading: venuesLoading } =
+    useFetchVendorVenueList();
+  const navigate = useNavigate();
+  const onFinish = async (values) => {
+    if (!selectedVenue) {
+      return message.error("Please select a venue first!");
+    }
 
-    const onFinish = (values) => {
-        console.log('Form Values:', values);
+    const payload = {
+      courtName: values.courtName,
+      sportId: values.sports,
+      venueId: selectedVenue,
+      description: values.description,
     };
+
+    setLoading(true);
+    try {
+      await AddSingleCourt(payload);
+      message.success("Court added successfully!");
+      navigate("/vendor/manage/court");
+      form.resetFields();
+      setSelectedVenue(null);
+    } catch (err) {
+      console.error("Error adding court:", err);
+      message.error("Failed to add court.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (sportsLoading || venuesLoading) {
     return (
-        <div className="add-Court-Container">
-            <div className="add-court-form-section">
-                <Form
-                    layout="vertical"
-                    onFinish={onFinish}
-                    form={form}
-                >
-                    <h2 className="add-court-title">Add Court</h2>
-                    <div className="court-form-row">
-                        <Form.Item name="selectVenue" label="Select Venue" rules={[{ required: true }]}>
-                            <Select placeholder="Select Venue" className="court-Select">
-                                <Option value="venue1">Venue 1</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="courtName" label="Enter Court Name" rules={[{ required: true }]}>
-                            <Input placeholder="E.g. 6x6 Box Cricket " />
-                        </Form.Item>
-                    </div>
+      <div className="add-Court-Container">
+        <Spin tip="Loading venues and sports..." size="large" />
+      </div>
+    );
+  }
 
-                    <div className="court-form-row">
-                        <Form.Item name="sports" label="Sport" rules={[{ required: true }]}>
-                            <Select placeholder="Select Sport" className="court-Select">
-                                <Option value="sport1">Cricket</Option>
-                                <Option value="sport1">Football</Option>
-                                <Option value="sport1">Batminton</Option>
-                                <Option value="sport1">Tennis</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="description" label="Description" rules={[{ required: true }]}>
-                            <TextArea placeholder="Enter the Description" />
-                        </Form.Item>
-                    </div>
+  return (
+    <div className="add-Court-Container">
+      <div className="add-court-form-section">
+        <Form layout="vertical" onFinish={onFinish} form={form}>
+          <h2 className="add-court-title">Add Court</h2>
 
-                    <Form.Item className="centered-submit">
-                        <Button type="primary" htmlType="submit" >
-                            CREATE COURT
-                        </Button>
-                    </Form.Item>
+          <div className="court-form-row">
+            <Form.Item
+              name="selectVenue"
+              label="Select Venue"
+              rules={[{ required: true }]}
+            >
+              <Select
+                placeholder="Select Venue"
+                className="court-Select"
+                value={selectedVenue}
+                onChange={(value) => setSelectedVenue(value)}
+              >
+                {venuesData?.resutl?.map((venue) => (
+                  <Option key={venue.venue_id} value={venue.venue_id}>
+                    {venue.venue_name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-                </Form>
-            </div>
-        </div>
-    )
+            <Form.Item
+              name="courtName"
+              label="Enter Court Name"
+              rules={[{ required: true }]}
+            >
+              <Input placeholder="E.g. 6x6 Box Cricket" />
+            </Form.Item>
+          </div>
+
+          <div className="court-form-row">
+            <Form.Item name="sports" label="Sport" rules={[{ required: true }]}>
+              <Select placeholder="Select Sport" className="court-Select">
+                {sportsData?.result?.map((sport) => (
+                  <Option key={sport.id} value={sport.id}>
+                    {sport.sports_name || sport.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="description"
+              label="Description"
+              rules={[{ required: true }]}
+            >
+              <TextArea placeholder="Enter the Description" />
+            </Form.Item>
+          </div>
+
+          <Form.Item className="centered-submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
+              CREATE COURT
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </div>
+  );
 }

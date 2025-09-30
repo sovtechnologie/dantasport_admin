@@ -129,7 +129,9 @@ const VenGymAddTimeSlot = lazy(() =>
 const VenGymEditTimeSlot = lazy(() =>
   import("../features/vendor/pages/Gym/EditGymTimeSlot")
 );
-
+const VenManEditCourt = lazy(() =>
+  import("../features/vendor/pages/ManagePage/EditCourt.jsx")
+);
 // Admin routes
 
 // ✅ Admin Gym Reports
@@ -381,6 +383,10 @@ const AppRoutes = () => {
             <Route
               path="/vendor/manage/addcourt"
               element={<VenManAddCourt />}
+            />
+            <Route
+              path="/vendor/manage/editcourt/:courId"
+              element={<VenManEditCourt />}
             />
             <Route path="/vendor/manage/images" element={<VenManImages />} />
             <Route
