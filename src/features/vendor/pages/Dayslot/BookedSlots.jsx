@@ -1,136 +1,173 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import { Spin, message, Button, Card } from "antd";
+import {
+  getBookedAndAvailableBookings,
+  updateVenueBooking,
+} from "../../../../services/vendor/DaySlots/endpointApi";
 import "../../styelsheets/DaySlots/BookedSlots.css";
-import { Button, Modal, Input } from "antd";
-import { useState } from "react";
 
-const dummyBookings = [
-    {
-        id: 1,
-        date: "Tue, 22nd April 2025",
-        name: "Badminton Premium Hybrid",
-        court: "Court 1",
-        sport: "Badminton",
-        time: "06:00 AM – 07:00 AM",
-        customer: "Mihir Saha",
-        mobile: "******8663",
-        amount: "₹700",
-    },
-    {
-        id: 2,
-        date: "Tue, 22nd April 2025",
-        name: "Badminton Premium Hybrid",
-        court: "Court 1",
-        sport: "Badminton",
-        time: "06:00 AM – 07:00 AM",
-        customer: "Mihir Saha",
-        mobile: "******8663",
-        amount: "₹700",
-    },
-    {
-        id: 3,
-        date: "Tue, 22nd April 2025",
-        name: "Badminton Premium Hybrid",
-        court: "Court 1",
-        sport: "Badminton",
-        time: "06:00 AM – 07:00 AM",
-        customer: "Mihir Saha",
-        mobile: "******8663",
-        amount: "₹700",
-    },
-    {
-        id: 4,
-        date: "Tue, 22nd April 2025",
-        name: "Badminton Premium Hybrid",
-        court: "Court 1",
-        sport: "Badminton",
-        time: "06:00 AM – 07:00 AM",
-        customer: "Mihir Saha",
-        mobile: "******8663",
-        amount: "₹700",
-    },
-];
+const BookedDetails = () => {
+  const { id } = useParams();
+  const location = useLocation();
 
-export default function BookedSlots() {
+  const [loading, setLoading] = useState(false);
+  const [bookedData, setBookedData] = useState([]);
 
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [selectedBooking, setSelectedBooking] = useState(null);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [reason, setReason] = useState("");
+  const queryParams = new URLSearchParams(location.search);
+  const date = queryParams.get("date");
+  const startTime = queryParams.get("start");
+  const endTime = queryParams.get("end");
 
-    const handleCancelClick = (booking) => {
-        setSelectedBooking(booking);
-        setIsModalVisible(true);
-    };
+  const fetchBookedDetails = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        bookingIds: id ? id.split("-").map(Number) : [],
+        type: 1,
+        startTime,
+        endTime,
+        date,
+      };
 
-    const handleConfirmCancel = () => {
-        console.log("Cancelled booking with ID:", selectedBooking.id);
-        setIsModalVisible(false);
-        setSelectedBooking(null);
-        setReason("");
-    };
+      console.log("Booked Payload:", payload);
 
-    return (
-        <div className="booked-container">
-            <div className="booked-header">
-                <h1>Booked Court Details</h1>
-                <span className="close-btn" onClick={() => navigate(-1)}>
-                    ×
-                </span>
-            </div>
+      const res = await getBookedAndAvailableBookings(payload);
+      console.log("Booked Data Response:", res?.result?.data);
 
-            <div className="booked-cards">
-                {dummyBookings.map((booking) => (
-                    <div key={booking.id} className="booking-card">
-                        <p className="booking-date">{booking.date}</p>
-                        <h3>{booking.name}</h3>
-                        <h3>{booking.court}</h3>
-                        <p><strong>Sports:</strong> {booking.sport}</p>
-                        <p>
-                            <strong>Timing:</strong>{" "}
-                            <span className="highlight-blue">{booking.time}</span>
-                        </p>
-                        <p>
-                            <strong>Customer:</strong>{" "}
-                            <span className="highlight-blue">{booking.customer}</span>
-                        </p>
-                        <p>
-                            <strong>Mobile Number:</strong>
-                            <span className="highlight-blue">{booking.mobile}</span>
-                        </p>
-                        <p><strong>Amount:</strong>
-                            <span className="highlight-blue">{booking.amount}</span> </p>
-                        <div className="booking-footer">
-                            <Button type="primary" className="cancel-btn" onClick={() => handleCancelClick(booking)}>
-                                Cancel
-                            </Button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+      setBookedData(res?.result?.data || []);
+    } catch (error) {
+      message.error("Failed to fetch booked details");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            <Modal
-                title="Cancel Booking"
-                open={isModalVisible}
-                onOk={handleConfirmCancel}
-                onCancel={() => setIsModalVisible(false)}
-                footer={null}
-            >
-                <p>Are you sure you want to cancel?</p>
-                <Input.TextArea
-                    rows={4}
-                    placeholder="Type message or reason"
-                    value={reason}
-                    onChange={(e) => setReason(e.target.value)}
-                />
-                <div className="modal-footer">
-                    <Button danger className="modal-btn" onClick={() => setIsModalVisible(false)}>NO</Button>
-                    <Button type="primary" className="modal-btn" onClick={handleConfirmCancel}>YES</Button>
-                </div>
+  useEffect(() => {
+    fetchBookedDetails();
+  }, [id, date, startTime, endTime]);
 
-                {/* <p>Are you sure you want to cancel the booking for <strong>{selectedBooking?.court}</strong> at <strong>{selectedBooking?.time}</strong>?</p> */}
-            </Modal>
+  const handleCheckIn = async (id) => {
+    try {
+      setLoading(true);
 
+      const payload = {
+        bookingId: Number(id),
+        type: 2, // Check-In
+      };
+
+      console.log("Check-In Payload:", payload);
+
+      const res = await updateVenueBooking(payload);
+
+      if (res?.success) {
+        message.success("Booking Checked-In successfully");
+
+        setBookedData((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, status: 2 } : item))
+        );
+      } else {
+        message.error("Failed to Check-In booking");
+      }
+    } catch (error) {
+      console.error("Check-In Error:", error);
+      message.error("Error while checking in booking");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDecline = async (id) => {
+    try {
+      setLoading(true);
+      const payload = {
+        bookingId: Number(id),
+        type: 1,
+        status: 0, // Declined
+      };
+
+      console.log("Decline Payload:", payload);
+
+      const res = await updateVenueBooking(payload);
+
+      if (res?.success) {
+        message.success("Booking Declined successfully");
+        setBookedData((prev) =>
+          prev.map((item) => (item.id === id ? { ...item, status: 0 } : item))
+        );
+      } else {
+        message.error("Failed to decline booking");
+      }
+    } catch (error) {
+      console.error("Decline Error:", error);
+      message.error("Error while declining booking");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="booked-details-container">
+      <h2>Booked Court Details</h2>
+      <Spin spinning={loading}>
+        <div className="booked-cards">
+          {bookedData.length === 0 && <p>No booked courts.</p>}
+          {bookedData.map((item, index) => (
+            <Card key={index} className="booked-card">
+              <p>
+                <strong>{date}</strong>
+              </p>
+              <h3>
+                {item.venue_name} - {item.court_name}
+              </h3>
+              <p>
+                <strong>Sport:</strong> {item.sports_name}
+              </p>
+              <p>
+                <strong>Timing:</strong> {startTime} - {endTime}
+              </p>
+              <p>
+                <strong>Customer:</strong> {item.customer_name || "N/A"}
+              </p>
+              <p>
+                <strong>Mobile:</strong>{" "}
+                {item.mobile_number
+                  ? "******" + item.mobile_number.slice(-4)
+                  : "N/A"}
+              </p>
+              <p>
+                <strong>Amount:</strong> ₹{item.amount || 700}
+              </p>
+
+              <div className="booked-actions">
+                {item.status === 0 ? (
+                  <Button danger disabled>
+                    Declined
+                  </Button>
+                ) : item.status === 2 ? (
+                  <Button type="primary" disabled>
+                    Checked-In
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      type="primary"
+                      onClick={() => handleCheckIn(item.id)}
+                    >
+                      Check-In
+                    </Button>
+                    <Button danger onClick={() => handleDecline(item.id)}>
+                      Decline
+                    </Button>
+                  </>
+                )}
+              </div>
+            </Card>
+          ))}
         </div>
-    )
-}
+      </Spin>
+    </div>
+  );
+};
+
+export default BookedDetails;

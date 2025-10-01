@@ -282,7 +282,7 @@ export default function EditSport() {
                     onChange={(time) =>
                       handleSlotChange(day, index, "startTime", time)
                     }
-                     use12Hours
+                    use12Hours
                   />
                   <TimePicker
                     format="HH:mm"
@@ -290,7 +290,7 @@ export default function EditSport() {
                     onChange={(time) =>
                       handleSlotChange(day, index, "endTime", time)
                     }
-                     use12Hours
+                    use12Hours
                   />
                   <InputNumber
                     min={0}
