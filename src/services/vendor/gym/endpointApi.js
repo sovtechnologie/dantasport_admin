@@ -1,5 +1,64 @@
 import api from "../../api";
 
+// Gym bookings list API
+export const getBookingGymList = async (payload) => {
+  try {
+    const response = await api.post("vendor/gym/getBookingGymList", payload);
+
+    console.log("responseresponseresponseresponse", response);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch gym booking list", error);
+    throw error;
+  }
+};
+
+export const getRecentCheckingByGym = async (payload) => {
+  try {
+    const response = await api.post(
+      "/vendor/gym/getRecentCheckingByGym",
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch recent checking data", error);
+    throw error;
+  }
+};
+
+export const verifyAndCheckInGym = async (gymId, userId, checkInType = 2) => {
+  try {
+    const payload = { checkInType };
+    const response = await api.post(
+      `/user/gym/verifyAndCheckIn/${gymId}/${userId}`,
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    if (error?.response?.status === 404) {
+      return Promise.reject(new Error("Invalid User"));
+    }
+    if (error?.response?.status === 400) {
+      return Promise.reject(new Error("Please recharge your passes"));
+    }
+    console.error("Failed to verify and check-in gym", error);
+    throw error;
+  }
+};
+
+export const getPendingCheckingByGym = async (payload) => {
+  try {
+    const response = await api.post(
+      "/vendor/gym/getPendingGymCheckingByGym",
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch pending checking data", error);
+    throw error;
+  }
+};
+
 // Add Gym Member API (using venue member endpoint)
 export const addGymMember = async (formData) => {
   try {
@@ -47,7 +106,7 @@ export const updateGymMember = async (payload) => {
   try {
     // Check if payload is FormData or regular object
     const isFormData = payload instanceof FormData;
-    
+
     const response = await api.put("/vendor/members/updateMembers", payload, {
       headers: {
         "Content-Type": isFormData ? "multipart/form-data" : "application/json",
@@ -62,11 +121,15 @@ export const updateGymMember = async (payload) => {
 // Get Single Gym Member Details with Permissions API (using venue member endpoint)
 export const getSingleGymMemberList = async (payload) => {
   try {
-    const response = await api.post("/vendor/members/getSingleMemberList", payload, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await api.post(
+      "/vendor/members/getSingleMemberList",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -77,11 +140,15 @@ export const getSingleGymMemberList = async (payload) => {
 // Payload: { memberId: member_id, data: [{ name: "Banner", status: 1 }] }
 export const addingGymMemberPermission = async (payload) => {
   try {
-    const response = await api.post("/vendor/members/addingPermission", payload, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await api.post(
+      "/vendor/members/addingPermission",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -92,11 +159,15 @@ export const addingGymMemberPermission = async (payload) => {
 // Payload: { memberId: member_id, data: [{ name: "Banner", status: 1 }] }
 export const updateGymMemberPermission = async (payload) => {
   try {
-    const response = await api.put("/vendor/members/updatePermission", payload, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await api.put(
+      "/vendor/members/updatePermission",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     throw error;

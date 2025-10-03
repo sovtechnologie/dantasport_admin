@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
-import { Table, Input, DatePicker, Select, Card, Badge, Typography, Tag, Spin } from "antd";
+import React, { useMemo, useState, useEffect } from "react";
+import { Table, Input, DatePicker, Select, Card, Spin } from "antd";
 import { useSelector } from "react-redux";
-import { useFetchGymBookingList } from "../../../../hooks/vendor/gym/useFetchGymBookingList";
-import { CalendarOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
+import { getBookingGymList } from "../../../../services/vendor/gym/endpointApi";
 
 const { RangePicker } = DatePicker;
 
@@ -15,32 +15,72 @@ const GymBooking = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  const startDate = dateRange?.[0]?.startOf("day").toISOString();
-  const endDate = dateRange?.[1]?.endOf("day").toISOString();
+  const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
 
-  const { data, isLoading, isFetching } = useFetchGymBookingList({
-    vendorId,
-    search,
-    venueId,
-    startDate,
-    endDate,
-    page,
-    limit,
-  });
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await getBookingGymList();
+      setRows(res?.result || []);
+    } catch (err) {
+      console.error("Error fetching gym bookings:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchData();
+  }, [vendorId]);
+
+  const filteredData = useMemo(() => {
+    let data = [...rows];
+
+    if (search) {
+      const s = search.toLowerCase();
+      data = data.filter(
+        (row) =>
+          row.full_name?.toLowerCase().includes(s) ||
+          row.mobile_number?.toLowerCase().includes(s) ||
+          String(row.booking_id)?.includes(s)
+      );
+    }
+
+    // venue filter
+    if (venueId) {
+      data = data.filter((row) => String(row.gym_name) === String(venueId));
+    }
+
+    // date filter
+    if (dateRange?.length === 2) {
+      const start = dateRange[0].startOf("day");
+      const end = dateRange[1].endOf("day");
+      data = data.filter((row) => {
+        const d = new Date(row.booking_date);
+        return d >= start && d <= end;
+      });
+    }
+
+    return data;
+  }, [rows, search, venueId, dateRange]);
+
+  // ✅ Table rows
   const dataSource = useMemo(() => {
-    const rows = data?.result ?? [];
-    return rows.map((row, idx) => ({
+    return filteredData.map((row, idx) => ({
       key: row.booking_id ?? idx,
       bookingId: `#${row.booking_id}`,
       redeem: `${row.total_check_in}/${row.total_passes}`,
       gym: row.gym_name,
-      user: `${row.full_name}\n${row.mobile_number}`,
-      date: row.booking_date ? new Date(row.booking_date).toLocaleString("en-GB") : "",
+      user: `${row.full_name} \n ${row.mobile_number}`,
+      date: row.booking_date
+        ? new Date(row.booking_date).toLocaleString("en-GB")
+        : "",
       amount: `₹${Number(row.amount).toFixed(0)}`,
     }));
-  }, [data?.result]);
+  }, [filteredData]);
 
+  // ✅ Columns
   const columns = [
     { title: "Booking ID", dataIndex: "bookingId" },
     { title: "Redeem Passes", dataIndex: "redeem" },
@@ -60,6 +100,7 @@ const GymBooking = () => {
             prefix={<SearchOutlined />}
             placeholder="Search by Booking ID or customer name"
             style={{ width: 320 }}
+            value={search}
             onChange={(e) => {
               setPage(1);
               setSearch(e.target.value);
@@ -69,11 +110,16 @@ const GymBooking = () => {
             allowClear
             placeholder="Select Venue"
             style={{ width: 200 }}
+            value={venueId}
             onChange={(v) => {
               setPage(1);
               setVenueId(v ?? null);
             }}
-            options={[]}
+            // 👇 Gym list dynamic laa sakte ho rows se
+            options={[...new Set(rows.map((r) => r.gym_name))].map((g) => ({
+              label: g,
+              value: g,
+            }))}
           />
           <RangePicker
             onChange={(rng) => {
@@ -81,17 +127,18 @@ const GymBooking = () => {
               setDateRange(rng || []);
             }}
           />
-          {isFetching && <Spin size="small" />}
+          {loading && <Spin size="small" />}
         </div>
       </Card>
 
       <Table
         columns={columns}
         dataSource={dataSource}
-        loading={isLoading}
+        loading={loading}
         pagination={{
           current: page,
           pageSize: limit,
+          total: dataSource.length,
           onChange: (p, ps) => {
             setPage(p);
             setLimit(ps);
@@ -104,5 +151,3 @@ const GymBooking = () => {
 };
 
 export default GymBooking;
-
-

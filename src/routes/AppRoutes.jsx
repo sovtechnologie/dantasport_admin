@@ -16,6 +16,10 @@ const VendorDashboard = lazy(() => import("../pages/vendor/Dashboard"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const AdminNotFound = lazy(() => import("../pages/admin/NotFound"));
 const VendorNotFound = lazy(() => import("../pages/vendor/NotFound"));
+const VenGymControl = lazy(() =>
+  import("../features/vendor/pages/Gym/GymControl.jsx")
+);
+
 const VendorServiceSelect = lazy(() =>
   import("../features/vendor/Component/VendorServiceSelect.jsx")
 );
@@ -455,6 +459,8 @@ const AppRoutes = () => {
               path="/vendor/gym/edittimeslot/:id"
               element={<VenGymEditTimeSlot />}
             />
+
+            <Route path="/vendor/gym/control" element={<VenGymControl />} />
             {/* Revenue routes */}
             <Route
               path="/vendor/reports/booking"
