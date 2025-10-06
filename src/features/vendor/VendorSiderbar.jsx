@@ -501,6 +501,26 @@ const VendorSidebar = ({ onSelect }) => {
                   <CalendarOutlined className="sidebar-menu-icon" />
                   Booking
                 </Link>
+                <Link
+                  to="/vendor/gym/revenue"
+                  className={`sidebar-submenu-item ${
+                    isActive("/vendor/gym/revenue") ? "active" : ""
+                  }`}
+                  onClick={() => onSelect("Gym")}
+                >
+                  <CalendarOutlined className="sidebar-menu-icon" />
+                  Revenue
+                </Link>
+                <Link
+                  to="/vendor/gym/rating"
+                  className={`sidebar-submenu-item ${
+                    isActive("/vendor/gym/rating") ? "active" : ""
+                  }`}
+                  onClick={() => onSelect("Gym")}
+                >
+                  <CalendarOutlined className="sidebar-menu-icon" />
+                  Rating
+                </Link>
               </li>
               <li>
                 <Link

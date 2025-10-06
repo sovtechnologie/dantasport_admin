@@ -115,6 +115,13 @@ const VenGymEditDiscount = lazy(() =>
 const VenGymBooking = lazy(() =>
   import("../features/vendor/pages/Gym/GymBooking")
 );
+const VenGymRevenue = lazy(() =>
+  import("../features/vendor/pages/Gym/GymRevenue.jsx")
+);
+const VenGymRating = lazy(() =>
+  import("../features/vendor/pages/Gym/GymRating.jsx")
+);
+
 const VenGymCoaches = lazy(() =>
   import("../features/vendor/pages/Gym/GymCoaches")
 );
@@ -444,6 +451,10 @@ const AppRoutes = () => {
               element={<VenGymEditDiscount />}
             />
             <Route path="/vendor/gym/booking" element={<VenGymBooking />} />
+            {/* Gym Reports Routes */}
+            <Route path="/vendor/gym/revenue" element={<VenGymRevenue />} />
+            <Route path="/vendor/gym/rating" element={<VenGymRating />} />
+
             <Route path="/vendor/gym/coaches" element={<VenGymCoaches />} />
             <Route path="/vendor/gym/addcoach" element={<VenGymAddCoach />} />
             <Route

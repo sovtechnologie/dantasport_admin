@@ -13,6 +13,41 @@ export const getBookingGymList = async (payload) => {
   }
 };
 
+export const getGymRevenueGymList = async (payload) => {
+  try {
+    const response = await api.post("vendor/gym/getGymRevenueGymList", payload);
+    console.log("Revenue List Response:", response);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch gym revenue list", error);
+    throw error;
+  }
+};
+
+//  Gym Rating List
+export const getGymRatingList = async (payload) => {
+  try {
+    const response = await api.post("vendor/gym/getGymRatingList", payload);
+    console.log("Rating List Response:", response);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch gym rating list", error);
+    throw error;
+  }
+};
+
+// Gym Coupon List
+export const getGymCouponList = async (payload) => {
+  try {
+    const response = await api.post("vendor/gym/getGymCouponList", payload);
+    console.log("Coupon List Response:", response);
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to fetch gym coupon list", error);
+    throw error;
+  }
+};
+
 export const getRecentCheckingByGym = async (payload) => {
   try {
     const response = await api.post(

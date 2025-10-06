@@ -13,12 +13,6 @@ export default function AvailableDetails() {
   const courtIds = id ? id.split("-").map(Number) : [];
 
   const query = new URLSearchParams(location.search);
-  console.log(" Query Params:", {
-    date: query.get("date"),
-    start: query.get("start"),
-    end: query.get("end"),
-  });
-
   const navigate = useNavigate();
 
   const [courts, setCourts] = useState([]);
@@ -84,14 +78,14 @@ export default function AvailableDetails() {
         startTime: startTime.slice(0, 5),
         duration: duration,
         courtId: selectedCourt.court_id,
+        reason: reason,
       };
-
-      console.log("📩 Booking Payload:", payload);
 
       const res = await createBooking(payload);
 
       if (res?.status === 200) {
         message.success("Booking confirmed successfully!");
+        navigate("/vendor/dayslots");
       } else {
         message.error(res?.message || "Booking failed!");
       }
@@ -129,9 +123,11 @@ export default function AvailableDetails() {
               <p>
                 <strong>Timing:</strong>{" "}
                 <span className="highlight-blue">
-                  {startTime} - {endTime}
+                  {startTime.split(":").slice(0, 2).join(":")} -{" "}
+                  {endTime.split(":").slice(0, 2).join(":")}
                 </span>
               </p>
+
               <div className="Available-footer">
                 <Button type="primary" onClick={() => handleBookClick(court)}>
                   Book
@@ -145,7 +141,6 @@ export default function AvailableDetails() {
       <Modal
         title="Booking"
         open={isModalVisible}
-        onOk={handleConfirmBooking}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
@@ -156,11 +151,18 @@ export default function AvailableDetails() {
           value={reason}
           onChange={(e) => setReason(e.target.value)}
         />
-        <div className="modal-footer">
+        <div
+          className="modal-footer"
+          style={{ marginTop: "15px", textAlign: "right" }}
+        >
           <Button danger onClick={() => setIsModalVisible(false)}>
             NO
           </Button>
-          <Button type="primary" onClick={handleConfirmBooking}>
+          <Button
+            type="primary"
+            onClick={handleConfirmBooking}
+            disabled={!reason.trim()}
+          >
             YES
           </Button>
         </div>
