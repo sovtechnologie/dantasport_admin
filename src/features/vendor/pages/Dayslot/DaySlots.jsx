@@ -3,8 +3,8 @@ import { Table, Select, DatePicker, Spin, message } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getBookingDetails } from "../../../../services/vendor/DaySlots/endpointApi";
-import { useFetchSports } from "../../../../hooks/admin/sport/useFetchSport";
 import { fetchVendorVenueList } from "../../../../services/vendor/venueinfo/endpointApi";
+import { useFetchVendorSportsList } from "../../../../hooks/vendor/sports/useFetchSportVendor";
 
 const { Option } = Select;
 
@@ -21,7 +21,11 @@ const DaySlots = () => {
   const [venueLoading, setVenueLoading] = useState(false);
   console.log("venuesListvenuesListvenuesListvenuesList", venuesList);
 
-  const { data: sportsList, isLoading: sportLoading } = useFetchSports();
+  const {
+    data: sportsList,
+    isLoading: sportLoading,
+    error: sportError,
+  } = useFetchVendorSportsList(filters.venueId);
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -145,24 +149,11 @@ const DaySlots = () => {
       <div className="day-slots-filters">
         <div className="day-slots-selected-box">
           {/* Sport Dropdown */}
-          <Select
-            placeholder="Select Sport"
-            className="filter-select"
-            onChange={(val) => setFilters({ ...filters, sportId: val })}
-            value={filters.sportId}
-            style={{ minWidth: 150 }}
-            loading={sportLoading}
-          >
-            {sportsList?.result?.map((sport) => (
-              <Option key={sport.id} value={sport.id}>
-                {sport.sports_name}
-              </Option>
-            ))}
-          </Select>
 
           {/* Venue Dropdown */}
           <Select
             placeholder="Select Venue"
+            className="filter-select"
             onChange={(val) => setFilters({ ...filters, venueId: val })}
             value={filters.venueId}
             loading={venueLoading}
@@ -170,6 +161,22 @@ const DaySlots = () => {
             {venuesList.map((venue) => (
               <Option key={venue.venue_id} value={venue.venue_id}>
                 {venue.venue_name}
+              </Option>
+            ))}
+          </Select>
+
+          <Select
+            placeholder="Select Sport"
+            className="filter-select"
+            onChange={(val) => setFilters({ ...filters, sportId: val })}
+            value={filters.sportId}
+            style={{ minWidth: 150 }}
+            loading={sportLoading}
+            disabled={!filters.venueId}
+          >
+            {sportsList?.result?.map((sport) => (
+              <Option key={sport.sports_id} value={sport.sports_id}>
+                {sport.sports_name}
               </Option>
             ))}
           </Select>

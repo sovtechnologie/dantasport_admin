@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import { Spin, message, Button, Card } from "antd";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { Spin, message, Button, Card, Modal, Input } from "antd";
 import {
   getBookedAndAvailableBookings,
   updateVenueBooking,
@@ -10,10 +10,12 @@ import "../../styelsheets/DaySlots/BookedSlots.css";
 const BookedDetails = () => {
   const { id } = useParams();
   const location = useLocation();
-
   const [loading, setLoading] = useState(false);
   const [bookedData, setBookedData] = useState([]);
-
+  const [declineModal, setDeclineModal] = useState(false);
+  const [declineReason, setDeclineReason] = useState("");
+  const [selectedBookingId, setSelectedBookingId] = useState(null);
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const date = queryParams.get("date");
   const startTime = queryParams.get("start");
@@ -29,14 +31,9 @@ const BookedDetails = () => {
         endTime,
         date,
       };
-
-      console.log("Booked Payload:", payload);
-
       const res = await getBookedAndAvailableBookings(payload);
-      console.log("Booked Data Response:", res?.result?.data);
-
       setBookedData(res?.result?.data || []);
-    } catch (error) {
+    } catch {
       message.error("Failed to fetch booked details");
     } finally {
       setLoading(false);
@@ -47,62 +44,63 @@ const BookedDetails = () => {
     fetchBookedDetails();
   }, [id, date, startTime, endTime]);
 
-  const handleCheckIn = async (id) => {
+  const handleCheckIn = async (bookingId) => {
+    setLoading(true);
     try {
-      setLoading(true);
-
-      const payload = {
-        bookingId: Number(id),
-        type: 2, // Check-In
-      };
-
-      console.log("Check-In Payload:", payload);
-
+      const payload = { bookingId: Number(bookingId), type: 2 };
       const res = await updateVenueBooking(payload);
-
       if (res?.success) {
-        message.success("Booking Checked-In successfully");
-
         setBookedData((prev) =>
-          prev.map((item) => (item.id === id ? { ...item, status: 2 } : item))
+          prev.map((item) =>
+            item.id === bookingId ? { ...item, is_check_in: 1 } : item
+          )
         );
+        message.success("Booking Checked-In successfully");
       } else {
         message.error("Failed to Check-In booking");
       }
-    } catch (error) {
-      console.error("Check-In Error:", error);
+    } catch {
       message.error("Error while checking in booking");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDecline = async (id) => {
+  const showDeclineModal = (bookingId) => {
+    setSelectedBookingId(bookingId);
+    setDeclineModal(true);
+  };
+
+  const handleDeclineConfirm = async () => {
+    if (!declineReason.trim()) return message.warning("Please enter a reason");
+    setLoading(true);
     try {
-      setLoading(true);
       const payload = {
-        bookingId: Number(id),
+        bookingId: Number(selectedBookingId),
         type: 1,
-        status: 0, // Declined
+        status: 0,
+        reason: declineReason,
       };
-
-      console.log("Decline Payload:", payload);
-
       const res = await updateVenueBooking(payload);
-
       if (res?.success) {
-        message.success("Booking Declined successfully");
         setBookedData((prev) =>
-          prev.map((item) => (item.id === id ? { ...item, status: 0 } : item))
+          prev.map((item) =>
+            item.id === selectedBookingId ? { ...item, status: 0 } : item
+          )
         );
+
+        setDeclineModal(false);
+        setDeclineReason("");
+        setSelectedBookingId(null);
+        message.success("Booking Declined successfully");
       } else {
         message.error("Failed to decline booking");
       }
-    } catch (error) {
-      console.error("Decline Error:", error);
+    } catch {
       message.error("Error while declining booking");
     } finally {
       setLoading(false);
+      navigate("/vendor/dayslots");
     }
   };
 
@@ -130,21 +128,14 @@ const BookedDetails = () => {
                 <strong>Customer:</strong> {item.customer_name || "N/A"}
               </p>
               <p>
-                <strong>Mobile:</strong>{" "}
-                {item.mobile_number
-                  ? "******" + item.mobile_number.slice(-4)
-                  : "N/A"}
-              </p>
-              <p>
                 <strong>Amount:</strong> ₹{item.amount || 700}
               </p>
-
               <div className="booked-actions">
                 {item.status === 0 ? (
                   <Button danger disabled>
                     Declined
                   </Button>
-                ) : item.status === 2 ? (
+                ) : item.is_check_in === 1 ? (
                   <Button type="primary" disabled>
                     Checked-In
                   </Button>
@@ -153,10 +144,15 @@ const BookedDetails = () => {
                     <Button
                       type="primary"
                       onClick={() => handleCheckIn(item.id)}
+                      disabled={loading}
                     >
-                      Check-In
+                      Check-In Pending
                     </Button>
-                    <Button danger onClick={() => handleDecline(item.id)}>
+                    <Button
+                      danger
+                      onClick={() => showDeclineModal(item.id)}
+                      disabled={loading}
+                    >
                       Decline
                     </Button>
                   </>
@@ -166,6 +162,33 @@ const BookedDetails = () => {
           ))}
         </div>
       </Spin>
+
+      <Modal
+        title="Cancel"
+        open={declineModal}
+        onCancel={() => setDeclineModal(false)}
+        footer={[
+          <Button key="no" onClick={() => setDeclineModal(false)}>
+            No
+          </Button>,
+          <Button
+            key="yes"
+            type="primary"
+            onClick={handleDeclineConfirm}
+            disabled={!declineReason.trim() || loading}
+          >
+            Yes
+          </Button>,
+        ]}
+      >
+        <p>Are you sure you want to cancel?</p>
+        <Input.TextArea
+          rows={4}
+          placeholder="Type message or reason"
+          value={declineReason}
+          onChange={(e) => setDeclineReason(e.target.value)}
+        />
+      </Modal>
     </div>
   );
 };

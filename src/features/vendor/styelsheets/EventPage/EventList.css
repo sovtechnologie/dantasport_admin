@@ -1,0 +1,41 @@
+.event-list-page {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.event-header h2 {
+    font-size: 22px;
+    color: #172A39;
+    margin: 0;
+}
+
+.calendar-display {
+    background-color: #f0f2f5;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.ant-table-thead > tr > th {
+    background-color: #e6f0fc !important;
+    color: #172A39;
+    font-weight: 600;
+}
+
+.ant-tag {
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+}

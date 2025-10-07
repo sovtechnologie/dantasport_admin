@@ -2,9 +2,9 @@ import "../../styelsheets/Manage/addCourt.css";
 import { Form, Input, Button, Select, message, Spin } from "antd";
 import { useState } from "react";
 import { AddSingleCourt } from "../../../../services/vendor/Court/endpointsApi";
-import { useFetchSports } from "../../../../hooks/admin/sport/useFetchSport";
 import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useNavigate } from "react-router-dom";
+import { useFetchVendorSportsList } from "../../../../hooks/vendor/sports/useFetchSportVendor";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -14,7 +14,11 @@ export default function AddCourt() {
   const [selectedVenue, setSelectedVenue] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { data: sportsData, isLoading: sportsLoading } = useFetchSports();
+  const {
+    data: sportsData,
+    isLoading: sportsLoading,
+    error: sportsError,
+  } = useFetchVendorSportsList(selectedVenue);
   const { data: venuesData, isLoading: venuesLoading } =
     useFetchVendorVenueList();
   const navigate = useNavigate();
@@ -92,7 +96,7 @@ export default function AddCourt() {
             <Form.Item name="sports" label="Sport" rules={[{ required: true }]}>
               <Select placeholder="Select Sport" className="court-Select">
                 {sportsData?.result?.map((sport) => (
-                  <Option key={sport.id} value={sport.id}>
+                  <Option key={sport.sports_id} value={sport.sports_id}>
                     {sport.sports_name || sport.name}
                   </Option>
                 ))}

@@ -10,6 +10,7 @@ const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
 // Temporary fix for dynamic import issue
 import VendorLayout from "../layouts/VendorLayout";
 import RevenuePage from "../features/vendor/pages/ReportPage/RevenuePage";
+import EventListPage from "../features/vendor/pages/runEvent/EventList.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
 const VendorDashboard = lazy(() => import("../pages/vendor/Dashboard"));
@@ -142,6 +143,12 @@ const VenGymEditTimeSlot = lazy(() =>
 );
 const VenManEditCourt = lazy(() =>
   import("../features/vendor/pages/ManagePage/EditCourt.jsx")
+);
+const EvenListPage = lazy(() =>
+  import("../features/vendor/pages/runEvent/EventList.jsx")
+);
+const CreateEvent = lazy(() =>
+  import("../features/vendor/pages/runEvent/CreateEvent.jsx")
 );
 // Admin routes
 
@@ -424,6 +431,10 @@ const AppRoutes = () => {
             <Route
               path="/vendor/manage/editcoupon"
               element={<VenManEditDiscount />}
+            />
+            <Route
+              path="/vendor/runEvent/eventlist"
+              element={<EventListPage />}
             />
             {/* DaySlots routes */}
             <Route path="/vendor/dayslots" element={<VenDaySlots />} />

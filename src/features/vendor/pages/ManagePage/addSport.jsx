@@ -231,19 +231,62 @@ export default function AddSport() {
           <Form.Item
             name="duration"
             label="Slots Duration (mins)"
-            rules={[{ required: true }]}
+            rules={[
+              { required: true, message: "Slot Duration is required" },
+              {
+                validator: (_, value) => {
+                  if (!value) return Promise.resolve();
+                  if (value < 60)
+                    return Promise.reject(
+                      "Slot duration cannot be less than 60 minutes"
+                    );
+
+                  const minDuration = form.getFieldValue("minduration");
+                  if (minDuration && minDuration > value) {
+                    return Promise.reject(
+                      "Minimum Booking Duration cannot be greater than Slot Duration"
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
           >
-            <Input placeholder="Booking Duration" />
+            <InputNumber
+              placeholder="Slot Duration (min)"
+              style={{ width: "100%" }}
+            />
           </Form.Item>
         </div>
 
         <div className="form-row">
           <Form.Item
             name="minduration"
-            label="Minimum Booking Duration"
-            rules={[{ required: true }]}
+            label="Minimum Booking Duration (mins)"
+            dependencies={["duration"]}
+            rules={[
+              {
+                required: true,
+                message: "Minimum Booking Duration is required",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  const slotDuration = getFieldValue("duration");
+                  if (!value) return Promise.resolve();
+                  if (slotDuration && value > slotDuration) {
+                    return Promise.reject(
+                      "Minimum Booking Duration cannot be greater than Slot Duration"
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
           >
-            <Input placeholder="Min Booking Duration" />
+            <InputNumber
+              placeholder="Min Booking Duration (min)"
+              style={{ width: "100%" }}
+            />
           </Form.Item>
           <Form.Item
             name="courtNO"
@@ -253,7 +296,6 @@ export default function AddSport() {
             <InputNumber placeholder="No. of Courts" className="sport-Number" />
           </Form.Item>
         </div>
-
         <div className="form-row">
           <Form.Item
             label="Description"
