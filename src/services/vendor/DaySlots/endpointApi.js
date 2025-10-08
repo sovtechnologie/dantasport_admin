@@ -12,6 +12,18 @@ export const getBookingDetails = async (payload) => {
     throw error;
   }
 };
+export const updateVenueBookings = async (payload) => {
+  try {
+    const response = await api.put(
+      "vendor/bookings/updateVenueBookings",
+      payload
+    );
+    return response?.data;
+  } catch (error) {
+    console.error("Failed to update venue booking:", error);
+    throw error;
+  }
+};
 
 export const getBookedAndAvailableBookings = async (payload) => {
   try {

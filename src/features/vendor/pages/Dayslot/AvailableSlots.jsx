@@ -4,6 +4,7 @@ import { Spin, message, Button, Modal, Input } from "antd";
 import {
   createBooking,
   getBookedAndAvailableBookings,
+  updateVenueBookings,
 } from "../../../../services/vendor/DaySlots/endpointApi";
 import "../../styelsheets/DaySlots/AvailableSlots.css";
 
@@ -11,7 +12,6 @@ export default function AvailableDetails() {
   const location = useLocation();
   const { id } = useParams();
   const courtIds = id ? id.split("-").map(Number) : [];
-
   const query = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ export default function AvailableDetails() {
           message.info("No available courts for this slot");
         }
       } catch (error) {
-        console.error(error);
+        console.error(" Courts fetch error:", error);
         message.error("Failed to fetch available courts");
       } finally {
         setLoading(false);
@@ -59,6 +59,7 @@ export default function AvailableDetails() {
   }, [id, startTime, endTime, date]);
 
   const handleBookClick = (court) => {
+    console.log("🟦 Selected court for booking:", court);
     setSelectedCourt(court);
     setIsModalVisible(true);
   };
@@ -71,23 +72,43 @@ export default function AvailableDetails() {
       const end = new Date(`2000-01-01T${endTime}`);
       const duration = Math.floor((end - start) / (1000 * 60));
 
-      const payload = {
+      const createPayload = {
         sportId: selectedCourt.sports_id,
         venueId: String(selectedCourt.venue_id),
-        date: date,
+        date,
         startTime: startTime.slice(0, 5),
-        duration: duration,
+        duration,
         courtId: selectedCourt.court_id,
-        reason: reason,
       };
 
-      const res = await createBooking(payload);
+      const createRes = await createBooking(createPayload);
 
-      if (res?.status === 200) {
-        message.success("Booking confirmed successfully!");
-        navigate("/vendor/dayslots");
+      // Support both insertId and booking_id
+      const newBookingId =
+        createRes?.result?.booking_id ||
+        createRes?.result?.insertId ||
+        createRes?.data?.result?.booking_id;
+
+      console.log("🆔 Extracted new bookingId:", newBookingId);
+
+      if (createRes?.status === 200 && newBookingId) {
+        const updatePayload = {
+          bookingId: newBookingId,
+          type: 1,
+          status: 1,
+          bookMessage: reason.trim(),
+        };
+
+        const updateRes = await updateVenueBookings(updatePayload);
+
+        if (updateRes?.status === 200 || updateRes?.message === true) {
+          message.success("Booking confirmed successfully!");
+          navigate("/vendor/dayslots");
+        } else {
+          message.warning("Booking done, but reason not saved!");
+        }
       } else {
-        message.error(res?.message || "Booking failed!");
+        message.error("Booking creation failed! Missing booking ID.");
       }
     } catch (error) {
       console.error(" Booking Error:", error);
@@ -152,10 +173,13 @@ export default function AvailableDetails() {
           onChange={(e) => setReason(e.target.value)}
         />
         <div
-          className="modal-footer"
-          style={{ marginTop: "15px", textAlign: "right" }}
+          style={{ marginTop: "15px", textAlign: "right", marginRight: "5%" }}
         >
-          <Button danger onClick={() => setIsModalVisible(false)}>
+          <Button
+            style={{ marginRight: "30px" }}
+            danger
+            onClick={() => setIsModalVisible(false)}
+          >
             NO
           </Button>
           <Button

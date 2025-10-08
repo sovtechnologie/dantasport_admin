@@ -72,33 +72,43 @@ const BookedDetails = () => {
   };
 
   const handleDeclineConfirm = async () => {
-    if (!declineReason.trim()) return message.warning("Please enter a reason");
+    if (!declineReason.trim()) {
+      message.warning("Please enter a reason");
+      return;
+    }
+
     setLoading(true);
     try {
       const payload = {
         bookingId: Number(selectedBookingId),
         type: 1,
         status: 0,
-        reason: declineReason,
+        declineMessage: declineReason.trim(),
       };
+
+      console.log("📤 Sending decline payload:", payload);
       const res = await updateVenueBooking(payload);
-      if (res?.success) {
+      console.log("✅ Decline response:", res);
+
+      if (res?.status === 200 || res?.message === true || res?.success) {
+        // Update UI immediately
         setBookedData((prev) =>
           prev.map((item) =>
             item.id === selectedBookingId ? { ...item, status: 0 } : item
           )
         );
 
-        setDeclineModal(false);
-        setDeclineReason("");
-        setSelectedBookingId(null);
         message.success("Booking Declined successfully");
       } else {
         message.error("Failed to decline booking");
       }
-    } catch {
+    } catch (error) {
+      console.error("🔥 Decline error:", error);
       message.error("Error while declining booking");
     } finally {
+      setDeclineModal(false);
+      setDeclineReason("");
+      setSelectedBookingId(null);
       setLoading(false);
       navigate("/vendor/dayslots");
     }
