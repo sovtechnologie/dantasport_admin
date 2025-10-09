@@ -86,9 +86,7 @@ const BookedDetails = () => {
         declineMessage: declineReason.trim(),
       };
 
-      console.log("📤 Sending decline payload:", payload);
       const res = await updateVenueBooking(payload);
-      console.log("✅ Decline response:", res);
 
       if (res?.status === 200 || res?.message === true || res?.success) {
         // Update UI immediately
@@ -103,7 +101,7 @@ const BookedDetails = () => {
         message.error("Failed to decline booking");
       }
     } catch (error) {
-      console.error("🔥 Decline error:", error);
+      console.error(" Decline error:", error);
       message.error("Error while declining booking");
     } finally {
       setDeclineModal(false);
@@ -132,10 +130,15 @@ const BookedDetails = () => {
                 <strong>Sport:</strong> {item.sports_name}
               </p>
               <p>
-                <strong>Timing:</strong> {startTime} - {endTime}
+                <strong>Timing:</strong>{" "}
+                <span>
+                  {startTime.split(":").slice(0, 2).join(":")} -{" "}
+                  {endTime.split(":").slice(0, 2).join(":")}
+                </span>
               </p>
               <p>
-                <strong>Customer:</strong> {item.customer_name || "N/A"}
+                <strong>Customer:</strong>{" "}
+                {item.customer_name || "Booking By Vendor"}
               </p>
               <p>
                 <strong>Amount:</strong> ₹{item.amount || 700}
@@ -178,7 +181,16 @@ const BookedDetails = () => {
         open={declineModal}
         onCancel={() => setDeclineModal(false)}
         footer={[
-          <Button key="no" onClick={() => setDeclineModal(false)}>
+          <Button
+            style={{
+              marginRight: "30px",
+              backgroundColor: "red",
+              color: "white",
+              borderColor: "red",
+            }}
+            key="no"
+            onClick={() => setDeclineModal(false)}
+          >
             No
           </Button>,
           <Button

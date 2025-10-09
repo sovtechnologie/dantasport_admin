@@ -176,7 +176,12 @@ export default function AvailableDetails() {
           style={{ marginTop: "15px", textAlign: "right", marginRight: "5%" }}
         >
           <Button
-            style={{ marginRight: "30px" }}
+            style={{
+              marginRight: "30px",
+              backgroundColor: "red",
+              color: "white",
+              borderColor: "red",
+            }}
             danger
             onClick={() => setIsModalVisible(false)}
           >
