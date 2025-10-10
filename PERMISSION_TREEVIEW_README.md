@@ -16,12 +16,13 @@ This feature adds an expandable member list with permission management capabilit
 
 ### 2. Permission Categories
 Based on the provided image, the following permission categories are supported:
+- **Basic Info**: Manage basic member information
+- **Event List**: Access to view event list and create new events
+-**Create Event**: Access to view event list and create new events
+- **Member**: Manage member-related permissions
+- **Images**: Access to upload, edit, or delete images
 - **Banner**: Manage banner-related permissions
-- **Payout**: Control payout access
-- **Page**: Page management permissions
-- **Zone**: Zone access control
-- **Category**: Category management permissions
-- **Payment Gateway**: Payment gateway access
+
 
 ### 3. Permission Types
 Each category supports three permission levels:

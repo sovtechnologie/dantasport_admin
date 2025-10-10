@@ -75,7 +75,7 @@ const DiscountPage = () => {
         coupon.coupon_type === "percentage"
           ? `${coupon.value}%`
           : `₹${coupon.value}`,
-      bannerValue: coupon.display_on_banner ?? 0, // Not provided in API response
+      displayOnBanner: coupon.display_on_banner,
       expiry: coupon.expiry_date
         ? new Date(coupon.expiry_date).toLocaleDateString("en-GB")
         : "N/A",
@@ -238,17 +238,17 @@ const DiscountPage = () => {
 
     {
       title: "Display on Banner",
-      key: "display_on_banner",
+      key: "displayOnBanner",
       width: 160,
       render: (_, record) => (
         <Radio.Group
-          value={record.bannerValue === 1 ? "Yes" : "No"}
+          value={record.displayOnBanner === 1 ? "Yes" : "No"}
           onChange={async (e) => {
             const selectedValue = e.target.value === "Yes" ? 1 : 0;
             try {
               const payload = {
                 couponId: record.id,
-                display_on_banner: selectedValue,
+                displayOnBanner: selectedValue,
               };
               const response = await updateCouponMutation.mutateAsync(payload);
               if (response?.status === 200) {

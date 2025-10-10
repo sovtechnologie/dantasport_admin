@@ -157,8 +157,8 @@ export default function AddCoupon() {
         couponCode: values.couponCode,
         couponType: values.couponType, // "percentage" or "flat"
         value: values.value,
-        // maxDiscount: values.maxDiscount || null,
-        // minimumBookingValue: values.minimumBookingValue || null,
+        maxDiscount: values.maxDiscount || null,
+        minimumBookingValue: values.minimumBookingValue || null,
         description: values.description,
         startDate: values.startDate?.format("YYYY-MM-DD"),
         endDate: values.endDate?.format("YYYY-MM-DD"),
@@ -314,41 +314,81 @@ export default function AddCoupon() {
                 />
               </Form.Item>
             </div>
+            <Form.Item
+              name="maxDiscount"
+              label="Maximum Discount Amount"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter maximum discount amount",
+                },
+                {
+                  type: "number",
+                  min: 1,
+                  message: "Value must be greater than 0",
+                },
+              ]}
+            >
+              <InputNumber
+                style={{ width: "100%" }}
+                placeholder="Enter maximum discount"
+                min={1}
+              />
+            </Form.Item>
 
-            {/* Right Column */}
-            <div className="form-column">
-              {/* Start Date */}
-              <Form.Item
-                name="startDate"
-                label="Start Date"
-                rules={[
-                  { required: true, message: "Please select start date" },
-                ]}
-                className="form-item-compact"
-              >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  className="form-input-compact"
-                  placeholder="Start date"
-                />
-              </Form.Item>
+            {/* ✅ NEW FIELD 2: Minimum Booking Value */}
+            <Form.Item
+              name="minimumBookingValue"
+              label="Minimum Booking Value"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter minimum booking value",
+                },
+                {
+                  type: "number",
+                  min: 1,
+                  message: "Value must be greater than 0",
+                },
+              ]}
+            >
+              <InputNumber
+                style={{ width: "100%" }}
+                placeholder="Enter minimum booking value"
+                min={1}
+              />
+            </Form.Item>
+          </div>
 
-              {/* Expiry Date */}
-              <Form.Item
-                name="endDate"
-                label="Expiry Date"
-                rules={[
-                  { required: true, message: "Please select expiry date" },
-                ]}
-                className="form-item-compact"
-              >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  className="form-input-compact"
-                  placeholder="Expiry date"
-                />
-              </Form.Item>
-            </div>
+          {/* Right Column */}
+          <div className="form-column">
+            {/* Start Date */}
+            <Form.Item
+              name="startDate"
+              label="Start Date"
+              rules={[{ required: true, message: "Please select start date" }]}
+              className="form-item-compact"
+            >
+              <DatePicker
+                style={{ width: "100%" }}
+                className="form-input-compact"
+                placeholder="Start date"
+              />
+            </Form.Item>
+
+            {/* Expiry Date */}
+            <Form.Item
+              name="endDate"
+              label="Expiry Date"
+              rules={[{ required: true, message: "Please select expiry date" }]}
+              className="form-item-compact"
+            >
+              <DatePicker
+                style={{ width: "100%" }}
+                className="form-input-compact"
+                placeholder="Expiry date"
+              />
+            </Form.Item>
           </div>
 
           {/* Full Width Items */}
