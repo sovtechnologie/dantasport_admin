@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message } from "antd";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { Table, Input, Button, Select, Spin, message, DatePicker } from "antd";
+import {
+  CalendarOutlined,
+  DownloadOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { getVenueBookingReports } from "../../../../services/admin/ReportsAdmin/endpointApi";
 import { fetchVendorList } from "../../../../services/admin/CreateVendor/endpointApi";
 import "../Stylesheets/ReportsAdmin/BookinAdmin.css";
 
 const { Option } = Select;
-
+const { RangePicker } = DatePicker;
 const statusColors = {
   Upcoming: "blue",
   Complete: "green",
@@ -28,6 +32,7 @@ export default function BookingAdminPage() {
   const [selectedVendor, setSelectedVendor] = useState("All");
   const [selectedVenue, setSelectedVenue] = useState("All");
   const [searchText, setSearchText] = useState("");
+  const [dateRange, setDateRange] = useState([]);
 
   const fetchVendors = async () => {
     try {
@@ -60,12 +65,15 @@ export default function BookingAdminPage() {
             id: item.id,
             vendorId: vendor ? vendor.id : null,
             vendorName: vendor ? vendor.name : item.full_name,
-            bookingId: item.id,
+            mobile: item.mobile_number,
             venueName: item.venue_name,
+            venueId: item.venue_id,
             sports: item.sports_name,
             customer: item.full_name,
             bookingDate: new Date(item.created_at).toLocaleDateString(),
             eventDate: new Date(item.date).toLocaleDateString(),
+            eventDateRaw: new Date(item.date),
+
             duration: `${item.duration} mins`,
             status: statusLabels[item.status] || "Unknown",
           };
@@ -74,7 +82,12 @@ export default function BookingAdminPage() {
         setData(rawData);
         setFilteredData(rawData);
 
-        const uniqueVenues = [...new Set(rawData.map((d) => d.venueName))];
+        const uniqueVenues = Array.from(
+          new Map(rawData.map((d) => [d.venueId, d.venueName]))
+        ).map(([id, name]) => ({ id, name }));
+
+        setVenues(uniqueVenues);
+
         setVenues(uniqueVenues);
       } else {
         message.error("Failed to fetch booking reports");
@@ -94,19 +107,16 @@ export default function BookingAdminPage() {
   useEffect(() => {
     let filtered = data;
 
-    // Vendor filter only if specific vendor selected
     if (selectedVendor !== "All") {
       filtered = filtered.filter(
         (item) => item.vendorId === Number(selectedVendor)
       );
     }
 
-    // Venue filter
     if (selectedVenue !== "All") {
       filtered = filtered.filter((item) => item.venueName === selectedVenue);
     }
 
-    // Search filter
     if (searchText) {
       const text = searchText.toLowerCase();
       filtered = filtered.filter(
@@ -118,8 +128,17 @@ export default function BookingAdminPage() {
       );
     }
 
+    if (dateRange && dateRange.length === 2) {
+      const [start, end] = dateRange;
+      filtered = filtered.filter(
+        (item) =>
+          item.eventDateRaw >= start.startOf("day").toDate() &&
+          item.eventDateRaw <= end.endOf("day").toDate()
+      );
+    }
+
     setFilteredData(filtered);
-  }, [selectedVendor, selectedVenue, data, searchText]);
+  }, [selectedVendor, selectedVenue, data, searchText, dateRange]);
 
   const columns = [
     {
@@ -135,7 +154,7 @@ export default function BookingAdminPage() {
           <Option value="All">All Vendors</Option>
           {vendors.map((v) => (
             <Option key={v.id} value={v.id}>
-              {v.name}
+              {`${v.name} (${v.id})`}
             </Option>
           ))}
         </Select>
@@ -155,8 +174,8 @@ export default function BookingAdminPage() {
         >
           <Option value="All">All Venues</Option>
           {venues.map((v) => (
-            <Option key={v} value={v}>
-              {v}
+            <Option key={v.id} value={v.name}>
+              {`${v.name} (${v.id})`}
             </Option>
           ))}
         </Select>
@@ -164,11 +183,7 @@ export default function BookingAdminPage() {
       dataIndex: "venueName",
       key: "venueName",
     },
-    {
-      title: "Booking ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    { title: "Mobile Number", dataIndex: "mobile", key: "mobile" },
     { title: "Sports", dataIndex: "sports", key: "sports" },
     { title: "Customer", dataIndex: "customer", key: "customer" },
     { title: "Booking Date", dataIndex: "bookingDate", key: "bookingDate" },
@@ -187,6 +202,54 @@ export default function BookingAdminPage() {
       ),
     },
   ];
+
+  // 1. CSV Export function
+  const exportToCSV = () => {
+    if (!filteredData.length) {
+      message.warning("No data to export");
+      return;
+    }
+
+    const headers = [
+      "Vendor Name",
+      "Venue Name",
+      "Mobile Number",
+      "Sports",
+      "Customer",
+      "Booking Date",
+      "Event Date",
+      "Duration",
+      "Status",
+    ];
+
+    const csvRows = [
+      headers.join(","),
+      ...filteredData.map((row) =>
+        [
+          row.vendorName,
+          row.venueName,
+          row.mobile,
+          row.sports,
+          row.customer,
+          row.bookingDate,
+          row.eventDate,
+          row.duration,
+          row.status,
+        ]
+          .map((val) => `"${val}"`)
+          .join(",")
+      ),
+    ];
+
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `booking_reports_${Date.now()}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   return (
     <>
@@ -213,16 +276,16 @@ export default function BookingAdminPage() {
             type="default"
             className="export-btn"
             icon={<DownloadOutlined />}
+            onClick={exportToCSV}
           >
             Export
           </Button>
-          <Select defaultValue="Last Week">
-            {["Last Week", "Last Month", "This Year"].map((v) => (
-              <Option key={v} value={v}>
-                {v}
-              </Option>
-            ))}
-          </Select>
+          <RangePicker
+            format="YYYY-MM-DD"
+            onChange={(dates) => setDateRange(dates || [])}
+            allowClear
+            style={{ marginLeft: 10 }}
+          />
         </div>
 
         <Spin spinning={loading}>
