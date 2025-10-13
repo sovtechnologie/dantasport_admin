@@ -203,7 +203,6 @@ export default function BookingAdminPage() {
     },
   ];
 
-  // 1. CSV Export function
   const exportToCSV = () => {
     if (!filteredData.length) {
       message.warning("No data to export");
