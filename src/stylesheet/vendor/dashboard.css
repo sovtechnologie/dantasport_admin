@@ -1,0 +1,365 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+
+/* comman css */
+.section_heading {
+
+    color: #1163C7;
+    font-family: 'Lato';
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 32px;
+
+}
+.time{
+
+    font-weight: 400;
+}
+.light_txt{
+
+    color: #B1B1B1;
+    font-family: 'DM Sans';
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 30px;
+
+}
+
+.dashboard_section .inner_card {
+
+    padding: 20px;
+    box-shadow: 5.24px 5.24px 47.16px 0px #0000000D;
+    border-radius: 12.19px;
+
+}
+
+.dashboard_section .inner_card:hover {
+
+    transform: scale(1.1);
+    transition: .3s ease-in-out;
+}
+
+.dashboard_section {
+
+    background-color: #fff;
+    box-shadow: 0px 4px 20px 0px #EEEEEE80;
+    border: 1px solid #F8F9FA;
+    padding: 30px 10px;
+    border-radius: 20px;
+
+}
+
+.card1 {
+
+    background-color: #FFE2E5;
+}
+
+.card2 {
+    background-color: #FFF4DE;
+}
+
+.card3 {
+
+    background-color: #DCFCE7;
+}
+
+.card4 {
+
+    background-color: #F3E8FF;
+}
+
+.inner_card .title h2 {
+
+    font-family: 'DM Sans';
+    font-weight: 600;
+    font-size: 16px;
+    color: #172A39;
+
+}
+
+.inner_card .title span {
+
+    color: #1163C7;
+    font-family: 'DM Sans';
+    font-weight: 700;
+    font-size: 24px;
+
+}
+
+.inner_card .info p {
+
+    position: relative;
+    padding-left: 30px;
+    font-size: 14px;
+    color: #606060;
+}
+
+.inner_card .info span {
+
+    font-size: 14px;
+    color: #606060;
+}
+
+.inner_card .info p::before {
+
+    content: '';
+    position: absolute;
+    height: 21px;
+    width: 20px;
+    background-image: url('../../assets/Vendor/dashboard/Path.svg');
+    background-repeat: no-repeat;
+    left: 0;
+    top: 7px;
+    background-size: contain;
+}
+
+#dropdown-item-button {
+
+    border: 0.49px solid #CDCDCD !important;
+    color: #718096 !important;
+    background-color: #cdcdcd4d !important;
+
+}
+
+.dropdown-menu.show {
+
+    border: none;
+}
+
+.fiter_custom_btn button,
+.dropdown-item-text {
+
+    font-size: 14px;
+    color: #718096;
+}
+
+.sales-chart {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+}
+
+.sales_section,
+.tabing_section {
+
+    background-color: #fff;
+    box-shadow: 0px 4px 20px 0px #EEEEEE80;
+    border: 1px solid #F8F9FA;
+    border-radius: 20px;
+    margin: 30px 0;
+    padding: 10px;
+}
+
+
+/* tabing css */
+
+
+li.nav-item button {
+
+    color: #B1B1B1 !important;
+}
+
+.nav-link.active {
+
+    color: #1163C7 !important;
+    border-bottom: 1px solid #1163C7 !important;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.tabing_section .tab_card {
+    border: 1px solid #b1b1b1ba !important;
+    padding: 20px 15px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.tabing_section .tab_card:hover {
+  border: 1px solid #1163C7 !important;
+  transition: 0.3s ease-in-out;
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #1163C7, #6ca8d5) !important;
+  color: #fff !important;
+}
+
+/* Make all child elements white too */
+.tabing_section .tab_card:hover * {
+  color: #fff !important;
+  fill: #fff !important; /* for SVG icons */
+}
+
+
+
+
+.tabing_section .tab_card h5 {
+
+    font-family: 'Lato';
+    font-weight: 700;
+    font-size: 16.32px;
+    color: #172A39;
+    margin-bottom: 10px;
+
+}
+
+.tabing_section .tab_card p,
+.time{
+
+    color: #1163C7;
+     font-family: 'Lato';
+    font-weight: 700;
+    font-size: 14px;
+
+}
+
+.tabing_section .tab_card span{
+
+    font-family: 'Lato';
+    font-weight: 700;
+    font-size: 16.32px;
+    line-height: 26px;
+    color: #B1B1B1;
+
+}
+
+.tabing_section .tab_card h6{
+
+    font-family: 'Lato';
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 16.32px;
+    line-height: 26px;
+    margin-bottom: 5px;
+    color: #1163C7;
+
+}
+
+/* ======= report css ======== */
+
+.report_table th{
+
+    color: #172A39;
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    border-bottom: 1px solid #E4E6E8;
+    border-top: 1px solid #E4E6E8;
+
+}
+.report_table tr td{
+
+    color: #4B5563;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: 'DM Sans';
+}
+
+/* ========= HeatmapAndChecklist ====== */
+
+
+
+.heatmap {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.heatmap-header, .heatmap-row {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  align-items: center;
+}
+
+.time-label {
+  font-size: 12px;
+  color: #666;
+  padding: 4px;
+  text-align: left;
+}
+
+.day-label {
+  font-size: 12px;
+  text-align: center;
+  font-weight: 600;
+  color: #444;
+}
+
+.heatmap-cell {
+  height: 20px;
+  border-radius: 4px;
+  margin: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.intensity-0 { background-color: #fef3c7; }
+.intensity-1 { background-color: #fdba74; }
+.intensity-2 { background-color: #fb923c; }
+.intensity-3 { background-color: #f97316; }
+.intensity-4 { background-color: #ea580c; }
+.intensity-5 { background-color: #9a3412; }
+
+.custom_bdr {
+
+    border: 1px solid #B1B1B1;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.complete-btn {
+  background-color: #1163C7 !important;
+  border: none !important;
+  color: #fff !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.complete-btn:hover {
+  background-color: #0d4fa3 !important;
+  transform: scale(1.02);
+}
+
+
+.date-range-btn {
+  background: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 10px 18px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.date-range-btn:hover,
+.date-range-btn:focus {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(17, 99, 199, 0.15);
+  background: #fff !important;
+}
+
+.export-btn {
+  background: #fff !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 10px 18px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(17, 99, 199, 0.15);
+}
+
+.icon-circle {
+  background: #e8f0fe;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom_row .col-2{
+
+    width: 19.50%;
+}

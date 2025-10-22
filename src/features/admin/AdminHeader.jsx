@@ -37,15 +37,16 @@ export default function AdminHeader({ title = 'Bookings', user }) {
 
 
     return (
-        <Header className="bg-white px-6 py-6 flex items-center justify-between shadow-sm"
+        <Header className="bg-white px-6 py-6 flex items-center justify-between custom_nav shadow-sm"
             style={{
                 background: '#fff',
                 height: '80px',        // set your desired header height
                 lineHeight: '80px',    // ensure content is vertically centered
                 padding: '0 24px',
+                
             }}>
             <Title level={3} className="m-10">
-                {title}
+                {title} 
             </Title>
 
             <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" >

@@ -4,6 +4,7 @@ import UploadImage from "../../../../assets/UploadIcon.png";
 import { useSelector } from "react-redux";
 import { useFetchSingleVendor } from "../../../../hooks/admin/CreateVendor/useFetchSingleVendor";
 import { useEffect } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 
 const BasicInfo = () => {
   const id = useSelector((state) => state.auth.user.id);
@@ -78,185 +79,200 @@ const BasicInfo = () => {
   const isDisabled = true;
 
   return (
+
     <div className="form-section">
       <Form layout="vertical" onFinish={onFinish} form={form}>
         <div className="section-title">Basic Information</div>
-        <div className="form-row">
-          <Form.Item
-            name="ownerName"
-            label="Enter Owner Name"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="Owner Name" disabled />
-          </Form.Item>
-          <Form.Item
-            name="mobile"
-            label="Enter Mobile Number"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="Mobile Number" disabled />
-          </Form.Item>
-        </div>
-        <div className="form-row">
-          <Form.Item
-            name="email"
-            label="Enter Email"
-            rules={[{ required: true, type: "email" }]}
-          >
-            <Input placeholder="Email" disabled />
-          </Form.Item>
-          <Form.Item hidden></Form.Item>
-        </div>
+        <Row>
+          <Col lg={4} md={6}>
+            <Form.Item
+              name="ownerName"
+              label="Owner Name"
+              rules={[{ required: true }]}
+            >
+              <Input placeholder="Owner Name" disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={4} md={6}>
+            <Form.Item
+              name="mobile"
+              label="Mobile Number"
+              rules={[{ required: true }]}
+            >
+              <Input placeholder="Mobile Number" disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={4} md={6}>
+            <Form.Item
+              name="email"
+              label="Email Address"
+              rules={[{ required: true, type: "email" }]}
+            >
+              <Input placeholder="Email" disabled />
+            </Form.Item>
+            <Form.Item hidden></Form.Item>
+          </Col>
+        </Row>
+
 
         <div className="section-title">Other Information</div>
-
-        <div className="form-row">
-          <Form.Item
-            name="gstNumber"
-            label="GST Number"
-            rules={[{ required: true }]}
-          >
-            <Input disabled />
-          </Form.Item>
-          <Form.Item
-            label="Upload GST Document"
-            name="gstDoc"
-            rules={[{ required: true }]}
-            valuePropName="fileList"
-            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-          >
-            <Upload
-              beforeUpload={() => false}
-              listType="text"
-              maxCount={1}
-              onPreview={(file) => {
-                // open document in new tab or modal
-                window.open(file.url || file.thumbUrl, "_blank");
-              }}
-              showUploadList={{
-                showPreviewIcon: true,
-                showRemoveIcon: true, // Disable remove in edit if required
-              }}
+        <Row>
+          <Col lg={6} md={6}>
+            <Form.Item
+              name="gstNumber"
+              label="GST Number"
+              rules={[{ required: true }]}
             >
-              <Button className="uploadImage">
-                <img src={UploadImage} alt="upload" />
-                Upload Image
-              </Button>
-            </Upload>
-          </Form.Item>
-        </div>
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item
+              label="Upload GST Document"
+              name="gstDoc"
+              rules={[{ required: true }]}
+              valuePropName="fileList"
+              getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+            >
+              <Upload
+                beforeUpload={() => false}
+                listType="text"
+                maxCount={1}
+                onPreview={(file) => {
+                  // open document in new tab or modal
+                  window.open(file.url || file.thumbUrl, "_blank");
+                }}
+                showUploadList={{
+                  showPreviewIcon: true,
+                  showRemoveIcon: true, // Disable remove in edit if required
+                }}
+              >
+                <Button className="uploadImage">
+                  <img src={UploadImage} alt="upload" />
+                  Upload Image
+                </Button>
+              </Upload>
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item name="pan" label="Pan Number" rules={[{ required: true }]}>
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
 
-        <div className="form-row">
-          <Form.Item name="pan" label="Pan Number" rules={[{ required: true }]}>
-            <Input disabled />
-          </Form.Item>
-          <Form.Item
-            label="Upload Pancard"
-            name="panDoc"
-            rules={[{ required: true }]}
-            valuePropName="fileList"
-            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-          >
-            <Upload
+            <Form.Item
+              label="Upload Pancard"
+              name="panDoc"
+              rules={[{ required: true }]}
+              valuePropName="fileList"
+              getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+            >
+              <Upload
+                disabled={isDisabled}
+                beforeUpload={() => false}
+                listType="text"
+                maxCount={1}
+                onPreview={(file) => {
+                  // open document in new tab or modal
+                  window.open(file.url || file.thumbUrl, "_blank");
+                }}
+                showUploadList={{
+                  showPreviewIcon: true,
+                  showRemoveIcon: true, // Disable remove in edit if required
+                }}
+              >
+                <Button className="uploadImage">
+                  <img src={UploadImage} alt="upload" />
+                  Upload Image
+                </Button>
+              </Upload>
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item
               disabled={isDisabled}
-              beforeUpload={() => false}
-              listType="text"
-              maxCount={1}
-              onPreview={(file) => {
-                // open document in new tab or modal
-                window.open(file.url || file.thumbUrl, "_blank");
-              }}
-              showUploadList={{
-                showPreviewIcon: true,
-                showRemoveIcon: true, // Disable remove in edit if required
-              }}
+              name="aadhaar"
+              label="Aadhar Card Number"
+              rules={[{ required: true }]}
             >
-              <Button className="uploadImage">
-                <img src={UploadImage} alt="upload" />
-                Upload Image
-              </Button>
-            </Upload>
-          </Form.Item>
-        </div>
-
-        <div className="form-row">
-          <Form.Item
-            disabled={isDisabled}
-            name="aadhaar"
-            label="Aadhar Card Number"
-            rules={[{ required: true }]}
-          >
-            <Input disabled />
-          </Form.Item>
-          <Form.Item
-            label="Upload Aadhaar Card"
-            name="aadhaarDoc"
-            rules={[{ required: true }]}
-          >
-            <Upload disabled={isDisabled}>
-              <Button className="uploadImage">
-                <img src={UploadImage} alt="upload" />
-                Upload Image
-              </Button>
-            </Upload>
-          </Form.Item>
-        </div>
-
-        <div className="form-row">
-          <Form.Item
-            name="accountNumber"
-            label="Account Number"
-            rules={[{ required: true }]}
-          >
-            <Input disabled />
-          </Form.Item>
-          <Form.Item name="ifsc" label="IFSC Code" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-        </div>
-
-        <div className="form-row">
-          <Form.Item
-            name="bankName"
-            label="Bank Name"
-            rules={[{ required: true }]}
-          >
-            <Input disabled />
-          </Form.Item>
-          <Form.Item
-            label="Upload Bank Passbook/Cancel Cheque"
-            name="bankDoc"
-            rules={[{ required: true }]}
-            valuePropName="fileList"
-            getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
-          >
-            <Upload
-              beforeUpload={() => false}
-              listType="text"
-              maxCount={1}
-              disabled={isDisabled}
-              onPreview={(file) => {
-                // open document in new tab or modal
-                window.open(file.url || file.thumbUrl, "_blank");
-              }}
-              showUploadList={{
-                showPreviewIcon: true,
-                showRemoveIcon: true, // Disable remove in edit if required
-              }}
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item
+              label="Upload Aadhaar Card"
+              name="aadhaarDoc"
+              rules={[{ required: true }]}
             >
-              <Button className="uploadImage">
-                <img src={UploadImage} alt="upload" />
-                Upload Image
-              </Button>
-            </Upload>
-          </Form.Item>
-        </div>
+              <Upload disabled={isDisabled}>
+                <Button className="uploadImage">
+                  <img src={UploadImage} alt="upload" />
+                  Upload Image
+                </Button>
+              </Upload>
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item
+              name="accountNumber"
+              label="Account Number"
+              rules={[{ required: true }]}
+            >
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item name="ifsc" label="IFSC Code" rules={[{ required: true }]}>
+              <Input />
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item
+              name="bankName"
+              label="Bank Name"
+              rules={[{ required: true }]}
+            >
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6}>
+            <Form.Item
+              label="Upload Bank Passbook/Cancel Cheque"
+              name="bankDoc"
+              rules={[{ required: true }]}
+              valuePropName="fileList"
+              getValueFromEvent={(e) => (Array.isArray(e) ? e : e && e.fileList)}
+            >
+              <Upload
+                beforeUpload={() => false}
+                listType="text"
+                maxCount={1}
+                disabled={isDisabled}
+                onPreview={(file) => {
+                  // open document in new tab or modal
+                  window.open(file.url || file.thumbUrl, "_blank");
+                }}
+                showUploadList={{
+                  showPreviewIcon: true,
+                  showRemoveIcon: true, // Disable remove in edit if required
+                }}
+              >
+                <Button className="uploadImage">
+                  <img src={UploadImage} alt="upload" />
+                  Upload Image
+                </Button>
+              </Upload>
+            </Form.Item>
+          </Col>
 
-        {/* <Form.Item className="centered-submit">
+        </Row>
+
+        <Form.Item className="blue_btn">
           <Button type="primary" htmlType="submit" >
-            UPDATE
+            Update
           </Button>
-        </Form.Item> */}
+        </Form.Item>
       </Form>
     </div>
   );

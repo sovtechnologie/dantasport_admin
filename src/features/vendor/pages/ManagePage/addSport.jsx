@@ -1,5 +1,6 @@
 import "../../styelsheets/Manage/addSport.css";
 import React, { useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import {
   Select,
   Button,
@@ -161,197 +162,216 @@ export default function AddSport() {
     <div className="add-sport-container">
       <h2 className="add-sport-title">Add Sport</h2>
       <Form layout="vertical" onFinish={onFinish} form={form}>
-        <div className="form-row">
-          <Form.Item
-            name="selectVenue"
-            label="Select Venue"
-            rules={[{ required: true }]}
-          >
-            <Select
-              placeholder="Select Venue"
-              className="sport-Select"
-              loading={venueListLoading}
-              onChange={(value) => form.setFieldsValue({ venueId: value })}
-              value={venueList?.resutl?.[0]?.venue_id}
+        <Row>
+          <Col lg={6}>
+            <Form.Item
+              name="selectVenue"
+              label="Select Venue"
+              rules={[{ required: true }]}
             >
-              {venueList?.resutl?.map((venue) => (
-                <Option key={venue.venue_id} value={venue.venue_id}>
-                  {venue.venue_name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="venueId"
-            label="Venue ID"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="venueId" disabled />
-          </Form.Item>
-        </div>
-
-        <div className="form-row">
-          <Form.Item
-            name="selectSport"
-            label="Select Sport"
-            rules={[{ required: true }]}
-          >
-            {/* <Select placeholder="Select Sport" className="sport-Select">
-                            <Option value="cricket">Cricket</Option>
-                        </Select> */}
-            {/* <Form.Item name="selectSport" label="Select Sport" rules={[{ required: true }]}> */}
-            <Select
-              placeholder="Select Sport"
-              className="sport-Select"
-              onChange={(value) => form.setFieldsValue({ selectSport: value })}
-              loading={sportsloading}
-              showSearch
-              optionFilterProp="children" // Filter options by the text inside Option
-              filterOption={(input, option) =>
-                option.children.toLowerCase().includes(input.toLowerCase())
-              }
-            >
-              {sportsList?.result
-                ?.filter((sport) => sport.sports === 1) // ✅ only sports === 1
-                ?.sort((a, b) => a.sports_name.localeCompare(b.sports_name)) // ✅ sort alphabetically
-                ?.map((sport) => (
-                  <Option key={sport.id} value={sport.id}>
-                    {sport.sports_name}
+              <Select
+                placeholder="Select Venue"
+                className="sport-Select"
+                loading={venueListLoading}
+                onChange={(value) => form.setFieldsValue({ venueId: value })}
+                value={venueList?.resutl?.[0]?.venue_id}
+              >
+                {venueList?.resutl?.map((venue) => (
+                  <Option key={venue.venue_id} value={venue.venue_id}>
+                    {venue.venue_name}
                   </Option>
                 ))}
-            </Select>
-            {/* </Form.Item> */}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col lg={6}>
+            <Form.Item
+              name="venueId"
+              label="Venue ID"
+              rules={[{ required: true }]}
+            >
+              <Input placeholder="venueId" disabled />
+            </Form.Item>
+          </Col>
+          <Col lg={6}>
+            <Form.Item
+              name="selectSport"
+              label="Select Sport"
+              rules={[{ required: true }]}
+            >
+              {/* <Select placeholder="Select Sport" className="sport-Select">
+                            <Option value="cricket">Cricket</Option>
+                        </Select> */}
+              {/* <Form.Item name="selectSport" label="Select Sport" rules={[{ required: true }]}> */}
+              <Select
+                placeholder="Select Sport"
+                className="sport-Select"
+                onChange={(value) => form.setFieldsValue({ selectSport: value })}
+                loading={sportsloading}
+                showSearch
+                optionFilterProp="children" // Filter options by the text inside Option
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
+              >
+                {sportsList?.result
+                  ?.filter((sport) => sport.sports === 1) // ✅ only sports === 1
+                  ?.sort((a, b) => a.sports_name.localeCompare(b.sports_name)) // ✅ sort alphabetically
+                  ?.map((sport) => (
+                    <Option key={sport.id} value={sport.id}>
+                      {sport.sports_name}
+                    </Option>
+                  ))}
+              </Select>
+              {/* </Form.Item> */}
 
-            {/* Hidden field to actually capture sportsId */}
-            {/* <Form.Item name="sportsId" label="Sport ID" rules={[{ required: true }]}>
+              {/* Hidden field to actually capture sportsId */}
+              {/* <Form.Item name="sportsId" label="Sport ID" rules={[{ required: true }]}>
                             <Input placeholder="Selected Sport ID" disabled />
                         </Form.Item> */}
-          </Form.Item>
+            </Form.Item>
+          </Col>
+          <Col lg={6}>
+            <Form.Item
+              name="duration"
+              label="Slots Duration (mins)"
+              rules={[
+                { required: true, message: "Slot Duration is required" },
+                {
+                  validator: (_, value) => {
+                    if (!value) return Promise.resolve();
+                    if (value < 60)
+                      return Promise.reject(
+                        "Slot duration cannot be less than 60 minutes"
+                      );
 
-          <Form.Item
-            name="duration"
-            label="Slots Duration (mins)"
-            rules={[
-              { required: true, message: "Slot Duration is required" },
-              {
-                validator: (_, value) => {
-                  if (!value) return Promise.resolve();
-                  if (value < 60)
-                    return Promise.reject(
-                      "Slot duration cannot be less than 60 minutes"
-                    );
-
-                  const minDuration = form.getFieldValue("minduration");
-                  if (minDuration && minDuration > value) {
-                    return Promise.reject(
-                      "Minimum Booking Duration cannot be greater than Slot Duration"
-                    );
-                  }
-                  return Promise.resolve();
+                    const minDuration = form.getFieldValue("minduration");
+                    if (minDuration && minDuration > value) {
+                      return Promise.reject(
+                        "Minimum Booking Duration cannot be greater than Slot Duration"
+                      );
+                    }
+                    return Promise.resolve();
+                  },
                 },
-              },
-            ]}
-          >
-            <InputNumber
-              placeholder="Slot Duration (min)"
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-        </div>
+              ]}
+            >
+              <InputNumber
+                placeholder="Slot Duration (min)"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </Col>
+          <Col lg={6}>
+            <Form.Item
+              name="minduration"
+              label="Minimum Booking Duration (mins)"
+              dependencies={["duration"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Minimum Booking Duration is required",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    const slotDuration = getFieldValue("duration");
+                    if (!value) return Promise.resolve();
+                    if (slotDuration && value > slotDuration) {
+                      return Promise.reject(
+                        "Minimum Booking Duration cannot be greater than Slot Duration"
+                      );
+                    }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
+            >
+              <InputNumber
+                placeholder="Min Booking Duration (min)"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </Col>
+          <Col lg={6}>
+            <Form.Item
+              name="courtNO"
+              label="Number of Courts"
+              rules={[{ required: true }]}
+            >
+              <InputNumber placeholder="No. of Courts" className="sport-Number w-100" />
+            </Form.Item>
+          </Col>
+          <Col lg={12}>
+            <Form.Item
+              label="Description"
+              name="description"
+              rules={[{ required: true }]}
+            >
+              <Input.TextArea
+                placeholder="Enter description"
+                className="description-input"
+                rows={4} // you can adjust the number of visible lines
+              />
+            </Form.Item>
+          </Col>
+
+        </Row>
+
+
+
+
 
         <div className="form-row">
-          <Form.Item
-            name="minduration"
-            label="Minimum Booking Duration (mins)"
-            dependencies={["duration"]}
-            rules={[
-              {
-                required: true,
-                message: "Minimum Booking Duration is required",
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  const slotDuration = getFieldValue("duration");
-                  if (!value) return Promise.resolve();
-                  if (slotDuration && value > slotDuration) {
-                    return Promise.reject(
-                      "Minimum Booking Duration cannot be greater than Slot Duration"
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
-          >
-            <InputNumber
-              placeholder="Min Booking Duration (min)"
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-          <Form.Item
-            name="courtNO"
-            label="Number of Courts"
-            rules={[{ required: true }]}
-          >
-            <InputNumber placeholder="No. of Courts" className="sport-Number" />
-          </Form.Item>
-        </div>
-        <div className="form-row">
-          <Form.Item
-            label="Description"
-            name="description"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="Description" className="description-input" />
-          </Form.Item>
+
         </div>
 
         <h2 className="add-sport-title">Timing & Pricing</h2>
 
-        <Collapse defaultActiveKey={["Monday"]}>
-          {days?.map((day) => (
-            <Panel header={day} key={day}>
-              <div className="slot-list">
-                {slots[day]?.map((slot, index) => (
-                  <div className="slot-row" key={index}>
-                    <TimePicker
-                      format="hh:mm A"
-                      value={slot.startTime}
-                      onChange={(time) =>
-                        handleSlotChange(day, index, "startTime", time)
-                      }
-                      use12Hours
-                    />
-                    <TimePicker
-                      format="hh:mm A"
-                      value={slot.endTime}
-                      onChange={(time) =>
-                        handleSlotChange(day, index, "endTime", time)
-                      }
-                      use12Hours
-                    />
-                    <InputNumber
-                      min={0}
-                      placeholder="Price"
-                      value={slot.price}
-                      onChange={(value) =>
-                        handleSlotChange(day, index, "price", value)
-                      }
-                    />
-                    <Button
-                      danger
-                      onClick={() => removeSlot(day, index)}
-                      className="remove-slot-btn"
-                    >
-                      X
-                    </Button>
-                  </div>
-                ))}
-                <Button onClick={() => addSlot(day)} className="AddSlot-btn">
-                  + Add Slot
-                </Button>
+        <div className="wrapper">
+          <Collapse defaultActiveKey={["Monday"]}>
+            {days?.map((day) => (
+              <Panel header={day} key={day}>
+                <div className="slot-list">
+                  {slots[day]?.map((slot, index) => (
+                    <div className="slot-row" key={index}>
+                      <TimePicker
+                        format="hh:mm A"
+                        value={slot.startTime}
+                        onChange={(time) =>
+                          handleSlotChange(day, index, "startTime", time)
+                        }
+                        use12Hours
+                      />
+                      <TimePicker
+                        format="hh:mm A"
+                        value={slot.endTime}
+                        onChange={(time) =>
+                          handleSlotChange(day, index, "endTime", time)
+                        }
+                        use12Hours
+                      />
+                      <InputNumber
+                        min={0}
+                        placeholder="Price"
+                        value={slot.price}
+                        onChange={(value) =>
+                          handleSlotChange(day, index, "price", value)
+                        }
+                      />
+                      <Button
+                        danger
+                        onClick={() => removeSlot(day, index)}
+                        className="close_btn"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
+                  <Button onClick={() => addSlot(day)} className="add_btn">
+                    + Add Slot
+                  </Button>
 
-                {/* <div className="apply-to">
+                  {/* <div className="apply-to">
                                     <span className="apply-label">Apply To:</span>
                                     <div className="checkbox-group">
                                         {days
@@ -378,23 +398,27 @@ export default function AddSport() {
                                         Apply
                                     </Button>
                                 </div> */}
-              </div>
-            </Panel>
-          ))}
-        </Collapse>
-
-        <div className="form-submit-btn">
-          <Form.Item>
-            <Button
-              type="primary"
-              className="update-btn"
-              htmlType="submit"
-              loading={loading}
-            >
-              Update Time and Price
-            </Button>
-          </Form.Item>
+                </div>
+              </Panel>
+            ))}
+          </Collapse>
         </div>
+
+
+        <Col lg={4}>
+          <div className="blue_btn">
+            <Form.Item>
+              <Button
+                type="primary"
+                className="update-btn"
+                htmlType="submit"
+                loading={loading}
+              >
+                Update Time & Price
+              </Button>
+            </Form.Item>
+          </div>
+        </Col>
       </Form>
     </div>
   );

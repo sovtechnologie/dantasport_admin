@@ -5,12 +5,12 @@
 } */
 
 
-.form-section {
+ .form-section {
   background: white;
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+} 
 
 .section-title {
   font-size: 24px;
@@ -19,7 +19,7 @@
   font-weight: 600;
 }
 
-.form-row {
+/* .form-row {
   display: flex;
   gap: 40px;
   flex-wrap: wrap;
@@ -28,11 +28,12 @@
 .form-row .ant-form-item {
   flex: 1;
   max-width: 35vw;
-}
+} */
 
-.form-row input{
-  min-height: 50px;
-  border-radius: 12px;
+ input{
+  height: 50px;
+  border-radius: 6px;
+  border: 1px solid #B1B1B1 !important;
 }
 
 .uploadImage {

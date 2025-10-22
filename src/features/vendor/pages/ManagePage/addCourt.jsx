@@ -112,7 +112,7 @@ export default function AddCourt() {
             </Form.Item>
           </div>
 
-          <Form.Item className="centered-submit">
+          <Form.Item className="submit">
             <Button type="primary" htmlType="submit" loading={loading}>
               CREATE COURT
             </Button>

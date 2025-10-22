@@ -8,6 +8,8 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store'; // <-- Updated import
 import { PersistGate } from 'redux-persist/integration/react';
 import './utils/tokenDebugger'; // Import token debugger for development
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 if (process.env.NODE_ENV === 'production') {
   console.log = () => {};

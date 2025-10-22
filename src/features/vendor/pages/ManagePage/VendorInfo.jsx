@@ -8,6 +8,7 @@ import {
     Button,
     Radio,
     TimePicker,
+    
 } from 'antd';
 import { useParams } from "react-router-dom";
 import { useFetchSingleVenue } from "../../../../hooks/admin/CreateVenue/useFetchSingleVenue";
@@ -16,6 +17,7 @@ import { useUpdateVenue } from "../../../../hooks/admin/CreateVenue/useUpdateVen
 import { useEffect, useState } from "react";
 import moment from "moment";
 import GooglePlacesAutocomplete from "../../../../components/GooglePlacesAutocomplete";
+import { Row,Col } from "react-bootstrap";
 
 
 const { TextArea } = Input;
@@ -32,6 +34,8 @@ function LocationSearch({ form, onPlaceSelect }) {
 
     return (
         <>
+         
+        
             <Form.Item name="search" label="Location" disabled>
                 <GooglePlacesAutocomplete onPlaceSelect={onPlaceSelect} placeholder="Search your address" value={addressValue}
                     onChange={onSearchInputChange} border />
@@ -201,99 +205,66 @@ export default function VenueInfo() {
             <Form form={form} layout="vertical" onFinish={handleFinish}>
                 <div className="section-title">Venue Information</div>
 
-                <div className="Venue-form-row">
-                    <Form.Item name="venueName" label="Venue Name" rules={[{ required: true }]}>
-                        <Input placeholder="Enter venue name" disabled />
-                    </Form.Item>
+               
 
-                    <Form.Item name="venueId" label="Venue ID" initialValue="#123456">
-                        <Input disabled />
-                    </Form.Item>
-                </div>
+                <Row className="g-3">
+                    <Col lg={6}>
+                        <Form.Item name="venueName" label="Venue Name" rules={[{ required: true }]}>
+                            <Input placeholder="Enter venue name" disabled />
+                        </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                        <Form.Item name="venueId" label="Venue ID" initialValue="#123456">
+                            <Input disabled />
+                        </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                        <Form.Item label="Upload Cover Image For Mobile App">
+                            <Upload
+                                accept="image/*"
+                                beforeUpload={() => false}  // prevent auto upload
+                                maxCount={1}
+                                listType="text"
+                                fileList={mobileFileList}
+                                onChange={handleMobileChange}
+                            >
 
-                <div className="Venue-form-row">
-                    {/* <Form.Item name="mobileCover" label="Upload Cover Image For Mobile App">
-                        <Upload>
-                            <Button className="uploadImg"><img src={UploadImage} alt="upload" />Upload Cover Image</Button>
-                        </Upload>
-                    </Form.Item>
+                                <Button className="uploadImg">
+                                    <img src={UploadImage} alt="upload" />Upload Cover Image
+                                </Button>
 
-                    <Form.Item name="webCover" label="Upload Cover Image For Website">
-                        <Upload>
-                            <Button className="uploadImg"><img src={UploadImage} alt="upload" />Upload Cover Image</Button>
-                        </Upload>
-                    </Form.Item> */}
-                    {/* 
-                    <Form.Item label="Upload Cover Image For Mobile App">
-                        <Upload
-                            accept="image/*"
-                            beforeUpload={beforeUploadMobile}
-                            maxCount={1}
-                            showUploadList={mobileCoverFile ? [{ uid: '-1', name: mobileCoverFile.name }] : []}
-                        >
-                            <Button className="uploadImg">
-                                <img src={UploadImage} alt="upload" /> Upload Cover Image
-                            </Button>
-                        </Upload>
-                    </Form.Item>
+                            </Upload>
+                        </Form.Item>
+                    </Col>
+                    <Col lg={6}>
+                        <Form.Item label="Upload Cover Image For Website">
+                            <Upload
+                                accept="image/*"
+                                beforeUpload={() => false}
+                                maxCount={1}
+                                listType="text"
+                                fileList={webFileList}
+                                onChange={handleWebChange}
+                            >
 
-                    <Form.Item label="Upload Cover Image For Website">
-                        <Upload
-                            accept="image/*"
-                            beforeUpload={beforeUploadWeb}
-                            maxCount={1}
-                            showUploadList={webCoverFile ? [{ uid: '-2', name: webCoverFile.name }] : []}
-                        >
-                            <Button className="uploadImg">
-                                <img src={UploadImage} alt="upload" /> Upload Cover Image
-                            </Button>
-                        </Upload>
-                    </Form.Item> */}
+                                <Button className="uploadImg">
+                                    <img src={UploadImage} alt="upload" /> Upload Cover Image
+                                </Button>
 
-                    <Form.Item label="Upload Cover Image For Mobile App">
-                        <Upload
-                            accept="image/*"
-                            beforeUpload={() => false}  // prevent auto upload
-                            maxCount={1}
-                            listType="text"
-                            fileList={mobileFileList}
-                            onChange={handleMobileChange}
-                        >
+                            </Upload>
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                            <Button className="uploadImg">
-                                <img src={UploadImage} alt="upload" />Upload Cover Image
-                            </Button>
-
-                        </Upload>
-                    </Form.Item>
-
-                    <Form.Item label="Upload Cover Image For Website">
-                        <Upload
-                            accept="image/*"
-                            beforeUpload={() => false}
-                            maxCount={1}
-                            listType="text"
-                            fileList={webFileList}
-                            onChange={handleWebChange}
-                        >
-
-                            <Button className="uploadImg">
-                                <img src={UploadImage} alt="upload" /> Upload Cover Image
-                            </Button>
-
-                        </Upload>
-                    </Form.Item>
-
-
-                </div>
+             
 
                 <Form.Item name="about" label="Add About Venue" rules={[{ required: true }]}>
                     <TextArea rows={5}
                         placeholder="Eg:Football:- It is recommended but not compulsory to wear football studs while playing at the facility.
-- Metal studs are not allowed.
-Box Cricket:
-- Stumps and Bats will be provided by the venue.
-- Users have to bring their own Cricket Balls." />
+                        - Metal studs are not allowed.
+                        Box Cricket:
+                        - Stumps and Bats will be provided by the venue.
+                        - Users have to bring their own Cricket Balls." />
                 </Form.Item>
 
                 <div className="Venue-form-row">
@@ -391,7 +362,7 @@ Box Cricket:
                 </div>
 
 
-                <Form.Item className="centered-submit">
+                <Form.Item className="">
                     <Button type="primary" htmlType="submit" loading={loading}>
                         UPDATE
                     </Button>
@@ -400,3 +371,4 @@ Box Cricket:
         </div>
     );
 }
+

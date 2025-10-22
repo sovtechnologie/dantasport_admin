@@ -37,7 +37,7 @@ export default function VendorHeader({ title = 'Bookings', user }) {
     ];
 
     return (
-        <Header className="bg-white px-6 py-6 flex items-center justify-between shadow-sm"
+        <Header className="px-6 py-6 flex items-center justify-between shadow-sm"
             style={{
                 background: '#fff',
                 height: '80px',        // set your desired header height

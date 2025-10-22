@@ -1,6 +1,7 @@
 import "../../styelsheets/Report/RatingPage.css";
 import { Table, Select, Button ,Input} from "antd";
 import { StarFilled, DownloadOutlined } from "@ant-design/icons";
+import { Row, Col } from "react-bootstrap";
 
 
 const { Option } = Select;
@@ -55,7 +56,20 @@ export default function RatingReport() {
   return (
 
     <>
-      <div className="search-section">
+     <div className="search_wrapper">
+        <Row className="align-items-center">
+          <Col className="col-12">
+            <label className="search-label">Search by Anything</label>
+          </Col>
+          <Col lg={8}>
+            <Input placeholder="Booking ID" className="custom-search-input" />
+          </Col>
+          <Col lg={4}>
+            <Button className="custom-search-button">SEARCH</Button>
+          </Col>
+        </Row>
+      </div>
+      {/* <div className="search-section">
         <div className="search-input-container">
           <label className="search-label">Search by Anything</label>
           <Input placeholder="Booking ID" className="custom-search-input" />
@@ -63,7 +77,7 @@ export default function RatingReport() {
         <Button className="custom-search-button">
           SEARCH
         </Button>
-      </div>
+      </div> */}
 
       <div className="rating-container">
         <div className="rating-header">
