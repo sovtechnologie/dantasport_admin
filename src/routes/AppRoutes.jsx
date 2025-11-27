@@ -5,12 +5,15 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import { useSelector } from "react-redux";
 import { Spin } from "antd";
 
+
 const LoginPage = lazy(() => import("../pages/Login.jsx"));
 const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
 // Temporary fix for dynamic import issue
 import VendorLayout from "../layouts/VendorLayout";
 import RevenuePage from "../features/vendor/pages/ReportPage/RevenuePage";
 import EventListPage from "../features/vendor/pages/runEvent/EventList.jsx";
+import TurfDashboard from "../pages/vendor/TurfDashboard.jsx";
+// import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
 const VendorDashboard = lazy(() => import("../pages/vendor/Dashboard"));
@@ -147,9 +150,22 @@ const VenManEditCourt = lazy(() =>
 const EvenListPage = lazy(() =>
   import("../features/vendor/pages/runEvent/EventList.jsx")
 );
-const CreateEvent = lazy(() =>
-  import("../features/vendor/pages/runEvent/CreateEvent.jsx")
+
+const CreateEvents = lazy(() =>
+  import("../features/vendor/pages/runEvent/CreateEvents.jsx")
 );
+
+const EventDetails = lazy(() =>
+  import("../features/vendor/pages/runEvent/EventDetails.jsx")
+);
+
+const EventLocation = lazy(() =>
+  import("../features/vendor/pages/runEvent/EventLocation.jsx")
+);
+
+
+
+
 // Admin routes
 
 // ✅ Admin Gym Reports
@@ -380,6 +396,11 @@ const AppRoutes = () => {
               path="/vendor/manage/basic-info"
               element={<VenManBasicInfo />}
             />
+            {/* my code ss */}
+          <Route path="/vendor/runEvent/createEvent" element={<CreateEvents/>}></Route>
+          <Route path="/vendor/runEvent/event-details" element={<EventDetails/>}></Route>
+          <Route path="/vendor/runEvent/location-info"element={<EventLocation />}></Route>
+      
             <Route
               path="/vendor/manage/venuelist"
               element={<VenuManVenueList />}
@@ -491,6 +512,7 @@ const AppRoutes = () => {
             <Route path="/vendor/reports/revenue" element={<VenRepRevenue />} />
             <Route path="/vendor/reports/rating" element={<VenRepRating />} />
             <Route path="/vendor/reports/coupan" element={<VenRepCoupon />} />
+            <Route path="/vendor/dashboard//turf" element={<TurfDashboard/>} />
             {/* Catch-all for vendor routes */}
             <Route path="*" element={<VendorNotFound />} />
           </Route>

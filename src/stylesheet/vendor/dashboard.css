@@ -179,7 +179,7 @@ li.nav-item button {
 .tabing_section .tab_card:hover {
   border: 1px solid #1163C7 !important;
   transition: 0.3s ease-in-out;
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
   background: linear-gradient(135deg, #1163C7, #6ca8d5) !important;
   color: #fff !important;
 }

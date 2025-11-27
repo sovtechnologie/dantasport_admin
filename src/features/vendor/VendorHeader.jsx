@@ -6,6 +6,7 @@ import { Layout, Dropdown, Avatar,Typography, Space } from 'antd';
 import { DownOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
+
 const { Header } = Layout;
 const { Title, Text } = Typography;
 
@@ -13,6 +14,23 @@ export default function VendorHeader({ title = 'Bookings', user }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const vendor = useSelector((state) => state.auth.user);
+
+
+    //   const navigate = useNavigate();
+
+//   const handleChange = (e) => {
+//     const value = e.target.value;
+    
+//     if (value == title) {
+//       navigate(`/vendor/`);
+//     }
+//     else {
+
+//         // (value == title)
+//          navigate(`/vendor/dashboard/${value}`); 
+//     }
+    
+//   };
 
 
     // Define menu items as an array of objects
@@ -37,19 +55,25 @@ export default function VendorHeader({ title = 'Bookings', user }) {
     ];
 
     return (
-        <Header className="px-6 py-6 flex items-center justify-between shadow-sm"
-            style={{
-                background: '#fff',
-                height: '80px',        // set your desired header height
-                lineHeight: '80px',    // ensure content is vertically centered
-                padding: '0 24px',
-            }}>
-            <Title level={3} className="m-10">
+        <Header className="bg-white header_section">
+            {/* <Title level={3} className="m-10">
                 {title}
-            </Title>
-
-            <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" >
-                <a onClick={(e) => e.preventDefault()} style={{ marginRight: 50, display: 'flex', alignItems: 'center' }}>
+            </Title> */}
+           <div className="row justify-content-between align-items-center">
+              {/* <div className="col-3">
+                    <Form.Select aria-label="Select Page" onChange={handleChange}>
+                        <option>Dashboard</option>
+                        <option value="/turf">Turf.jsx</option>
+                        <option value="/two">Two</option>
+                        <option value="/three">Three</option>
+                    </Form.Select>
+                </div> */}
+                <div className="col-3">
+                    <h3>{title}</h3>
+                </div>
+            <div className="col-6 text-end">
+                <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" >
+                <a onClick={(e) => e.preventDefault()} >
                     <Space>
                         <Avatar src={user.avatarUrl} shape="square" size={48} />
                         <div className="flex flex-col">
@@ -62,6 +86,10 @@ export default function VendorHeader({ title = 'Bookings', user }) {
                     </Space>
                 </a>
             </Dropdown>
+            </div>
+           </div>
+
+            
         </Header>
     );
 }

@@ -1,37 +1,22 @@
-import "../../stylesheet/vendor/dashboard.css";
-import StatsSection from"../../components/StatsSection";
-import { Container,Col, Row } from "react-bootstrap";
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import React from 'react'
 import date from"../../assets/Vendor/dashboard/date.svg";
 import revenue from "../../assets/Vendor/dashboard/Revenue.svg";
 import rating from "../../assets/Vendor/dashboard/Average-Rating.svg";
 import Peakhours from "../../assets/Vendor/dashboard/Peak-hour.svg";
-import SalesChart from "./SalesChart ";
-import DashboardStats from "./DashboardStats";
-import DashboardTabs from "./DashboardTabs";
-import DashboardReports from "./DashboardReports";
-import HeatmapAndChecklist from "./HeatmapAndChecklist";
-import DateExportBar from "./DateExportBar";
-import DashboardCards from "./DashboardCards";
+import { Container,Row,Col } from 'react-bootstrap';
+function DashboardCards() {
 
-const Dashboard = () => {
-  // Sample data - later replace with real API calls
-  const stats = [
+      const stats = [
     { label: 'Total Rating', value: 120 },
     { label: 'Revenue', value: 34 },
     { label: 'Bookings Today', value: 45 },
     { label: 'Reports Pending', value: 6 },
   ];
-
   return (
-   <>
-    <section>
-      <Container>
-        <DateExportBar/>
-      </Container>
-    </section>
-     {/* <section className="dashboard_section">
+    <>
+
+    
+    <section className="dashboard_section">
       <Container>
         <Row>
           <Col className="col-3">
@@ -100,40 +85,9 @@ const Dashboard = () => {
           </Col>
         </Row>
       </Container>
-     </section> */}
-     <section>
-      <Container>
-        <DashboardCards/>
-      </Container>
      </section>
-     <section className="sales_section">
-      <Container>
-        <SalesChart/>
-      </Container>
-     </section>
+    </>
+  )
+}
 
-     <section>
-      <Container className="p-0">
-        <DashboardStats/>
-      </Container>
-     </section>
-     <section>
-      <Container className="p-0">
-        <DashboardTabs/>
-      </Container>
-     </section>
-     <section>
-      <Container className="p-0">
-        <DashboardReports/>
-      </Container>
-     </section>
-     <section>
-      <Container className="p-0">
-        <HeatmapAndChecklist/>
-      </Container>
-     </section>
-   </>
-  );
-};
-
-export default Dashboard;
+export default DashboardCards

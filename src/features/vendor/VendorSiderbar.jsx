@@ -175,6 +175,7 @@ const VendorSidebar = ({ onSelect }) => {
                   Basic Info
                 </Link>
               </li> */}
+              
               <li>
                 <Link
                   to="/vendor/runEvent/createEvent"
