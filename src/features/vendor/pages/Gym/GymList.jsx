@@ -405,7 +405,7 @@ export default function GymList() {
             {/* Statistics Cards */}
             <Row gutter={16} style={{ marginBottom: 24 }}>
                 <Col xs={24} sm={12} md={6}>
-                    <Card size="small">
+                    <Card size="small" className="booking_counts_gym">
                         <Statistic
                             title="Total Gyms"
                             value={statistics.total}
@@ -414,7 +414,7 @@ export default function GymList() {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                    <Card size="small">
+                    <Card size="small" className="booking_counts_gym">
                         <Statistic
                             title="Active"
                             value={statistics.active}
@@ -423,7 +423,7 @@ export default function GymList() {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                    <Card size="small">
+                    <Card size="small" className="booking_counts_gym">
                         <Statistic
                             title="Bookable"
                             value={statistics.bookable}
@@ -432,7 +432,7 @@ export default function GymList() {
                     </Card>
                 </Col>
                 <Col xs={24} sm={12} md={6}>
-                    <Card size="small">
+                    <Card size="small" className="booking_counts_gym">
                         <Statistic
                             title="Women Only"
                             value={statistics.womenOnly}

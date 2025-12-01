@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col, Container, Row, Form, Card } from 'react-bootstrap'
+import { Col, Container, Row, Form, Card } from 'react-bootstrap';
 import { FiUpload } from "react-icons/fi";
 import { FiArrowLeft } from "react-icons/fi";
 import "../../styelsheets/EventPage/CreateEvent.css"
@@ -125,7 +125,7 @@ function EventLocation() {
                                         <button>Save Listing</button>
                                       </div>
                                     </Col>
-                                </Row>
+                    </Row>
 
                 </Container>
             </section>

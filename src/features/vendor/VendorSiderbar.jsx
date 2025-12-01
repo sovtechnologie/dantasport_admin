@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../assets/DantaSportslogo.png";
+import logo from "../../assets/Danta-sports1.png";
+// import logo from "../../assets/"
 import {
   DashboardOutlined,
   SettingOutlined,

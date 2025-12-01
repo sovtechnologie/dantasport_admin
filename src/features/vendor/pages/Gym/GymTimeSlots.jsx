@@ -348,64 +348,8 @@ export default function GymTimeSlotsPage() {
   return (
     <div className="venue-card">
       {/* Enhanced Header Section */}
-      <div style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        borderRadius: '16px',
-        padding: '24px',
-        marginBottom: '24px',
-        color: 'white',
-        boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <div>
-            <h2 style={{ 
-              margin: 0, 
-              fontSize: '28px', 
-              fontWeight: '700',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <ClockCircleOutlined style={{ fontSize: '32px' }} />
-              Time Slot Management
-            </h2>
-            <p style={{ 
-              margin: '8px 0 0 0', 
-              fontSize: '16px', 
-              opacity: 0.9,
-              color: 'white'
-            }}>
-              Manage your gym's operating hours and availability
-            </p>
-          </div>
-          <Button 
-            type="primary" 
-            size="large"
-            icon={<PlusOutlined />}
-            disabled={!selectedGymId || isProcessing || timeSlotsFetching}
-            onClick={handleAddTimeSlot}
-            style={{
-              background: 'rgba(255, 255, 255, 0.2)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: 'white',
-              height: '48px',
-              padding: '0 24px',
-              borderRadius: '12px',
-              fontWeight: '600',
-              fontSize: '16px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-            }}
-          >
-            Add Time Slot
-            {isProcessing && (
-              <span style={{ marginLeft: '8px', opacity: 0.8 }}>(Processing...)</span>
-            )}
-          </Button>
-        </div>
-
-        {/* Gym Selection */}
-        <div style={{ marginBottom: '20px' }}>
+      <div className="d-flex justify-between mb-4">
+         <div >
           <Select
             placeholder="Select Gym"
             size="large"
@@ -426,84 +370,37 @@ export default function GymTimeSlotsPage() {
             ))}
           </Select>
         </div>
+        <div>
+          
+          <Button 
+            type="primary" 
+            size="large"
+            icon={<PlusOutlined />}
+            disabled={!selectedGymId || isProcessing || timeSlotsFetching}
+            onClick={handleAddTimeSlot}
+            style={{
+              background: '#1163C7',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              color: 'white',
+              height: '48px',
+              padding: '0 24px',
+              borderRadius: '12px',
+              fontWeight: '600',
+              fontSize: '16px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            Add Time Slot
+            {isProcessing && (
+              <span style={{ marginLeft: '8px', opacity: 0.8 }}>(Processing...)</span>
+            )}
+          </Button>
+        </div>
 
-        {/* Statistics Cards */}
-        {selectedGymId && gymTimeSlots.length > 0 && (
-          <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12} md={6}>
-              <Card 
-                size="small" 
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '12px'
-                }}
-                bodyStyle={{ padding: '16px' }}
-              >
-                <Statistic
-                  title={<span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Total Slots</span>}
-                  value={timeSlotStats.total}
-                  valueStyle={{ color: 'white', fontSize: '24px', fontWeight: '700' }}
-                  prefix={<ClockCircleOutlined />}
-                />
-              </Card>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card 
-                size="small" 
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '12px'
-                }}
-                bodyStyle={{ padding: '16px' }}
-              >
-                <Statistic
-                  title={<span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Daily Slots</span>}
-                  value={timeSlotStats.daily}
-                  valueStyle={{ color: '#52c41a', fontSize: '24px', fontWeight: '700' }}
-                  prefix={<CheckCircleOutlined />}
-                />
-              </Card>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card 
-                size="small" 
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '12px'
-                }}
-                bodyStyle={{ padding: '16px' }}
-              >
-                <Statistic
-                  title={<span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Custom Slots</span>}
-                  value={timeSlotStats.custom}
-                  valueStyle={{ color: '#1890ff', fontSize: '24px', fontWeight: '700' }}
-                  prefix={<ThunderboltOutlined />}
-                />
-              </Card>
-            </Col>
-            <Col xs={24} sm={12} md={6}>
-              <Card 
-                size="small" 
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '12px'
-                }}
-                bodyStyle={{ padding: '16px' }}
-              >
-                <Statistic
-                  title={<span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Total Hours</span>}
-                  value={timeSlotStats.totalHours}
-                  valueStyle={{ color: '#faad14', fontSize: '24px', fontWeight: '700' }}
-                  suffix="hrs"
-                />
-              </Card>
-            </Col>
-          </Row>
-        )}
+        {/* Gym Selection */}
+       
+
+    
       </div>
 
       {/* Gym Title */}
