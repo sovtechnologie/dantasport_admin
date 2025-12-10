@@ -1,0 +1,292 @@
+.title_box input{
+
+  height: 30px !important;
+  width: 30px !important;
+  border-radius: unset;
+}
+
+
+
+.lead-section .container_wrapper select{
+
+  height: 40px;
+}
+
+.lead-section .container_wrapper .status-active{
+
+  background-color: #FFCCD1 !important;
+  color: #EE1D52 !important;
+  border:  1px solid #EE1D52 !important;
+  font-weight: 600;
+}
+
+.lead-section .container_wrapper  .status-new{
+
+    background-color: #FFD8B7 !important;
+  color: #FC8019 !important;
+  border:  1px solid #FC8019 !important;
+    font-weight: 600;
+
+}
+
+.lead-section .container_wrapper  .status-converted {
+
+    background-color: #007bff !important;
+  color: #fff !important;
+  border:  1px solid #5578d9  !important;
+    font-weight: 600;
+
+}
+
+.lead-section .container_wrapper  .status-inactive  {
+
+    background-color: #ccc !important;
+  color: #00000089 !important;
+  border:  1px solid #48494c  !important;
+    font-weight: 600;
+
+}
+/* .status-active{
+
+  background-color: #007bff !important;
+} */
+.text-limit {
+  max-width: 200px;      /* adjust width */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  border: 1px solid transparent;
+}
+
+.text-limit:hover{
+
+  color: #2f2f2f;
+  border: 1px solid #007bff;
+  background-color: #fff;
+  transition: .3s ease-in-out;
+}
+
+
+.status-closed {
+  background-color: #dc3545 !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.wrap-text {
+  white-space: normal !important;
+  word-break: break-word;
+  max-width: 250px;  /* adjust size if required */
+}
+
+
+.coach_leads_table thead tr th {
+
+    color: #1163C7;
+    border: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 15px 5px;
+    min-width: 155px;
+
+
+}
+
+.dropdown-menu.show{
+
+    border: 1px solid #8588586c;
+}
+
+
+/* .modal-content{
+
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+} */
+.react-datepicker__close-icon::after{
+
+    top: 5px;
+    right: 5px;
+    background-color: red !important;
+    position: absolute;
+}
+/* .coach_leads_table  */
+
+.coach_leads_table table td {
+
+    border: none !important;
+    height: 100% !important;
+}
+
+.table-bordered>:not(caption)>*>*{
+
+    border: none;
+    color: #2f2f2f;
+}
+
+.custom-toggle::after {
+  display: none !important;
+}
+
+.status_btns span{
+
+    width: 80px;
+    /* background-color: #E7F7EF !important; */
+    /* color: #0CAF60 !important; */
+    display: inline-block;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 5px;
+    font-weight: 400 !important;
+}
+
+
+
+
+
+
+/* top buttons */
+.top-btn {
+  border: 1px solid #dcdcdc !important;
+  padding: 6px 18px !important;
+  border-radius: 8px !important;
+  font-size: 14px;
+}
+
+/* table design */
+.reviews-table thead th {
+  background: #f8f9fc;
+  color: #1163C7;
+  font-weight: 600;
+  padding: 14px 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.reviews-table tbody td {
+  padding: 16px 20px;
+  color: #2f2f2f;
+  font-size: 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+/* rating */
+.rating-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.star-icon {
+  color: #ffc107;
+  font-size: 18px;
+}
+
+/* review text fixed width desktop */
+.review-text {
+  max-width: 300px;
+  white-space: normal;
+}
+
+/* Table spacing */
+.reviews-table {
+  border-collapse: separate;
+  border-spacing: 0 4px;
+}
+
+/* Responsive – Mobile view */
+@media (max-width: 768px) {
+  .reviews-table thead {
+    display: none;
+  }
+
+  .reviews-table tbody tr {
+    display: block;
+    background: white;
+    margin-bottom: 14px;
+    border-radius: 10px;
+    padding: 12px 15px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  }
+
+  .reviews-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+  }
+
+  .reviews-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #555;
+  }
+}
+
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-bubble {
+  padding: 10px 15px;
+  border-radius: 20px;
+  word-wrap: break-word;
+}
+
+.chat-bubble.sent {
+  background-color: #007bff;
+  color: white;
+  border-bottom-right-radius: 0;
+}
+
+.chat-bubble.received {
+  background-color: #f1f0f0;
+  color: black;
+  border-bottom-left-radius: 0;
+}
+
+
+.tab_buttons span{
+
+    width: 150px;
+    padding: 10px;
+    border: 1px solid #8588586c;
+    border-radius: 6px;
+}
+
+
+
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Optional: active button red styling */
+.custm_btns {
+  border-radius: 6px;
+  transition: all 0.2s;
+}

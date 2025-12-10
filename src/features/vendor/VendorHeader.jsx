@@ -68,7 +68,7 @@ export default function VendorHeader({ title = 'Bookings', user }) {
                         <option value="/three">Three</option>
                     </Form.Select>
                 </div> */}
-                <div className="col-3">
+                <div className="col-4">
                     <h3>{title}</h3>
                 </div>
             <div className="col-6 text-end">
