@@ -19,6 +19,10 @@ import Plans from "../features/vendor/pages/Coach/Plans.jsx";
 import DitePlans from "../features/vendor/pages/Coach/DitePlans.jsx";
 import CoachesAcademy from "../features/vendor/pages/Coach/CoachesAcademy.jsx";
 import CoachAcademyList from "../features/vendor/pages/Coach/CoachAcademyList.jsx";
+import CoachDashboard from "../pages/vendor/CoachDashboard.jsx";
+import GymDashboard from "../pages/vendor/GymDashboard.jsx";
+import RunDashboard from "../pages/vendor/RunDashboard.jsx";
+import EventDashboard from "../pages/vendor/EventDashboard.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -527,6 +531,10 @@ const AppRoutes = () => {
             <Route path="/vendor/reports/rating" element={<VenRepRating />} />
             <Route path="/vendor/reports/coupan" element={<VenRepCoupon />} />
             <Route path="/vendor/dashboard//turf" element={<TurfDashboard/>} />
+            <Route path="/vendor/dashboard/turf/caoch" element={<CoachDashboard/>} />
+            <Route path="/vendor/dashboard/gym-dashbaord" element={<GymDashboard/>} />
+            <Route path="/vendor/dashboard/run-dashbaord" element={<RunDashboard/>} />
+             <Route path="/vendor/dashboard/event-dashbaord" element={<EventDashboard/>} />
             {/* Catch-all for vendor routes */}
             <Route path="*" element={<VendorNotFound />} />
           </Route>

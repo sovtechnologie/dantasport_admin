@@ -47,7 +47,9 @@ const VendorSidebar = ({ onSelect }) => {
     <aside className="vendor-sidebar">
       {/* Logo */}
       <div className="sidebar-logo">
-        <img src={logo} alt="Danta Sports" />
+        <Link to="/">
+         <img src={logo} alt="Danta Sports" />
+        </Link>
       </div>
 
       <nav className="sidebar-nav">
