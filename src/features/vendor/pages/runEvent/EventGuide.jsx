@@ -1,68 +1,121 @@
-import React from 'react'
-import { Container, Row,Col } from 'react-bootstrap'
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 
-function EventGuide() {
+function EventGuide({ payload, updatePayload }) {
   return (
-    <>
-      <section>
-        <Container className='container_wrapper'>
-             <h2 className='sub_title mb-4'>Event  Guide</h2>
-            <Row>
-                <Col className="col-6">
-                <div class="mb-3">
-                    <label for="Language" class="form-label">Event Language*</label>
-                    <input type="email" class="form-control" id="Language" placeholder="E.g, english,hindi"/>
-                    </div>
-                </Col>
-                <Col className="col-6">
-                <div class="mb-3">
-                    <label for="Duration" class="form-label">Enter Duration*</label>
-                    <input type="email" class="form-control" id="Duration" placeholder="e.g., 30 min"/>
-                    </div>
-                </Col>
-                 <Col className="col-6">
-                <div class="mb-3">
-                    <label for="Duration" class="form-label">Ticket Needed For*</label>
-                    <input type="email" class="form-control" id="Duration" placeholder="e.g., 10yrs & above"/>
-                    </div>
-                </Col>
-                 <Col className="col-6">
-                <div class="mb-3">
-                    <label for="Allowed" class="form-label">Entry Allowed for*</label>
-                    <input type="email" class="form-control" id="Allowed" placeholder="e.g., 10yrs & above"/>
-                    </div>
-                </Col>
-                  <Col className="col-6">
-                <div class="mb-3">
-                    <label for="Layout" class="form-label">Enter Layout*</label>
-                    <input type="email" class="form-control" id="Layout" placeholder="e.g., outdoor"/>
-                    </div>
-                </Col>
-                 <Col className="col-6">
-                <div class="mb-3">
-                    <label for="Kids" class="form-label">Kids Friendly*</label>
-                    <input type="email" class="form-control" id="Kids" placeholder="e.g., no"/>
-                    </div>
-                </Col>
-                <Col className="col-6">
-                <div class="mb-3">
-                    <label for="Pets" class="form-label">Pets Friendly*</label>
-                    <input type="email" class="form-control" id="Pets" placeholder="e.g., no"/>
-                    </div>
-                </Col>
-                
-            </Row>
-            <Row className='mt-4'>
-                <Col className='col-4'>
-                  <div className="save_btn mb-3">
-                    <button>Submit Event Listing</button>
-                  </div>
-                </Col>
-            </Row>
-        </Container>
-      </section>
-    </>
-  )
+    <section>
+      <Container className="container_wrapper">
+        <h2 className="sub_title mb-4">Event Guide</h2>
+
+        <Row>
+          {/* Language */}
+          <Col className="col-6">
+            <div className="mb-3">
+              <label className="form-label">Event Language*</label>
+              <input
+                className="form-control"
+                placeholder="E.g, english, hindi"
+                value={payload.language ?? ""}
+                onChange={(e) => updatePayload("language", e.target.value)}
+              />
+            </div>
+          </Col>
+
+          {/* Duration */}
+          <Col className="col-6">
+            <div className="mb-3">
+              <label className="form-label">Enter Duration*</label>
+              <input
+                className="form-control"
+                placeholder="e.g., 30 min"
+                value={payload.duration ?? ""}
+                onChange={(e) => updatePayload("duration", e.target.value)}
+              />
+            </div>
+          </Col>
+
+          {/* Ticket Needed For */}
+          <Col className="col-6">
+            <div className="mb-3">
+              <label className="form-label">Ticket Needed For*</label>
+              <input
+                className="form-control"
+                placeholder="e.g., 10yrs & above"
+                value={payload.ticketNeedFor ?? ""}
+                onChange={(e) =>
+                  updatePayload("ticketNeedFor", e.target.value)
+                }
+              />
+            </div>
+          </Col>
+
+          {/* Entry Allowed */}
+          <Col className="col-6">
+            <div className="mb-3">
+              <label className="form-label">Entry Allowed for*</label>
+              <input
+                className="form-control"
+                placeholder="e.g., 10yrs & above"
+                value={payload.EntryAllowed ?? ""}
+                onChange={(e) =>
+                  updatePayload("EntryAllowed", e.target.value)
+                }
+              />
+            </div>
+          </Col>
+
+          {/* Layout */}
+          <Col className="col-6">
+            <div className="mb-3">
+              <label className="form-label">Enter Layout*</label>
+              <input
+                className="form-control"
+                placeholder="e.g., outdoor"
+                value={payload.layout ?? ""}
+                onChange={(e) => updatePayload("layout", e.target.value)}
+              />
+            </div>
+          </Col>
+
+          {/* Kids Friendly */}
+          <Col className="col-6">
+            <div className="mb-3">
+              <label className="form-label">Kids Friendly*</label>
+              <select
+                className="form-control"
+                value={payload.kidsFridenly ?? ""}
+                onChange={(e) =>
+                  updatePayload("kidsFridenly", e.target.value)
+                }
+              >
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+          </Col>
+
+          {/* Pets Friendly */}
+          <Col className="col-6">
+            <div className="mb-3">
+              <label className="form-label">Pets Friendly*</label>
+              <select
+                className="form-control"
+                value={payload.petsFriendly ?? ""}
+                onChange={(e) =>
+                  updatePayload("petsFriendly", e.target.value)
+                }
+              >
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </section>
+  );
 }
 
-export default EventGuide
+export default EventGuide;

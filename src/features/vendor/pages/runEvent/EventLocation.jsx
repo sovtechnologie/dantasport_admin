@@ -1,136 +1,198 @@
-import React from 'react'
-import { Col, Container, Row, Form, Card } from 'react-bootstrap'
-import { FiUpload } from "react-icons/fi";
-import { FiArrowLeft } from "react-icons/fi";
-import "../../styelsheets/EventPage/CreateEvent.css"
+import React, { useState, useEffect } from "react";
+import { Col, Container, Row, Form, Card } from "react-bootstrap";
 import { FiEdit } from "react-icons/fi";
+import "../../styelsheets/EventPage/CreateEvent.css";
+import GooglePlacesAutocomplete from "../../../../components/GooglePlacesAutocomplete";
 
+/* 🔹 STATIC LOCATION (API REQUIRED FORMAT) */
+const STATIC_LOCATION = {
+    lat: 28.5452545,
+    lng: 77.5545487,
+    fullAddress: "Bharat colony",
+    area: "Faridabad",
+    city: "Faridabad",
+    state: "HR",
+    pincode: 121002,
+};
 
+function EventLocation({ payload, updatePayload }) {
+    /* 🔹 Always fallback to static location */
+    const location = payload?.locations?.[0] || STATIC_LOCATION;
 
-function EventLocation() {
+    /* 🔹 Map state only */
+    const [mapLocation, setMapLocation] = useState({
+        latitude: location.lat,
+        longitude: location.lng,
+    });
+
+    /* ✅ AUTO SET STATIC LOCATION ON LOAD */
+    useEffect(() => {
+        if (!payload?.locations || payload.locations.length === 0) {
+            updatePayload("locations", [STATIC_LOCATION]);
+        }
+    }, []);
+
+    /* 🔹 Google Place Select (Optional Override) */
+    const onPlaceSelect = ({
+        address,
+        area,
+        city,
+        state,
+        pincode,
+        latitude,
+        longitude,
+    }) => {
+        const updatedLocation = {
+            lat: latitude,
+            lng: longitude,
+            fullAddress: address,
+            area,
+            city,
+            state,
+            pincode: Number(pincode),
+        };
+
+        updatePayload("locations", [updatedLocation]);
+
+        if (latitude && longitude) {
+            setMapLocation({
+                latitude,
+                longitude,
+            });
+        }
+    };
+
+    /* 🔹 Google Map iframe */
+    const mapSrc = `https://maps.google.com/maps?q=${mapLocation.latitude},${mapLocation.longitude}&z=15&output=embed`;
 
     return (
-        <>
-            <section>
-                <Container className='container_wrapper'>
-                    <Row>
-                        <Col className='col-6'>
-                            <div className="d-flex justify-between ">
-                                <h2 className='sub_title mb-4'>Location Info</h2>
-                                <div className="edit_btn">
-                                    <button>
-                                        <FiEdit />
-                                    </button>
-                                </div>
+        <section>
+            <Container className="container_wrapper">
+                <Row>
+                    <Col className="col-6">
+                        <div className="d-flex justify-between">
+                            <h2 className="sub_title mb-4">Location Info</h2>
+                            <div className="edit_btn">
+                                <button type="button">
+                                    <FiEdit />
+                                </button>
                             </div>
-                        </Col>
-                        
-                    </Row>
-                    <Row>
+                        </div>
+                    </Col>
+                </Row>
+
+                <Row>
+                    {/* LEFT SIDE */}
+                    <Col className="col-6">
+                        {/* 🔍 SEARCH (OPTIONAL) */}
+                        <div className="mb-3">
+                            <GooglePlacesAutocomplete
+                                placeholder="Search for a location"
+                                value={location.fullAddress}
+                                onPlaceSelect={onPlaceSelect}
+                                border
+                            />
+                        </div>
+
+                        {/* EMAIL (UNCHANGED) */}
+                        <div className="mb-3">
+                            <label className="form-label">Email address</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                placeholder="name@example.com"
+                            />
+                        </div>
+
                         <Row>
-                            <Col className='col-6'>
-                              <Col className='col-12'>
-                                    <div class="mb-3">
-                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Search for a location" />
-                                    </div>
-                                </Col>
-                                <Col className='col-12'>
-                                    <div class="mb-3">
-                                        <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
-                                    </div>
-                                </Col>
-                              
-                                <Row>
-                                    <Col className='col-6'>
-                                        <div className="mb-3">
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Area*</Form.Label>
-                                                <Form.Select>
-                                                    <option>Select Area</option>
-                                                </Form.Select>
-                                            </Form.Group>
-                                        </div>
-                                    </Col>
-                                    <Col className='col-6'>
-                                        <div className="mb-3">
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>City*</Form.Label>
-                                                <Form.Select>
-                                                    <option>Select City</option>
-                                                </Form.Select>
-                                            </Form.Group>
-                                        </div>
-                                    </Col>
-                                    <Col className='col-6'>
-                                        <div className="mb-3">
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>State*</Form.Label>
-                                                <Form.Select>
-                                                    <option>Select State*</option>
-                                                </Form.Select>
-                                            </Form.Group>
-                                        </div>
-                                    </Col>
-                                    <Col>
-                                        <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">Pincode*</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Pincode*" />
-                                        </div>
-
-                                    </Col>
-                                </Row>
+                            <Col className="col-6">
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Area*</Form.Label>
+                                    <Form.Select value={location.area} disabled>
+                                        <option>{location.area}</option>
+                                    </Form.Select>
+                                </Form.Group>
                             </Col>
-                            <Col className='col-6'>
-                                <Card
-                                    style={{
-                                        borderRadius: "14px",
-                                        padding: "20px",
-                                        border: "1px solid #e5e5e5",
-                                    }}
-                                >
-                                    {/* Title */}
-                                    <h5 className="fw-bold mb-2">Location</h5>
 
-                                    {/* Address */}
-                                    <p className="mb-3 text-secondary" style={{ fontSize: "15px" }}>
-                                        PSA Ground Next To Shreeji Lawns Ganga Dham Road Bibwewadi Pune 411037
-                                    </p>
+                            <Col className="col-6">
+                                <Form.Group className="mb-3">
+                                    <Form.Label>City*</Form.Label>
+                                    <Form.Select value={location.city} disabled>
+                                        <option>{location.city}</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
 
-                                    {/* Google Map */}
-                                    <div
-                                        style={{
-                                            borderRadius: "12px",
-                                            overflow: "hidden",
-                                            width: "100%",
-                                            height: "260px",
-                                        }}
-                                    >
-                                        <iframe
-                                            title="location-map"
-                                            width="100%"
-                                            height="100%"
-                                            loading="lazy"
-                                            style={{ border: "0" }}
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.380154630509!2d73.858!3d18.494!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2ea65c97f1fb7%3A0x123!2sBibwewadi%2C%20Pune!5e0!3m2!1sen!2sin!4v1700000000000"
-                                        ></iframe>
-                                    </div>
-                                </Card>
+                            <Col className="col-6">
+                                <Form.Group className="mb-3">
+                                    <Form.Label>State*</Form.Label>
+                                    <Form.Select value={location.state} disabled>
+                                        <option>{location.state}</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+
+                            <Col className="col-6">
+                                <div className="mb-3">
+                                    <label className="form-label">Pincode*</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={location.pincode}
+                                        readOnly
+                                    />
+                                </div>
                             </Col>
                         </Row>
-                    </Row>
-                    <Row className='mt-4 justify-items-end justify-end'>
-                                    <Col className='col-4 text-end'>
-                                      <div className="save_btn mb-3">
-                                        <button>Save Listing</button>
-                                      </div>
-                                    </Col>
-                                </Row>
+                    </Col>
 
-                </Container>
-            </section>
-        </>
-    )
+                    {/* RIGHT SIDE MAP */}
+                    <Col className="col-6">
+                        <Card
+                            style={{
+                                borderRadius: "14px",
+                                padding: "20px",
+                                border: "1px solid #e5e5e5",
+                            }}
+                        >
+                            <h5 className="fw-bold mb-2">Location</h5>
+
+                            <p className="mb-3 text-secondary" style={{ fontSize: "15px" }}>
+                                {location.fullAddress}
+                            </p>
+
+                            <div
+                                style={{
+                                    borderRadius: "12px",
+                                    overflow: "hidden",
+                                    width: "100%",
+                                    height: "260px",
+                                }}
+                            >
+                                <iframe
+                                    title="location-map"
+                                    width="100%"
+                                    height="100%"
+                                    loading="lazy"
+                                    style={{ border: "0" }}
+                                    src={mapSrc}
+                                />
+                            </div>
+                        </Card>
+                    </Col>
+                </Row>
+
+                {/* SAVE BUTTON (UI SAME) */}
+                <Row className="mt-4 justify-content-end">
+                    <Col className="col-4 text-end">
+                        <div className="save_btn mb-3">
+                            <button type="button">Save Listing</button>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
+        </section>
+    );
 }
 
-export default EventLocation
+export default EventLocation;

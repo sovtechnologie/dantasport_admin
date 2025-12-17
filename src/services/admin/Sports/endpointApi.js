@@ -21,7 +21,7 @@ export const UpdateSport = async (payload) => {
     }
 }
 
-export const fetchSportsList = async () => {
+export const fetchsList = async () => {
     try {
         const response = await api.get("admin/sports/getSportsList");
         return response?.data;

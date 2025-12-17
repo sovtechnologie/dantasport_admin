@@ -1,73 +1,94 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import "../../styelsheets/EventPage/CreateEvent.css";
 import { FiTrash2 } from "react-icons/fi";
 
-function TicketingInformation() {
-  const [performers, setPerformers] = useState([
-    { name: "", role: "" } // first row (no delete)
-  ]);
+function TicketingInformation({ payload, updatePayload }) {
 
-  // ADD NEW ROW
+  /* 🔹 LOCAL STATE (tickets) */
+  const [tickets, setTickets] = useState(
+    payload.tickets?.length
+      ? payload.tickets.map(t => ({
+        categoryName: t.categoryName || "",
+        price: t.price || "",
+        description: t.description || "",
+        new: false
+      }))
+      : [
+        {
+          categoryName: "",
+          price: "",
+          description: "",
+          new: false
+        }
+      ]
+  );
+
+  /* ✅ SYNC TO PAYLOAD */
+  useEffect(() => {
+    const payloadTickets = tickets.map(t => ({
+      categoryName: t.categoryName,
+      price: Number(t.price),
+      description: t.description
+    }));
+
+    updatePayload("tickets", payloadTickets);
+  }, [tickets]);
+
+  /* 🔹 ADD ROW */
   const addMore = () => {
-    setPerformers([
-      ...performers,
-      { name: "", role: "", new: true } // new row with delete icon
+    setTickets([
+      ...tickets,
+      {
+        categoryName: "",
+        price: "",
+        description: "",
+        new: true
+      }
     ]);
   };
 
-  // DELETE ROW
+  /* 🔹 DELETE ROW */
   const deleteRow = (index) => {
-    const updated = performers.filter((_, i) => i !== index);
-    setPerformers(updated);
+    const updated = tickets.filter((_, i) => i !== index);
+    setTickets(updated);
   };
 
-  // HANDLE TEXT INPUT CHANGES
+  /* 🔹 HANDLE CHANGE */
   const handleChange = (index, field, value) => {
-    const updated = [...performers];
+    const updated = [...tickets];
     updated[index][field] = value;
-    setPerformers(updated);
+    setTickets(updated);
   };
 
   return (
     <section>
       <Container className="container_wrapper">
-          <h2 className='sub_title mb-4'>Ticketing Information</h2>
+        <h2 className="sub_title mb-4">Ticketing Information</h2>
 
-        {/* Static: Free/Paid Radio */}
+        {/* Free / Paid (UI SAME – backend not affected) */}
         <Row>
           <Col className="col-12 event_calendar">
             <div className="mb-3">
-              <label className="form-label">Any Celebrities/Performers</label>
+              <label className="form-label">Event Type</label>
 
               <div className="d-flex">
                 <div className="form-check">
-                  <input
-                    type="radio"
-                    className="form-check-input"
-                    name="celebType"
-                    id="free"
-                    defaultChecked
-                  />
-                  <label className="form-check-label" htmlFor="free">Free</label>
+                  <input type="radio" className="form-check-input" defaultChecked />
+                  <label className="form-check-label">Free</label>
                 </div>
 
                 <div className="form-check ms-3">
-                  <input
-                    type="radio"
-                    className="form-check-input"
-                    name="celebType"
-                    id="paid"
-                  />
-                  <label className="form-check-label" htmlFor="paid">Paid</label>
+                  <input type="radio" className="form-check-input" />
+                  <label className="form-check-label">Paid</label>
                 </div>
               </div>
             </div>
           </Col>
         </Row>
 
-        {/* Dynamic Rows */}
-        {performers.map((item, index) => (
+        {/* TICKET ROWS */}
+        {tickets.map((item, index) => (
           <div
             key={index}
             className="p-3 mb-4"
@@ -77,35 +98,52 @@ function TicketingInformation() {
             }}
           >
             <Row>
-              {/* Name Field */}
-              <Col className="col-6">
+              {/* Category */}
+              <Col className="col-4">
                 <div className="mb-3">
-                  <label className="form-label">Enter Name of Speakers/Performers*</label>
+                  <label className="form-label">Ticket Category*</label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Enter Name"
-                    value={item.name}
-                    onChange={(e) => handleChange(index, "name", e.target.value)}
+                    value={item.categoryName}
+                    onChange={(e) =>
+                      handleChange(index, "categoryName", e.target.value)
+                    }
                   />
                 </div>
               </Col>
 
-              {/* Role Field */}
-              <Col className="col-6">
+              {/* Price */}
+              <Col className="col-4">
                 <div className="mb-3">
-                  <label className="form-label">Enter Role/Title*</label>
+                  <label className="form-label">Price*</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
-                    placeholder="Enter Role/Title"
-                    value={item.role}
-                    onChange={(e) => handleChange(index, "role", e.target.value)}
+                    value={item.price}
+                    onChange={(e) =>
+                      handleChange(index, "price", e.target.value)
+                    }
                   />
                 </div>
               </Col>
 
-              {/* Delete Icon (ONLY for new rows) */}
+              {/* Description */}
+              <Col className="col-4">
+                <div className="mb-3">
+                  <label className="form-label">Description</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={item.description}
+                    onChange={(e) =>
+                      handleChange(index, "description", e.target.value)
+                    }
+                  />
+                </div>
+              </Col>
+
+              {/* DELETE */}
               {item.new && (
                 <Col className="col-12 d-flex justify-content-end">
                   <button
@@ -121,20 +159,19 @@ function TicketingInformation() {
           </div>
         ))}
 
-        {/* Add More Button */}
+        {/* ACTION BUTTONS */}
         <Row>
           <Col className="col-12 d-flex justify-content-end">
             <div className="save_btn">
-                <button  onClick={addMore}>
-              + Add more
-            </button>
+              <button onClick={addMore}>+ Add more</button>
             </div>
-             <div className="save_btn ms-3">
-                <button>Save Listing </button>
-             </div>
+            <div className="save_btn ms-3">
+              <button onClick={() => updatePayload("tickets", tickets)}>
+                Save Listing
+              </button>
+            </div>
           </Col>
         </Row>
-
       </Container>
     </section>
   );

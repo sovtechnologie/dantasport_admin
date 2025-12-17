@@ -1,189 +1,316 @@
-import React from 'react'
-import { Col, Container, Row,Form } from 'react-bootstrap';
-import "../../styelsheets/EventPage/CreateEvent.css"
+import React, { useEffect } from 'react';
+import { Col, Container, Row, Form } from 'react-bootstrap';
+import "../../styelsheets/EventPage/CreateEvent.css";
 import { FiUpload } from "react-icons/fi";
-import { FiArrowLeft } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
-function EventDetails() {
+import DatePicker from "react-multi-date-picker";
+import "react-multi-date-picker/styles/colors/teal.css";
+
+function EventDetails({ payload, updatePayload }) {
   const navigate = useNavigate();
+
+
+
+  /* ---------------- FILE HANDLER (UI SAME) ---------------- */
+  const handleFileChange = (field, e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      updatePayload(field, file);
+    }
+  };
+
+
+
+  useEffect(() => {
+    if (
+      payload.eventCalender === 2 &&
+      Array.isArray(payload.repetitiveEventsDates) &&
+      payload.repetitiveEventsDates.length
+    ) {
+      const newStart = payload.repetitiveEventsDates[0];
+      const newEnd =
+        payload.repetitiveEventsDates[payload.repetitiveEventsDates.length - 1];
+
+      // 🔒 prevent infinite loop
+      if (payload.startDate !== newStart) {
+        updatePayload("startDate", newStart);
+      }
+
+      if (payload.endDate !== newEnd) {
+        updatePayload("endDate", newEnd);
+      }
+    }
+  }, [
+    payload.eventCalender,
+    payload.repetitiveEventsDates,
+    payload.startDate,
+    payload.endDate,
+  ]);
+
+  const sportsCategoryList = [
+    { id: 1, name: "Cricket" },
+    { id: 2, name: "Football" },
+    { id: 3, name: "Basketball" },
+    { id: 4, name: "Cycling" },
+  ];
+
+
+
   return (
-   <>
-    <section>
-      <Container className='container_wrapper'>
-     
-         <h2 className='sub_title m-0'>Event Details</h2>
-         <Row className='mt-5'>
-           <Row>
+    <>
+      <section>
+        <Container className='container_wrapper'>
+
+          <h2 className='sub_title m-0'>Event Details</h2>
+
+          <Row className='mt-5'>
             <Col className='col-6'>
-            <Col className='col-12'>
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Enter Event Title*</label>
-                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Owner Name"/>
-              </div>
-          </Col>
-            <Col className='col-12'>
-              <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Event Type*</label>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              </div>
-          </Col>
-            </Col>
-          <Col className='col-6'>
-            <Col className='col-12'>
-                <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Phone Number*</label>
-               <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
-              </div>
-          </Col>
-          
-          </Col>
-           </Row>
-         </Row>
-        <Row className='other_info'>
-          <Col className='col-6'>
+              {/* EVENT TITLE */}
               <div className="mb-3">
-                 <Form.Group controlId="gstUpload">
-                  <label for="exampleFormControlInput1" class="form-label">Upload Event Poster/Banner (For Desktop)*</label>
+                <label className="form-label">Enter Event Title*</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Event Title"
+                  value={payload.eventTitle}
+                  onChange={(e) => updatePayload("eventTitle", e.target.value)}
+                />
+              </div>
 
+              {/* EVENT TYPE */}
+              <div className="mb-3">
+                <label className="form-label">Event Type*</label>
+                <select
+                  className="form-select"
+                  value={payload.eventType}
+                  onChange={(e) =>
+                    updatePayload("eventType", Number(e.target.value))
+                  }
+                >
+                  <option value="">Select Event Type</option>
+                  <option value={1}>Normal Event</option>
+                  <option value={2}>Run Event</option>
+                </select>
+              </div>
+
+              {/* SPORTS CATEGORY */}
+              {payload.eventType === 1 && (
+                <div className="mb-3">
+                  <label className="form-label">Select Sports Category*</label>
+                  <select
+                    className="form-select"
+                    value={payload.eventCateorySports?.[0] || ""}
+                    onChange={(e) =>
+                      updatePayload("eventCateorySports", [Number(e.target.value)])
+                    }
+                  >
+                    <option value="">Select Category</option>
+
+                    {sportsCategoryList.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+
+                </div>
+              )}
+            </Col>
+
+            {/* ABOUT EVENT */}
+            <Col className='col-6'>
+              <div className="mb-3">
+                <label className="form-label">About Event*</label>
+                <textarea
+                  className="form-control"
+                  rows="6"
+                  value={payload.aboutEvent}
+                  onChange={(e) => updatePayload("aboutEvent", e.target.value)}
+                />
+              </div>
+            </Col>
+          </Row>
+
+          {/* ------------------- FILE UPLOADS ------------------- */}
+          <Row className='other_info'>
+            {/* DESKTOP IMAGE */}
+            <Col className='col-6'>
+              <Form.Group className="mb-3">
+                <label className="form-label">
+                  Upload Event Poster/Banner (Desktop)*
+                </label>
                 <div className="upload-box d-flex flex-column justify-content-center align-items-center">
-                  <FiUpload size={20} className="mb-1" />
+                  {payload.bannerDesktop && (
+                    <img
+                      src={URL.createObjectURL(payload.bannerDesktop)}
+                      alt="desktop banner preview"
+                      style={{ width: "100%", borderRadius: "6px", marginBottom: "10px" }}
+                    />
+                  )}
+
+                  <FiUpload size={20} />
                   <span className="text-muted">Upload Image</span>
-                  <span className="text-muted">(Size 430px * 200px max 5MB)</span>
-                  <Form.Control type="file" className="file-input" />
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    className="file-input"
+                    onChange={(e) => handleFileChange("desktopImage", e)}
+                  />
                 </div>
               </Form.Group>
-              </div>
-          </Col>
-          <Col className='col-6'>
-               <div className="mb-3">
-                <Form.Group controlId="gstUpload">
-                  <label for="exampleFormControlInput1" class="form-label">Upload Event Poster/Banner (For Mobile)*</label>
+            </Col>
 
+            {/* MOBILE IMAGE */}
+            <Col className='col-6'>
+              <Form.Group className="mb-3">
+                <label className="form-label">
+                  Upload Event Poster/Banner (Mobile)*
+                </label>
                 <div className="upload-box d-flex flex-column justify-content-center align-items-center">
-                  <FiUpload size={20} className="mb-1" />
+                  {payload.bannerMobile && (
+                    <img
+                      src={URL.createObjectURL(payload.bannerMobile)}
+                      alt="mobile banner preview"
+                      style={{ width: "100%", borderRadius: "6px", marginBottom: "10px" }}
+                    />
+                  )}
+
+                  <FiUpload size={20} />
                   <span className="text-muted">Upload Image</span>
-                  <span className="text-muted">(Size 430px * 200px max 5MB)</span>
-                  <Form.Control type="file" className="file-input" />
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    className="file-input"
+                    onChange={(e) => handleFileChange("mobileImage", e)}
+                  />
                 </div>
               </Form.Group>
-               </div>
-          </Col>
-          <Col className='col-6'>
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Enter Event Video</label>
-                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="eg: ( Youtube Link )"/>
-              </div>
-          </Col>
-          <Col className='col-6'>
-          <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Add difficulty level*</label>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>Select difficulty level</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              </div>
-          </Col>
-          <Col className="event_calendar col-12">
-           <div className="mb-3">
-             <label htmlFor="exampleFormControlInput1" className="form-label">
-            Event Calendar*
-          </label>
+            </Col>
 
-          <div className="d-flex">
-            <div className="form-check">
+            {/* VIDEO URL */}
+            <Col className='col-6'>
+              <div className="mb-3">
+                <label className="form-label">Enter Event Video</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Youtube Link"
+                  value={payload.eventVideoURL}
+                  onChange={(e) => updatePayload("eventVideoURL", e.target.value)}
+                />
+              </div>
+            </Col>
+
+            {/* DIFFICULTY */}
+            <Col className='col-6'>
+              <div className="mb-3">
+                <label className="form-label">Add difficulty level*</label>
+                <select
+                  className="form-select"
+                  value={payload.difficulty}
+                  onChange={(e) =>
+                    updatePayload("difficulty", Number(e.target.value))
+                  }
+                >
+                  <option value="">Select difficulty level</option>
+                  <option value={1}>Easy</option>
+                  <option value={2}>Medium</option>
+                  <option value={3}>Hard</option>
+                </select>
+              </div>
+            </Col>
+
+            {/* EVENT CALENDAR */}
+            <Col className="col-12">
+              <label className="form-label">Event Calendar*</label>
+              <div className="d-flex">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    checked={payload.eventCalender === 1}
+                    onChange={() => updatePayload("eventCalender", 1)}
+                  />
+                  <label className="form-check-label">One Time Event</label>
+                </div>
+
+                <div className="form-check ms-3">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    checked={payload.eventCalender === 2}
+                    onChange={() => updatePayload("eventCalender", 2)}
+                  />
+                  <label className="form-check-label">Repetitive Event</label>
+                </div>
+              </div>
+            </Col>
+
+            {/* ONE TIME */}
+            {payload.eventCalender === 1 && (
+              <>
+                <Col className='col-6'>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={payload.startDate}
+                    onChange={(e) => updatePayload("startDate", e.target.value)}
+                  />
+                </Col>
+
+                <Col className='col-6'>
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={payload.endDate}
+                    onChange={(e) => updatePayload("endDate", e.target.value)}
+                  />
+                </Col>
+              </>
+            )}
+
+            {/* REPETITIVE */}
+            {payload.eventCalender === 2 && (
+              <Col className='col-12'>
+                <DatePicker
+                  multiple
+                  format="YYYY-MM-DD"
+                  value={payload.repetitiveEventsDates}
+                  onChange={(dates) =>
+                    updatePayload(
+                      "repetitiveEventsDates",
+                      dates.map(d => d.format("YYYY-MM-DD"))
+                    )
+                  }
+                />
+              </Col>
+            )}
+
+            {/* TIME */}
+            <Col className='col-6'>
               <input
-                className="form-check-input"
-                type="radio"
-                name="eventType"
-                id="oneTimeEvent"
-                defaultChecked
+                type="time"
+                className="form-control"
+                value={payload.startTime}
+                onChange={(e) => updatePayload("startTime", e.target.value)}
               />
-              <label className="form-check-label" htmlFor="oneTimeEvent">
-                One Time Event
-              </label>
-            </div>
+            </Col>
 
-            <div className="form-check ms-3">
+            <Col className='col-6'>
               <input
-                className="form-check-input"
-                type="radio"
-                name="eventType"
-                id="repetitiveEvent"
-                
+                type="time"
+                className="form-control"
+                value={payload.endTime}
+                onChange={(e) => updatePayload("endTime", e.target.value)}
               />
-              <label className="form-check-label" htmlFor="repetitiveEvent">
-                Repetitive Event
-              </label>
-            </div>
-          </div>
-           </div>
-          </Col>
-          <Col className='col-6'>
-          <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Start Date*</label>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>Select Start Date</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              </div>
-          </Col>
-          <Col className='col-6'>
-          <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">End Date*</label>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>Select End Date</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              </div>
-          </Col>
-          <Col className='col-6'>
-          <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">Start Time*</label>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>Select Start Date</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              </div>
-          </Col>
-          <Col className='col-6'>
-          <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">End Time*</label>
-                <select class="form-select" aria-label="Default select example">
-                <option selected>OSelect End Date</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-              </div>
-          </Col>
+            </Col>
+          </Row>
 
-         
-        </Row>
-        <Row className='my-4 justify-end'>
-          <Col className='col-4 text-end'>
-             <div className="save_btn">
-              <button>Save Listing</button>
-             </div>
-          </Col>
-        </Row>
-     </Container>
-     </section>
-   </>
-  )
+        </Container>
+      </section>
+    </>
+  );
 }
 
-export default EventDetails
+export default EventDetails;
