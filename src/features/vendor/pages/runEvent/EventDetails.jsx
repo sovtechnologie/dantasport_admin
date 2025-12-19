@@ -6,9 +6,23 @@ import { useNavigate } from "react-router-dom";
 
 import DatePicker from "react-multi-date-picker";
 import "react-multi-date-picker/styles/colors/teal.css";
+import { useFetchSportsByCategory } from '../../../../hooks/vendor/sports/useFetchSportsByCategory';
 
 function EventDetails({ payload, updatePayload }) {
   const navigate = useNavigate();
+
+
+  /* 🔒 EVENTS ONLY */
+  const {
+    data: sportsCategoryResponse,
+    isLoading,
+    isError,
+  } = useFetchSportsByCategory(4);
+
+  const sportsCategoryList =
+    Array.isArray(sportsCategoryResponse?.result)
+      ? sportsCategoryResponse.result
+      : [];
 
 
 
@@ -48,12 +62,7 @@ function EventDetails({ payload, updatePayload }) {
     payload.endDate,
   ]);
 
-  const sportsCategoryList = [
-    { id: 1, name: "Cricket" },
-    { id: 2, name: "Football" },
-    { id: 3, name: "Basketball" },
-    { id: 4, name: "Cycling" },
-  ];
+
 
 
 
@@ -100,22 +109,41 @@ function EventDetails({ payload, updatePayload }) {
                   <label className="form-label">Select Sports Category*</label>
                   <select
                     className="form-select"
-                    value={payload.eventCateorySports?.[0] || ""}
-                    onChange={(e) =>
-                      updatePayload("eventCateorySports", [Number(e.target.value)])
-                    }
+                    multiple
+                    value={payload.eventCateorySports ?? []}
+                    onChange={() => { }} // empty (handled manually)
                   >
-                    <option value="">Select Category</option>
+                    {sportsCategoryList.map((cat) => {
+                      const isSelected = payload.eventCateorySports?.includes(cat.id);
 
-                    {sportsCategoryList.map((cat) => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </option>
-                    ))}
+                      return (
+                        <option
+                          key={cat.id}
+                          value={cat.id}
+                          selected={isSelected}
+                          onMouseDown={(e) => {
+                            e.preventDefault(); // 🔥 browser default roko
+
+                            let updated = [...(payload.eventCateorySports || [])];
+
+                            if (updated.includes(cat.id)) {
+                              updated = updated.filter((id) => id !== cat.id); // remove
+                            } else {
+                              updated.push(cat.id); // add
+                            }
+
+                            updatePayload("eventCateorySports", updated);
+                          }}
+                        >
+                          {cat.sports_name}
+                        </option>
+                      );
+                    })}
                   </select>
 
                 </div>
               )}
+
             </Col>
 
             {/* ABOUT EVENT */}

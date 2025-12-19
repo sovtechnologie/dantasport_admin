@@ -39,13 +39,13 @@ function CreateEvents() {
 
     locations: [
       {
-        lat: "18.5204",
-        lng: "73.8567",
-        fullAddress: "Hinjewadi, Pune, Maharashtra, India",
-        state: "Maharashtra",
-        city: "Pune",
-        area: "Hinjewadi",
-        pincode: "411057",
+        lat: "",
+        lng: "",
+        fullAddress: "",
+        state: "",
+        city: "",
+        area: "",
+        pincode: "",
       },
     ],
 
@@ -59,8 +59,8 @@ function CreateEvents() {
     customerSupportContanct: "",
     supportEmail: "",
     altPhoneNumber: "",
-    plantformLink: "https://dummyplatform.com",
-    agendaViewers: "100",
+    plantformLink: "",
+    agendaViewers: "people",
     safetyProtocols: "",
 
     termAndConditions: "",

@@ -112,6 +112,38 @@ function EventGuide({ payload, updatePayload }) {
               </select>
             </div>
           </Col>
+          {/* Things To Carry */}
+          <Col className="col-12">
+            <div className="mb-3">
+              <label className="form-label">Things To Carry*</label>
+              <textarea
+                className="form-control"
+                rows={3}
+                placeholder="e.g., ID card, water bottle, yoga mat"
+                value={payload.thingsToCarry ?? ""}
+                onChange={(e) =>
+                  updatePayload("thingsToCarry", e.target.value)
+                }
+              />
+            </div>
+          </Col>
+
+          {/* Instructions */}
+          <Col className="col-12">
+            <div className="mb-3">
+              <label className="form-label">Instructions*</label>
+              <textarea
+                className="form-control"
+                rows={3}
+                placeholder="e.g., Reach 15 minutes early, follow safety rules"
+                value={payload.instruction ?? ""}
+                onChange={(e) =>
+                  updatePayload("instruction", e.target.value)
+                }
+              />
+            </div>
+          </Col>
+
         </Row>
       </Container>
     </section>
