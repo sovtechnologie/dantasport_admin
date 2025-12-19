@@ -11,13 +11,13 @@ import {
   Form,
   Spin,
 } from "antd";
-import { useFetchSports } from "../../../../hooks/admin/sport/useFetchSport";
 import { useFetchSportPrice } from "../../../../hooks/vendor/venue/useFetchSportPrice";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { useUpdateVendorSport } from "../../../../hooks/vendor/sports/useUpdatevendorSport";
 import { useUpdatePriceSlot } from "../../../../hooks/vendor/sports/useUpdatePriceSlot";
 import { getSingleVendorSports } from "../../../../services/vendor/SportList/endpointApi";
+import { useFetchSportsByCategory } from "../../../../hooks/vendor/sports/useFetchSportsByCategory";
 
 const { Option } = Select;
 const { Panel } = Collapse;
@@ -41,7 +41,11 @@ export default function EditSport() {
   const [sportData, setSportData] = useState(null);
   const navigate = useNavigate();
 
-  const { data: sportsList, loading: sportsLoading } = useFetchSports();
+  const {
+    data: sportsList,
+    isLoading: sportsLoading,
+    isError,
+  } = useFetchSportsByCategory(4);
 
   const { data: sportPriceData, loading: sportPriceLoading } =
     useFetchSportPrice({
