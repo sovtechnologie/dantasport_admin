@@ -28,6 +28,34 @@
   font-size: 20px;
 }
 
+.sports-select-box {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 10px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.sports-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  background: #f8f9fa;
+}
+
+.sports-item.selected {
+  background: #e7f1ff;
+}
+
+.sports-item span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
 .container_wrapper label {
   font-family: "DM Sans";
   font-weight: 400;

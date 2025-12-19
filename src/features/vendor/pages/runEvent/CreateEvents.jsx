@@ -159,7 +159,6 @@ function CreateEvents() {
     }
   };
 
-  // ----------------------- ACCORDION -----------------------
   const sections = [
     { title: "Event Details", component: <EventDetails payload={payload} updatePayload={updatePayload} /> },
     { title: "Location", component: <EventLocation payload={payload} updatePayload={updatePayload} /> },

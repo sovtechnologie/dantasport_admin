@@ -25,7 +25,7 @@ function ControlAccess({ payload, updatePayload }) {
                     <Col className="col-12 event_calendar">
                         <div className="mb-3">
                             <label className="form-label">
-                                Any Celebrities/Performers
+                                QR Code Check-ins Required?*
                             </label>
 
                             <div className="d-flex">

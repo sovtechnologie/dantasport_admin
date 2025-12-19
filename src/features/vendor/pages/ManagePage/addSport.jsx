@@ -15,9 +15,9 @@ import { DownOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useAddVenueSport } from "../../../../hooks/vendor/sport/useAddVenueSport";
 import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
-import { useFetchSports } from "../../../../hooks/admin/sport/useFetchSport";
 import { useAddSportPrice } from "../../../../hooks/vendor/venue/useAddSportPrice";
 import { useNavigate } from "react-router-dom";
+import { useFetchSportsByCategory } from "../../../../hooks/vendor/sports/useFetchSportsByCategory";
 
 const { Panel } = Collapse;
 const days = [
@@ -37,7 +37,15 @@ export default function AddSport() {
   const { mutate: addSportPrice } = useAddSportPrice();
   const { data: venueList, loading: venueListLoading } =
     useFetchVendorVenueList();
-  const { data: sportsList, loading: sportsloading } = useFetchSports();
+
+  const {
+    data: sportsList,
+    isLoading: sportsloading,
+    isError,
+  } = useFetchSportsByCategory(4);
+
+
+
 
   // Loading state for submit button
   const [loading, setLoading] = useState(false);

@@ -1,62 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { FiUpload, FiTrash2 } from "react-icons/fi";
 import "../../styelsheets/EventPage/CreateEvent.css";
 
 function CelebratiesPerformers({ payload, updatePayload }) {
   const [hasParticipants, setHasParticipants] = useState(true);
+  const isInitialMount = useRef(true);
 
-  /* 🔹 LOCAL STATE (UI PURPOSE) */
   const [performers, setPerformers] = useState([
-    { name: "", role: "", bio: "", file: null, new: false },
+    {
+      id: Date.now(),
+      name: "",
+      role: "",
+      bio: "",
+      file: null,
+      preview: null,
+      new: false,
+    },
   ]);
 
-  /* ✅ SYNC FROM PARENT (VERY IMPORTANT FIX) */
+  /* ✅ SYNC ONLY FIRST TIME (edit / api case) */
   useEffect(() => {
-    if (payload?.performers?.length) {
-      const mapped = payload.performers.map((p, index) => ({
+    if (!payload?.performers?.length) return;
+    if (!isInitialMount.current) return;
+
+    const mapped = payload.performers.map((p, index) => {
+      const file = payload.performerImages?.[index] || null;
+      return {
+        id: Date.now() + index,
         name: p.name || "",
         role: p.title || "",
         bio: p.bio || "",
-        file: payload.performerImages?.[index] || null,
+        file,
+        preview: file ? URL.createObjectURL(file) : null,
         new: false,
-      }));
-      setPerformers(mapped);
-    }
+      };
+    });
+
+    setPerformers(mapped);
+    isInitialMount.current = false;
   }, [payload.performers, payload.performerImages]);
 
-
-  /* 🔹 ADD MORE */
-  const addMore = () => {
-    setPerformers([
-      ...performers,
-      { name: "", role: "", bio: "", file: null, new: true },
-    ]);
-  };
-
-  /* 🔹 DELETE */
-  const deleteRow = (index) => {
-    if (index === 0) return;
-
-    const updated = performers.filter((_, i) => i !== index);
-    setPerformers(updated);
-    syncPayload(updated);
-  };
-
-  /* 🔹 CHANGE HANDLER */
-  const handleChange = (index, field, value) => {
-    const updated = [...performers];
-    updated[index][field] = value;
-    setPerformers(updated);
-    syncPayload(updated);
-  };
-
+  /* 🔹 AUTO SYNC PAYLOAD */
   const syncPayload = (data) => {
-    const valid = data.filter(p => p.name && p.role);
+    const valid = data.filter((p) => p.name && p.role);
 
     updatePayload(
       "performers",
-      valid.map(p => ({
+      valid.map((p) => ({
         name: p.name,
         title: p.role,
         bio: p.bio,
@@ -65,15 +56,49 @@ function CelebratiesPerformers({ payload, updatePayload }) {
 
     updatePayload(
       "performerImages",
-      valid.map(p => p.file).filter(Boolean)
+      valid.map((p) => p.file).filter(Boolean)
     );
   };
 
+  /* 🔹 CHANGE HANDLER */
+  const handleChange = (index, field, value) => {
+    const updated = [...performers];
 
-  /* 🔹 SAVE */
-  const handleSave = () => {
-    syncPayload(performers);
-    setPerformers((prev) => prev.map((p) => ({ ...p, new: false })));
+    if (field === "file") {
+      updated[index].file = value;
+      updated[index].preview = value
+        ? URL.createObjectURL(value)
+        : null;
+    } else {
+      updated[index][field] = value;
+    }
+
+    setPerformers(updated);
+    syncPayload(updated);
+  };
+
+  /* 🔹 ADD MORE */
+  const addMore = () => {
+    setPerformers((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name: "",
+        role: "",
+        bio: "",
+        file: null,
+        preview: null,
+        new: true,
+      },
+    ]);
+  };
+
+  /* 🔹 DELETE */
+  const deleteRow = (index) => {
+    if (index === 0) return;
+    const updated = performers.filter((_, i) => i !== index);
+    setPerformers(updated);
+    syncPayload(updated);
   };
 
   return (
@@ -122,10 +147,12 @@ function CelebratiesPerformers({ payload, updatePayload }) {
         {hasParticipants &&
           performers.map((item, index) => (
             <div
-              key={index}
+              key={item.id}
               className="p-3 mb-4"
               style={{
-                border: item.new ? "1px solid #ccc" : "1px solid transparent",
+                border: item.new
+                  ? "1px solid #ccc"
+                  : "1px solid transparent",
                 borderRadius: "8px",
               }}
             >
@@ -189,8 +216,23 @@ function CelebratiesPerformers({ payload, updatePayload }) {
                   </label>
 
                   <div className="upload-box d-flex flex-column justify-content-center align-items-center">
-                    <FiUpload size={20} className="mb-1" />
-                    <span className="text-muted">Upload Image</span>
+                    {item.preview ? (
+                      <img
+                        src={item.preview}
+                        alt="preview"
+                        style={{
+                          width: "100%",
+                          height: "100px",
+                          objectFit: "cover",
+                          borderRadius: "6px",
+                        }}
+                      />
+                    ) : (
+                      <>
+                        <FiUpload size={20} className="mb-1" />
+                        <span className="text-muted">Upload Image</span>
+                      </>
+                    )}
 
                     <Form.Control
                       type="file"
@@ -209,6 +251,7 @@ function CelebratiesPerformers({ payload, updatePayload }) {
                     className="d-flex align-items-end justify-content-end"
                   >
                     <button
+                      type="button"
                       className="btn btn-danger d-flex align-items-center justify-content-center text-white"
                       onClick={() => deleteRow(index)}
                       style={{
@@ -225,15 +268,14 @@ function CelebratiesPerformers({ payload, updatePayload }) {
             </div>
           ))}
 
-        {/* ACTION BUTTONS */}
+        {/* ONLY ADD MORE */}
         {hasParticipants && (
           <Row>
             <Col className="d-flex justify-content-end">
               <div className="save_btn">
-                <button onClick={addMore}>+ Add more</button>
-              </div>
-              <div className="save_btn ms-3">
-                <button onClick={handleSave}>Save Listing</button>
+                <button type="button" onClick={addMore}>
+                  + Add more
+                </button>
               </div>
             </Col>
           </Row>

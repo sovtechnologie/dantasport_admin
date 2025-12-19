@@ -12,7 +12,6 @@ function EventDetails({ payload, updatePayload }) {
   const navigate = useNavigate();
 
 
-  /* 🔒 EVENTS ONLY */
   const {
     data: sportsCategoryResponse,
     isLoading,
@@ -107,42 +106,43 @@ function EventDetails({ payload, updatePayload }) {
               {payload.eventType === 1 && (
                 <div className="mb-3">
                   <label className="form-label">Select Sports Category*</label>
-                  <select
-                    className="form-select"
-                    multiple
-                    value={payload.eventCateorySports ?? []}
-                    onChange={() => { }} // empty (handled manually)
-                  >
+
+                  <div className="sports-select-box">
                     {sportsCategoryList.map((cat) => {
                       const isSelected = payload.eventCateorySports?.includes(cat.id);
 
                       return (
-                        <option
+                        <div
                           key={cat.id}
-                          value={cat.id}
-                          selected={isSelected}
-                          onMouseDown={(e) => {
-                            e.preventDefault(); // 🔥 browser default roko
-
-                            let updated = [...(payload.eventCateorySports || [])];
-
-                            if (updated.includes(cat.id)) {
-                              updated = updated.filter((id) => id !== cat.id); // remove
-                            } else {
-                              updated.push(cat.id); // add
-                            }
-
-                            updatePayload("eventCateorySports", updated);
-                          }}
+                          className={`sports-item ${isSelected ? "selected" : ""}`}
                         >
-                          {cat.sports_name}
-                        </option>
+                          <span>{cat.sports_name}</span>
+
+                          <button
+                            type="button"
+                            className={`btn btn-sm ${isSelected ? "btn-success" : "btn-outline-primary"
+                              }`}
+                            onClick={() => {
+                              let updated = [...(payload.eventCateorySports || [])];
+
+                              if (isSelected) {
+                                updated = updated.filter((id) => id !== cat.id);
+                              } else {
+                                updated.push(cat.id);
+                              }
+
+                              updatePayload("eventCateorySports", updated);
+                            }}
+                          >
+                            {isSelected ? "Selected" : "Select"}
+                          </button>
+                        </div>
                       );
                     })}
-                  </select>
-
+                  </div>
                 </div>
               )}
+
 
             </Col>
 
@@ -169,11 +169,11 @@ function EventDetails({ payload, updatePayload }) {
                   Upload Event Poster/Banner (Desktop)*
                 </label>
                 <div className="upload-box d-flex flex-column justify-content-center align-items-center">
-                  {payload.bannerDesktop && (
+                  {payload.desktopImage && (
                     <img
-                      src={URL.createObjectURL(payload.bannerDesktop)}
+                      src={URL.createObjectURL(payload.desktopImage)}
                       alt="desktop banner preview"
-                      style={{ width: "100%", borderRadius: "6px", marginBottom: "10px" }}
+                      style={{ width: "10%", borderRadius: "6px", marginBottom: "10px", }}
                     />
                   )}
 
@@ -196,11 +196,11 @@ function EventDetails({ payload, updatePayload }) {
                   Upload Event Poster/Banner (Mobile)*
                 </label>
                 <div className="upload-box d-flex flex-column justify-content-center align-items-center">
-                  {payload.bannerMobile && (
+                  {payload.mobileImage && (
                     <img
-                      src={URL.createObjectURL(payload.bannerMobile)}
+                      src={URL.createObjectURL(payload.mobileImage)}
                       alt="mobile banner preview"
-                      style={{ width: "100%", borderRadius: "6px", marginBottom: "10px" }}
+                      style={{ width: "10%", borderRadius: "6px", marginBottom: "10px", }}
                     />
                   )}
 
