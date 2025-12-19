@@ -22,9 +22,10 @@ function AllDashboard() {
             <Form.Select aria-label="Select Page" onChange={handleChange}>
               <option value="dashboard">Dashboard</option>
               <option value="/vendor/dashboard//turf">Turf Dashboard</option>
-              <option value="/">Event Dashboard</option>
-              <option value="/">Run Dashboard</option>
-              <option value="/three">Gym dashboard</option>
+              <option value="/vendor/dashboard/event-dashbaord">Event Dashboard</option>
+              <option value="/vendor/dashboard/run-dashbaord">Run Dashboard</option>
+              <option value="/vendor/dashboard/gym-dashbaord">Gym dashboard</option>
+              <option value="/vendor/dashboard/turf/caoch">Coach Dashboard</option>
             </Form.Select>
           </div>
         </div>

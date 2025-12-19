@@ -3,13 +3,23 @@
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #cfcbcb;
+  /* border: 1px solid #cfcbcb; */
+  border: 0;
 }
 
-/* .container_wrapper.Organisers input{
+.pdf_file input{
 
-  height: unset;
-} */
+  height: 40px;
+}
+
+.section_title{
+
+    color: #1163C7;
+    font-family: 'Lato';
+    font-weight: 700;
+    font-size: 24px;
+
+}
 
 .sub_title {
   font-family: "Lato";

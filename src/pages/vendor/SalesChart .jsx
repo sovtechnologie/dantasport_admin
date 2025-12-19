@@ -1,4 +1,5 @@
 import React from "react";
+import { Container } from "react-bootstrap";
 import {
   LineChart,
   Line,
@@ -23,7 +24,8 @@ const data = [
 const SalesChart = () => {
   return (
     <section>
-      <div>
+      <Container className="container_wrapper my-5">
+        <div>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h2 className="section_heading">Sales Details</h2>
           <p className="text-end text-muted mb-0">
@@ -76,6 +78,7 @@ const SalesChart = () => {
           </LineChart>
         </ResponsiveContainer>
       </div>
+      </Container>
     </section>
   );
 };

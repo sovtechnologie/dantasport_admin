@@ -1,671 +1,328 @@
-import { Form, Input, Button, Select, Upload, Radio, TimePicker, InputNumber, message, Card, Row, Col, Typography, Divider, Space, Tag, Spin } from 'antd';
+import { Container, Form, Col, Row, Card } from "react-bootstrap";
 import "../../styelsheets/Manage/VendorInfo.css";
-import UploadImage from '../../../../assets/UploadIcon.png';
-import { useEffect, useState } from 'react';
-import GooglePlacesAutocomplete from '../../../../components/GooglePlacesAutocomplete';
-import { useFetchActiveAmenities, useAddGym } from '../../../../hooks/vendor/venue/useFetchvendorVenues';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeftOutlined, EnvironmentOutlined, ClockCircleOutlined, UserOutlined, ThunderboltOutlined, CheckCircleOutlined, InfoCircleOutlined, UploadOutlined } from '@ant-design/icons';
-
-const { TextArea } = Input;
+import "../../styelsheets/EventPage/CreateEvent.css";
+import { FiUpload } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 
 export default function AddGym() {
-    const [form] = Form.useForm();
-    const { RangePicker } = TimePicker;
-    const navigate = useNavigate();
+  return (
+    <Container className="container_wrapper">
+      <h2 className="section_title mb-3">GYM Information</h2>
 
-    const [loading, setLoading] = useState(false);
-    const [mobileFileList, setMobileFileList] = useState([]);
-    const [webFileList, setWebFileList] = useState([]);
+      <Row>
+        {/* Select Input */}
+        <Col className="col-6">
+          <Form.Group className="mb-3">
+            <Form.Label>Enter GYM Venue*</Form.Label>
+            <Form.Select className="uniform-height">
+              <option>Select Area</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
 
-    const [mapLocation, setMapLocation] = useState({
-        latitude: 18.5204,
-        longitude: 73.8567,
-    });
+        {/* File Upload */}
+        <Col className="col-6">
+          <Form.Group controlId="gstUpload" className="mb-3">
+            <Form.Label>Upload Cover Image*</Form.Label>
 
-    // Fetch active amenities
-    const { data: amenitiesData } = useFetchActiveAmenities();
-    const amenitiesOptions = amenitiesData?.resutl || [];
-
-    const addGymMutation = useAddGym();
-
-    const handleMobileChange = ({ fileList }) => setMobileFileList(fileList);
-    const handleWebChange = ({ fileList }) => setWebFileList(fileList);
-
-    const onPlaceSelect = ({ address, area, city, state, pincode, latitude, longitude, search }) => {
-        form.setFieldsValue({ fullAddress: address, area, city, state, pincode, latitude, longitude, search });
-        if (latitude && longitude) {
-            setMapLocation({ latitude, longitude });
-        }
-    };
-
-    useEffect(() => {
-        const lat = form.getFieldValue('latitude');
-        const lng = form.getFieldValue('longitude');
-        if (lat && lng) setMapLocation({ latitude: lat, longitude: lng });
-    }, [form]);
-
-    const mapSrc = `https://maps.google.com/maps?q=${mapLocation.latitude},${mapLocation.longitude}&z=15&output=embed`;
-
-    const handleFinish = async (values) => {
-        try {
-            setLoading(true);
-            const formData = new FormData();
-
-            // Images
-            if (mobileFileList[0]?.originFileObj) {
-                formData.append('mobileImage', mobileFileList[0].originFileObj);
-            }
-            if (webFileList[0]?.originFileObj) {
-                formData.append('desktopImage', webFileList[0].originFileObj);
-            }
-
-            // Map gym-specific fields to API
-            formData.append('gymName', values.gymName);
-            formData.append('aboutGym', values.aboutGym || '');
-            formData.append('onlyWomen', values.onlyWomen === 'yes');
-            formData.append('lat', values.latitude || '');
-            formData.append('lng', values.longitude || '');
-            formData.append('fullAddress', values.fullAddress || '');
-            formData.append('state', values.state || '');
-            formData.append('city', values.city || '');
-            formData.append('area', values.area || '');
-            formData.append('pincode', values.pincode || '');
-            formData.append('termAndConditions', values.termAndConditions || '');
-            formData.append('cancellationPolicy', values.cancellationPolicy || '');
-            formData.append('amenitiesType', 'gym');
-
-            // Timing and isBookable
-            if (values.timing && values.timing.length === 2) {
-                formData.append('startTime', values.timing[0].format('HH:mm'));
-                formData.append('endTime', values.timing[1].format('HH:mm'));
-            }
-            formData.append('isBookable', values.isBookable === 'yes');
-
-            // Single fixed pass name with user-provided price
-            const gymPasses = [
-                { passes_name: 'One day passes', price: Number(values.passPrice || 0) }
-            ];
-            formData.append('gymPasses', JSON.stringify(gymPasses));
-
-            // Amenities IDs as single array similar to gymPasses
-            if (values.amenities?.length) {
-                formData.append('amenities', JSON.stringify(values.amenities));
-            }
-
-            const res = await addGymMutation.mutateAsync(formData);
-            if (res?.status === 200) {
-                message.success('Gym added successfully');
-                navigate('/vendor/gym/list');
-            } else {
-                message.error(res?.message || 'Failed to add gym');
-            }
-        } catch (e) {
-            message.error(e?.message || 'Failed to add gym');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="venue-info-container">
-            {/* Enhanced Header */}
-            <div style={{ 
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                borderRadius: '16px',
-                padding: '24px',
-                marginBottom: '24px',
-                color: 'white',
-                boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)'
-            }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
-                    <Button 
-                        type="text" 
-                        icon={<ArrowLeftOutlined />} 
-                        onClick={() => navigate('/vendor/gym/list')}
-                        style={{
-                            color: 'white',
-                            background: 'rgba(255, 255, 255, 0.1)',
-                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                            borderRadius: '8px',
-                            height: '40px',
-                            padding: '0 16px'
-                        }}
-                    >
-                        Back to Gym List
-                    </Button>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '16px',
-                        background: 'rgba(255, 255, 255, 0.2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <EnvironmentOutlined style={{ fontSize: '32px', color: 'white' }} />
-                    </div>
-                    <div>
-                        <h2 style={{ 
-                            margin: 0, 
-                            fontSize: '28px', 
-                            fontWeight: '700',
-                            color: 'white'
-                        }}>
-                            Add New Gym
-                        </h2>
-                        <p style={{ 
-                            margin: '8px 0 0 0', 
-                            fontSize: '16px', 
-                            opacity: 0.9,
-                            color: 'white'
-                        }}>
-                            Create a new gym listing for your business
-                        </p>
-                    </div>
-                </div>
+            <div className="upload-box uniform-height d-flex align-items-center">
+              <FiUpload size={20} />
+              <span className="ms-2 text-muted">Upload Image</span>
+              <Form.Control type="file" className="file-input" />
             </div>
+          </Form.Group>
+        </Col>
+        <Col className="col-12">
+          <div class="mb-3">
+            <label for="GYM" class="form-label">
+              Add About GYM*
+            </label>
+            <textarea
+              class="form-control"
+              id="GYM"
+              rows="6"
+              placeholder="Football..."
+            ></textarea>
+          </div>
+        </Col>
+        <Col className="col-5">
+          <div class="mb-3">
+            <label for="Timing" class="form-label">
+              Timing*
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="Timing"
+              placeholder="Timing"
+            />
+          </div>
+        </Col>
+        <Col className="col-4">
+          <div className="mb-3 event_calendar ">
+            <label className="form-label">Is Bookable*</label>
 
-            <Card style={{ 
-                borderRadius: '16px',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-                border: '1px solid #f0f0f0'
-            }}>
-                <Form form={form} layout="vertical" onFinish={handleFinish}>
-                    <div style={{ 
-                        textAlign: 'center', 
-                        marginBottom: '32px',
-                        padding: '20px 0'
-                    }}>
-                        <Typography.Title level={2} style={{ 
-                            margin: 0, 
-                            color: '#1f2937',
-                            fontSize: '24px',
-                            fontWeight: '600'
-                        }}>
-                            Gym Information
-                        </Typography.Title>
-                        <Typography.Text style={{ 
-                            color: '#6b7280',
-                            fontSize: '16px'
-                        }}>
-                            Provide details about your gym facility
-                        </Typography.Text>
-                    </div>
+            <div className="d-flex">
+              <div className="form-check">
+                <input type="radio" className="form-check-input" />
+                <label className="form-check-label">Yes</label>
+              </div>
 
-                <Row gutter={[24, 24]}>
-                    <Col xs={24} md={12}>
-                        <Form.Item 
-                            name="gymName" 
-                            label={
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <EnvironmentOutlined style={{ color: '#1163C7' }} />
-                                    <span style={{ fontWeight: '600', color: '#374151' }}>Gym Name</span>
-                                    <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                </div>
-                            }
-                            rules={[{ required: true, message: 'Please enter gym name' }]}
-                        >
-                            <Input 
-                                placeholder="Enter gym name" 
-                                size="large"
-                                style={{ borderRadius: '8px' }}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={12}>
-                        <Form.Item 
-                            name="coverMobile" 
-                            label={
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <UploadOutlined style={{ color: '#1163C7' }} />
-                                    <span style={{ fontWeight: '600', color: '#374151' }}>Mobile Cover Image</span>
-                                </div>
-                            }
-                        >
-                            <Upload
-                                accept="image/*"
-                                beforeUpload={() => false}
-                                maxCount={1}
-                                listType="picture-card"
-                                fileList={mobileFileList}
-                                onChange={handleMobileChange}
-                                style={{ width: '100%' }}
-                            >
-                                <div style={{ textAlign: 'center' }}>
-                                    <UploadOutlined style={{ fontSize: '24px', color: '#1163C7' }} />
-                                    <div style={{ marginTop: '8px', color: '#6b7280' }}>Upload Image</div>
-                                </div>
-                            </Upload>
-                        </Form.Item>
-                    </Col>
-                </Row>
+              <div className="form-check ms-3">
+                <input type="radio" className="form-check-input" />
+                <label className="form-check-label">No</label>
+              </div>
+            </div>
+          </div>
+        </Col>
+        <Col className="col-3">
+          <div class="mb-3">
+            <label for="Amenities*" class="form-label">
+              Amenities**
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="Amenities*"
+              placeholder="Amenities*"
+            />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="col-6">
+          <div className="d-flex justify-between ">
+            <h2 className="sub_title mb-4">Location Info</h2>
+            <div className="edit_btn">
+              <button>
+                <FiEdit />
+              </button>
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="col-6">
+          <Col className="col-12">
+            <div className="mb-3 position-relative">
+              <FiSearch
+                style={{
+                  position: "absolute",
+                  left: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  fontSize: "18px",
+                  color: "#6c757d",
+                }}
+              />
 
-                <div style={{ marginBottom: '32px' }}>
-                    <Form.Item 
-                        name="aboutGym" 
-                        label={
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                                <InfoCircleOutlined style={{ color: '#1163C7' }} />
-                                <span style={{ fontWeight: '600', color: '#374151', fontSize: '16px' }}>About Gym</span>
-                                <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                            </div>
-                        }
-                        rules={[{ required: true, message: 'Please describe your gym' }]}
-                    >
-                        <TextArea 
-                            rows={5} 
-                            placeholder="Describe your gym facilities, equipment, and what makes it special..." 
-                            style={{ 
-                                borderRadius: '8px',
-                                fontSize: '16px'
-                            }}
-                        />
-                    </Form.Item>
-                </div>
+              <input
+                type="text"
+                className="form-control"
+                style={{ paddingLeft: "40px" }}
+                placeholder="Serch locations" // Removed text
+              />
+            </div>
+          </Col>
+          <Col className="col-12">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Email address
+              </label>
+              <input
+                type="email"
+                class="form-control"
+                id="exampleFormControlInput1"
+                placeholder="name@example.com"
+              />
+            </div>
+          </Col>
 
-                <Row gutter={[24, 24]}>
-                    <Col xs={24} md={12}>
-                        <Form.Item 
-                            name="onlyWomen" 
-                            label={
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <UserOutlined style={{ color: '#1163C7' }} />
-                                    <span style={{ fontWeight: '600', color: '#374151' }}>Gym Type</span>
-                                </div>
-                            }
-                            initialValue="no"
-                        >
-                            <Radio.Group style={{ display: 'flex', gap: '24px' }}>
-                                <Radio 
-                                    value="yes" 
-                                    style={{ 
-                                        fontSize: '16px',
-                                        fontWeight: '500',
-                                        color: '#374151'
-                                    }}
-                                >
-                                    Women Only
-                                </Radio>
-                                <Radio 
-                                    value="no" 
-                                    style={{ 
-                                        fontSize: '16px',
-                                        fontWeight: '500',
-                                        color: '#374151'
-                                    }}
-                                >
-                                    Mixed Gender
-                                </Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={12}>
-                        <Form.Item 
-                            name="amenities" 
-                            label={
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <ThunderboltOutlined style={{ color: '#1163C7' }} />
-                                    <span style={{ fontWeight: '600', color: '#374151' }}>Amenities</span>
-                                    <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                </div>
-                            }
-                            rules={[{ required: true, message: 'Please select amenities' }]}
-                        >
-                            <Select 
-                                mode="multiple" 
-                                placeholder="Select gym amenities" 
-                                size="large"
-                                style={{ borderRadius: '8px' }}
-                                options={amenitiesOptions.map(a => ({ 
-                                    label: a.amenities_name, 
-                                    value: a.id 
-                                }))} 
-                                optionFilterProp="label"
-                                allowClear
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
+          <Row>
+            <Col className="col-6">
+              <div className="mb-3">
+                <Form.Group className="mb-3">
+                  <Form.Label>Area*</Form.Label>
+                  <Form.Select>
+                    <option>Select Area</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+            </Col>
+            <Col className="col-6">
+              <div className="mb-3">
+                <Form.Group className="mb-3">
+                  <Form.Label>City*</Form.Label>
+                  <Form.Select>
+                    <option>Select City</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+            </Col>
+            <Col className="col-6">
+              <div className="mb-3">
+                <Form.Group className="mb-3">
+                  <Form.Label>State*</Form.Label>
+                  <Form.Select>
+                    <option>Select State*</option>
+                  </Form.Select>
+                </Form.Group>
+              </div>
+            </Col>
+            <Col>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">
+                  Pincode*
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="exampleFormControlInput1"
+                  placeholder="Pincode*"
+                />
+              </div>
+            </Col>
+          </Row>
+        </Col>
+        <Col className="col-6">
+          <Card
+            style={{
+              borderRadius: "14px",
+              padding: "20px",
+              border: "1px solid #e5e5e5",
+            }}
+          >
+            {/* Title */}
+            <h5 className="fw-bold mb-2">Location</h5>
 
-                <Row gutter={[24, 24]}>
-                    <Col xs={24} md={12}>
-                        <Form.Item 
-                            name="isBookable" 
-                            label={
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <CheckCircleOutlined style={{ color: '#1163C7' }} />
-                                    <span style={{ fontWeight: '600', color: '#374151' }}>Booking Available</span>
-                                    <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                </div>
-                            }
-                            rules={[{ required: true, message: 'Please select booking availability' }]}
-                        >
-                            <Radio.Group style={{ display: 'flex', gap: '24px' }}>
-                                <Radio 
-                                    value="yes" 
-                                    style={{ 
-                                        fontSize: '16px',
-                                        fontWeight: '500',
-                                        color: '#374151'
-                                    }}
-                                >
-                                    Yes - Bookable
-                                </Radio>
-                                <Radio 
-                                    value="no" 
-                                    style={{ 
-                                        fontSize: '16px',
-                                        fontWeight: '500',
-                                        color: '#374151'
-                                    }}
-                                >
-                                    No - Walk-in Only
-                                </Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                    </Col>
-                    <Col xs={24} md={12}>
-                        <Form.Item 
-                            name="timing" 
-                            label={
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <ClockCircleOutlined style={{ color: '#1163C7' }} />
-                                    <span style={{ fontWeight: '600', color: '#374151' }}>Operating Hours</span>
-                                </div>
-                            }
-                        >
-                            <RangePicker 
-                                format="HH:mm" 
-                                minuteStep={5} 
-                                size="large"
-                                style={{ width: '100%', borderRadius: '8px' }}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
+            {/* Address */}
+            <p className="mb-3 text-secondary" style={{ fontSize: "15px" }}>
+              PSA Ground Next To Shreeji Lawns Ganga Dham Road Bibwewadi Pune
+              411037
+            </p>
 
-                <div style={{ marginBottom: '32px' }}>
-                    <Form.Item 
-                        name="coverWeb" 
-                        label={
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <UploadOutlined style={{ color: '#1163C7' }} />
-                                <span style={{ fontWeight: '600', color: '#374151' }}>Website Cover Image</span>
-                            </div>
-                        }
-                    >
-                        <Upload
-                            accept="image/*"
-                            beforeUpload={() => false}
-                            maxCount={1}
-                            listType="picture-card"
-                            fileList={webFileList}
-                            onChange={handleWebChange}
-                            style={{ width: '100%' }}
-                        >
-                            <div style={{ textAlign: 'center' }}>
-                                <UploadOutlined style={{ fontSize: '24px', color: '#1163C7' }} />
-                                <div style={{ marginTop: '8px', color: '#6b7280' }}>Upload Image</div>
-                            </div>
-                        </Upload>
-                    </Form.Item>
-                </div>
+            {/* Google Map */}
+            <div
+              style={{
+                borderRadius: "12px",
+                overflow: "hidden",
+                width: "100%",
+                height: "260px",
+              }}
+            >
+              <iframe
+                title="location-map"
+                width="100%"
+                height="100%"
+                loading="lazy"
+                style={{ border: "0" }}
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.380154630509!2d73.858!3d18.494!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2ea65c97f1fb7%3A0x123!2sBibwewadi%2C%20Pune!5e0!3m2!1sen!2sin!4v1700000000000"
+              ></iframe>
+            </div>
+          </Card>
+        </Col>
+      </Row>
+      
+      <Row className="mt-3">
+        <Col className="col-6">
+          <div class="mb-3">
+            <label for="GYM" class="form-label">
+              Terms and conditions*
+            </label>
+            <textarea
+              class="form-control"
+              id="GYM"
+              rows="6"
+              placeholder="terms and conditions"
+            ></textarea>
+          </div>
+        </Col>
+        <Col className="col-6">
+          <div class="mb-3">
+            <label for="GYM" class="form-label">
+              Cancellation policy
+            </label>
+            <textarea
+              class="form-control"
+              id="GYM"
+              rows="6"
+              placeholder=" Cancellation policy"
+            ></textarea>
+          </div>
+        </Col>
+        <Col className="col-6">
+          <div className="mb-3">
+            <Form.Group controlId="gstUpload">
+              <label for="exampleFormControlInput1" class="form-label">
+                Upload GYM Poster/Banner (For Desktop)*
+              </label>
 
-                <Divider style={{ margin: '32px 0', fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
-                    <EnvironmentOutlined style={{ marginRight: '8px', color: '#1163C7' }} />
-                    Location Information
-                </Divider>
-                <div className="location-container">
-                    <div className="location-form">
-                        <div style={{ marginBottom: '24px' }}>
-                            <Form.Item 
-                                name="fullAddress" 
-                                label={
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <EnvironmentOutlined style={{ color: '#1163C7' }} />
-                                        <span style={{ fontWeight: '600', color: '#374151' }}>Full Address</span>
-                                        <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                    </div>
-                                }
-                                rules={[{ required: true, message: 'Please enter full address' }]}
-                            >
-                                <Input 
-                                    placeholder="Enter complete address" 
-                                    size="large"
-                                    style={{ borderRadius: '8px' }}
-                                />
-                            </Form.Item>
-                        </div>
-                        <Row gutter={[24, 24]}>
-                            <Col xs={24} md={12}>
-                                <Form.Item 
-                                    name="area" 
-                                    label={
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <EnvironmentOutlined style={{ color: '#1163C7' }} />
-                                            <span style={{ fontWeight: '600', color: '#374151' }}>Area</span>
-                                            <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                        </div>
-                                    }
-                                    rules={[{ required: true, message: 'Please enter area' }]}
-                                >
-                                    <Input 
-                                        placeholder="Enter area" 
-                                        size="large"
-                                        style={{ borderRadius: '8px' }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={12}>
-                                <Form.Item 
-                                    name="city" 
-                                    label={
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <EnvironmentOutlined style={{ color: '#1163C7' }} />
-                                            <span style={{ fontWeight: '600', color: '#374151' }}>City</span>
-                                            <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                        </div>
-                                    }
-                                    rules={[{ required: true, message: 'Please enter city' }]}
-                                >
-                                    <Input 
-                                        placeholder="Enter city" 
-                                        size="large"
-                                        style={{ borderRadius: '8px' }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[24, 24]}>
-                            <Col xs={24} md={12}>
-                                <Form.Item 
-                                    name="state" 
-                                    label={
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <EnvironmentOutlined style={{ color: '#1163C7' }} />
-                                            <span style={{ fontWeight: '600', color: '#374151' }}>State</span>
-                                            <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                        </div>
-                                    }
-                                    rules={[{ required: true, message: 'Please enter state' }]}
-                                >
-                                    <Input 
-                                        placeholder="Enter state" 
-                                        size="large"
-                                        style={{ borderRadius: '8px' }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={12}>
-                                <Form.Item 
-                                    name="pincode" 
-                                    label={
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <EnvironmentOutlined style={{ color: '#1163C7' }} />
-                                            <span style={{ fontWeight: '600', color: '#374151' }}>Pincode</span>
-                                            <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                        </div>
-                                    }
-                                    rules={[{ required: true, message: 'Please enter pincode' }]}
-                                >
-                                    <Input 
-                                        placeholder="Enter pincode" 
-                                        size="large"
-                                        style={{ borderRadius: '8px' }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[24, 24]}>
-                            <Col xs={24} md={12}>
-                                <Form.Item 
-                                    name="passPrice" 
-                                    label={
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <ThunderboltOutlined style={{ color: '#1163C7' }} />
-                                            <span style={{ fontWeight: '600', color: '#374151' }}>Price (Per Day)</span>
-                                            <Tag color="red" style={{ marginLeft: '8px' }}>Required</Tag>
-                                        </div>
-                                    }
-                                    rules={[{ required: true, message: 'Please enter price' }]}
-                                >
-                                    <InputNumber 
-                                        style={{ 
-                                            width: '100%', 
-                                            borderRadius: '8px',
-                                            height: '40px'
-                                        }} 
-                                        placeholder="Enter price per day (e.g., 250)" 
-                                        size="large"
-                                        formatter={value => `₹ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={value => value.replace(/₹\s?|(,*)/g, '')}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Row gutter={[24, 24]}>
-                            <Col xs={24} md={12}>
-                                <Form.Item 
-                                    name="termAndConditions" 
-                                    label={
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <InfoCircleOutlined style={{ color: '#1163C7' }} />
-                                            <span style={{ fontWeight: '600', color: '#374151' }}>Terms & Conditions</span>
-                                        </div>
-                                    }
-                                >
-                                    <TextArea 
-                                        rows={3} 
-                                        placeholder="Enter terms and conditions..."
-                                        style={{ borderRadius: '8px' }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={24} md={12}>
-                                <Form.Item 
-                                    name="cancellationPolicy" 
-                                    label={
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <InfoCircleOutlined style={{ color: '#1163C7' }} />
-                                            <span style={{ fontWeight: '600', color: '#374151' }}>Cancellation Policy</span>
-                                        </div>
-                                    }
-                                >
-                                    <TextArea 
-                                        rows={3} 
-                                        placeholder="Enter cancellation policy..."
-                                        style={{ borderRadius: '8px' }}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </div>
+              <div className="upload-box d-flex flex-column justify-content-center align-items-center">
+                <FiUpload size={20} className="mb-1" />
+                <span className="text-muted">Upload Image</span>
+                <span className="text-muted">(Size 430px * 200px max 5MB)</span>
+                <Form.Control type="file" className="file-input" />
+              </div>
+            </Form.Group>
+          </div>
+        </Col>
+        <Col className="col-6">
+          <div className="mb-3">
+            <Form.Group controlId="gstUpload">
+              <label for="exampleFormControlInput1" class="form-label">
+                Upload GYM Poster/Banner (For Mobile)*
+              </label>
 
-                    <div className="map-side">
-                        <div className="Venue-form-row">
-                            <Form.Item name="search" label="Search for a location">
-                                <GooglePlacesAutocomplete onPlaceSelect={onPlaceSelect} placeholder="Search your address" />
-                            </Form.Item>
-                            {/* Hidden lat/lng */}
-                            <Form.Item name="latitude" hidden><Input /></Form.Item>
-                            <Form.Item name="longitude" hidden><Input /></Form.Item>
-                        </div>
-                        <div className="map-container">
-                            <div style={{ 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '8px', 
-                                marginBottom: '12px' 
-                            }}>
-                                <EnvironmentOutlined style={{ color: '#1163C7' }} />
-                                <span style={{ 
-                                    fontWeight: '600', 
-                                    color: '#374151',
-                                    fontSize: '16px'
-                                }}>
-                                    Location Preview
-                                </span>
-                            </div>
-                            <iframe
-                                title="map"
-                                src={mapSrc}
-                                width="100%"
-                                height="220"
-                                style={{ 
-                                    border: '1px solid #e5e7eb', 
-                                    borderRadius: '12px',
-                                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-                                }}
-                                loading="lazy"
-                            />
-                        </div>
-                    </div>
-                </div>
+              <div className="upload-box d-flex flex-column justify-content-center align-items-center">
+                <FiUpload size={20} className="mb-1" />
+                <span className="text-muted">Upload Image</span>
+                <span className="text-muted">(Size 430px * 200px max 5MB)</span>
+                <Form.Control type="file" className="file-input" />
+              </div>
+            </Form.Group>
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="col-6">
+          <div class="mb-3">
+            <label for="Pricing" class="form-label">
+              Enter Pricing/Passes*
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="Timing"
+              placeholder="Pricing"
+            />
+          </div>
+        </Col>
+        <Col className="col-6">
+          <div className="mb-3 event_calendar ">
+            <label className="form-label">Only Women*</label>
 
-                <Divider style={{ margin: '40px 0 24px 0' }} />
+            <div className="d-flex">
+              <div className="form-check">
+                <input type="radio" className="form-check-input" />
+                <label className="form-check-label">Yes</label>
+              </div>
 
-                <div style={{ 
-                    textAlign: 'center', 
-                    padding: '24px 0',
-                    borderTop: '1px solid #f0f0f0'
-                }}>
-                    <Button 
-                        type="primary" 
-                        htmlType="submit" 
-                        loading={loading}
-                        size="large"
-                        style={{
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            border: 'none',
-                            borderRadius: '12px',
-                            height: '48px',
-                            padding: '0 32px',
-                            fontSize: '16px',
-                            fontWeight: '600',
-                            boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)',
-                            minWidth: '200px'
-                        }}
-                    >
-                        {loading ? 'Creating Gym...' : 'Create Gym'}
-                    </Button>
-                    <div style={{ 
-                        marginTop: '12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        color: '#6b7280',
-                        fontSize: '14px'
-                    }}>
-                        <InfoCircleOutlined />
-                        <span>All required fields must be completed</span>
-                    </div>
-                </div>
-            </Form>
-            </Card>
-        </div>
-    );
+              <div className="form-check ms-3">
+                <input type="radio" className="form-check-input" />
+                <label className="form-check-label">No</label>
+              </div>
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <Row className="mt-4 justify-items-end justify-end">
+        <Col className="col-3   text-end">
+          <div className="save_btn mb-3">
+            <button>Save </button>
+          </div>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
