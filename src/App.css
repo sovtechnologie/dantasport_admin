@@ -120,9 +120,16 @@ ul li {
   list-style-type: none !important;
 }
 
+a {
+
+  text-decoration: none !important;
+  color: #737791 !important;
+}
+
 .close_btn {
 
   background-color: #0654b2 !important;
   color: white !important;
   border: none !important;
 }
+

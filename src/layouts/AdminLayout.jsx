@@ -17,7 +17,7 @@ const AdminLayout = () => {
       <AdminSidebar />
       <div className="flex-1 flex flex-col">
         <AdminHeader  title="Dashboard" user={user}/>
-        <main className="p-4 flex-1 overflow-auto">
+        <main className="p-4 flex-1 overflow-auto" style={{background: "#F1F3F2"}}>
           <Outlet />
         </main>
         

@@ -7,6 +7,8 @@ import UploadImage from "../../../assets/UploadIcon.png";
 import { useFetchSports } from '../../../hooks/admin/sport/useFetchSport';
 import { useAddSport } from '../../../hooks/admin/sport/useAddSport';
 import { useStatusSport } from '../../../hooks/admin/sport/useStatusSport';
+import { fetchSportsList } from '../../../services/admin/Sports/endpointApi';
+
 
 const SportsServicePage = () => {
     const [data, setData] = useState([]);

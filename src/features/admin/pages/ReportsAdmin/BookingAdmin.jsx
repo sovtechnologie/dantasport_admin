@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message, DatePicker } from "antd";
+import { Table, Input, Select, Spin, message, DatePicker } from "antd";
+import { Button } from 'react-bootstrap';
 import {
   CalendarOutlined,
   DownloadOutlined,
@@ -284,6 +285,7 @@ export default function BookingAdminPage() {
             onChange={(dates) => setDateRange(dates || [])}
             allowClear
             style={{ marginLeft: 10 }}
+            className="datepiker"
           />
         </div>
 

@@ -55,6 +55,13 @@
   border-radius: 6px;
 }
 
+.rating-page table thead.ant-table-thead tr th{
+
+  background-color: #fff !important;
+  color: #1163c7 !important;
+}
+
+
 /* Page wrapper */
 .rating-page {
   background: #fff;
