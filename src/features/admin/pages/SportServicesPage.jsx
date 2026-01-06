@@ -4,11 +4,9 @@ import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import '../pages/Stylesheets/SportServices.css';
 import SportIcon from "../../../assets/Admin/sporticon.png"
 import UploadImage from "../../../assets/UploadIcon.png";
-import { useFetchSports } from '../../../hooks/admin/sport/useFetchSport';
 import { useAddSport } from '../../../hooks/admin/sport/useAddSport';
 import { useStatusSport } from '../../../hooks/admin/sport/useStatusSport';
-import { fetchSportsList } from '../../../services/admin/Sports/endpointApi';
-
+import { useFetchSports } from '../../../hooks/admin/sport/useFetchSport';
 
 const SportsServicePage = () => {
     const [data, setData] = useState([]);
@@ -25,7 +23,7 @@ const SportsServicePage = () => {
             const mappedData = sportlistData.result.map((sport, index) => ({
                 key: sport.id || index,
                 name: sport.sports_name || 'N/A',
-                icon: sport.sports_images || "", // use the backend image URL, empty string if not available
+                icon: sport.sports_images || "",
                 sports: sport.sports === 1,
                 coaching: sport.coaching === 1,
                 popularSports: sport.popular_sports === 1,

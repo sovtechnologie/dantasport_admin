@@ -1,11 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchSportsList } from "../../../services/admin/Sports/endpointApi";
+import { fetchsList } from "../../../services/admin/Sports/endpointApi";
 
 export const useFetchSports = () => {
-    return useQuery({
-        queryKey: ["SportsList"],
-        queryFn: () => {
-           return fetchSportsList();
-        },
-    });
+  return useQuery({
+    queryKey: ["admin-sports-list"],
+    queryFn: fetchsList,
+  });
 };

@@ -6,7 +6,7 @@ import {
   FetchSingleCourt,
   UpdateVendorCourt,
 } from "../../../../services/vendor/Court/endpointsApi";
-import { useFetchSports } from "../../../../hooks/admin/sport/useFetchSport";
+import { useFetchSportsByCategory } from "../../../../hooks/vendor/sports/useFetchSportsByCategory";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -18,7 +18,11 @@ export default function EditCourtPage() {
   const navigate = useNavigate();
   const { courId } = useParams();
 
-  const { data: sportsList, loading: sportsLoading } = useFetchSports();
+  const {
+    data: sportsList,
+    isLoading: sportsLoading,
+    isError,
+  } = useFetchSportsByCategory(4);
 
   useEffect(() => {
     if (courId) {
