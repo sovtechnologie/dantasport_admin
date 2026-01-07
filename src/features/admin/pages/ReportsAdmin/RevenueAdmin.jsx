@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message } from "antd";
+import { Table, Input, Button, Select, Spin, message,DatePicker  } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueRevenueReports } from "../../../../services/admin/ReportsAdmin/endpointApi";
 import "../Stylesheets/ReportsAdmin/RevenueAdmin.css";
 
 const { Option } = Select;
-
+const { RangePicker } = DatePicker;
 const statusColors = {
   Active: "green",
   Deactive: "red",
@@ -71,7 +71,7 @@ export default function RevenueAdmin() {
     { title: "Txn ID", dataIndex: "txnId", key: "txnId" },
     { title: "Venue Name", dataIndex: "venueName", key: "venueName" },
     { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Customer", dataIndex: "customer", key: "customer" },
+    { title: "Customer Name & ID", dataIndex: "customer", key: "customer" },
     { title: "Booking ID", dataIndex: "bookingId", key: "bookingId" },
     { title: "Date", dataIndex: "bookingDate", key: "bookingDate" },
     { title: "Amount", dataIndex: "amount", key: "amount" },
@@ -111,7 +111,7 @@ export default function RevenueAdmin() {
 
       {/* Table page */}
       <div className="revenue-page">
-        <div className="export-section">
+        {/* <div className="export-section">
           <Button
             type="default"
             className="export-btn"
@@ -126,6 +126,23 @@ export default function RevenueAdmin() {
               </Option>
             ))}
           </Select>
+        </div> */}
+          <div className="export-section">
+          <Button
+            type="default"
+            className="export-btn"
+            icon={<DownloadOutlined />}
+           
+          >
+            Export
+          </Button>
+          <RangePicker
+            format="YYYY-MM-DD"
+            onChange={(dates) => setDateRange(dates || [])}
+            allowClear
+            style={{ marginLeft: 10 }}
+            className="datepiker"
+          />
         </div>
 
         <Spin spinning={loading}>

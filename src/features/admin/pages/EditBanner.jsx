@@ -143,34 +143,39 @@ export default function EditBannerForm() {
     );
   }
   return (
-    <div className="banner-form-container">
-      <h3>Edit Banner</h3>
+    <div className="banner-form-container bg-white p-3 shadow-sm rounded-2xl">
+      <h3 className="my-3" style={{color: "#1163C7"}}>Edit Banner</h3>
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <div className="form-row">
-          <Form.Item
+        <div className="row">
+         <div className="col-6">
+           <Form.Item
             label="Start Date"
             name="startDate"
             rules={[{ required: true }]}
           >
-            <DatePicker style={{ width: "100%" }} />
+            <DatePicker style={{ width: "100%", height:"56px" }} />
           </Form.Item>
+         </div>
 
-          <Form.Item
+          <div className="col-6">
+            <Form.Item
             label="End Date"
             name="endDate"
             rules={[{ required: true }]}
           >
-            <DatePicker style={{ width: "100%" }} />
+            <DatePicker style={{ width: "100%", height:"56px" }} />
           </Form.Item>
+          </div>
         </div>
 
-        <div className="form-row">
-          <Form.Item
+        <div className="row">
+        <div className="col-6">
+            <Form.Item
             label="Location"
             name="location"
             rules={[{ required: true }]}
           >
-            <Select mode="multiple" allowClear showSearch>
+            <Select mode="multiple" allowClear showSearch  style={{ height:"56px" }}>
               {cities.map((city) => (
                 <Option key={city.id} value={city.name}>
                   {city.name}
@@ -178,19 +183,24 @@ export default function EditBannerForm() {
               ))}
             </Select>
           </Form.Item>
-
-          <Form.Item
+        </div>
+        <div className="col-6">
+           <Form.Item
             label="Page Link"
             name="pageLink"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Enter URL" />
+            <Input placeholder="Enter URL"  style={{ height:"56px" }}/>
           </Form.Item>
         </div>
 
-        <div className="form-row">
-          <Form.Item label="Pages" name="page" rules={[{ required: true }]}>
-            <Select mode="multiple" allowClear>
+         
+        </div>
+
+        <div className="row">
+        <div className="col-6">
+            <Form.Item label="Pages" name="page" rules={[{ required: true }]}  >
+            <Select mode="multiple" allowClear style={{ height:"56px" }}>
               <Option value={1}>Home</Option>
               <Option value={2}>Turf List</Option>
               <Option value={3}>Event List</Option>
@@ -203,13 +213,15 @@ export default function EditBannerForm() {
               <Option value={10}>SuccessfulPage</Option>
             </Select>
           </Form.Item>
+        </div>
 
-          <Form.Item
+          <div className="col-6">
+            <Form.Item
             label="Banner Type / Position"
             name="position"
             rules={[{ required: true }]}
           >
-            <Select>
+            <Select style={{ height:"56px" }}>
               <Option value={1}>1</Option>
               <Option value={2}>2</Option>
               <Option value={3}>3</Option>
@@ -218,10 +230,12 @@ export default function EditBannerForm() {
               <Option value={6}>6</Option>
             </Select>
           </Form.Item>
+          </div>
         </div>
 
-        <div className="form-row">
-          <Form.Item
+        <div className="row">
+         <div className="col-6">
+           <Form.Item
             label="Desktop Banner"
             name="desktopBanner"
             valuePropName="fileList"
@@ -234,8 +248,10 @@ export default function EditBannerForm() {
               </div>
             </Upload>
           </Form.Item>
+         </div>
 
-          <Form.Item
+          <div className="col-6">
+            <Form.Item
             label="Mobile Banner"
             name="mobileBanner"
             valuePropName="fileList"
@@ -248,13 +264,18 @@ export default function EditBannerForm() {
               </div>
             </Upload>
           </Form.Item>
+          </div>
         </div>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
+        <div className="row my-4">
+          <div className="col-4 m-auto">
+            <Form.Item>
+          <Button className="w-100 py-4 fs-5 fw-bold" type="primary" htmlType="submit">
             Update Banner
           </Button>
         </Form.Item>
+          </div>
+        </div>
       </Form>
     </div>
   );

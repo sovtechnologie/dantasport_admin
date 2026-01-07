@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message } from "antd";
+import { Table, Input, Button, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueReviewReports } from "../../../../services/admin/ReportsAdmin/endpointApi"; // create this API or replace with your endpoint
 import "../Stylesheets/ReportsAdmin/RatingAdmin.css";
 
+
 export default function RatingAdmin() {
+
+  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -121,17 +124,23 @@ export default function RatingAdmin() {
 
       {/* Export + timeframe controls (right aligned like booking) */}
       <div className="revenue-page export-wrapper">
-        <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-          {/* keep timeframe dropdown look consistent with BookingAdmin (optional) */}
-          <div className="timeframe-select">Last Week</div>
-        </div>
+          <div className="export-section">
+                  <Button
+                    type="default"
+                    className="export-btn"
+                    icon={<DownloadOutlined />}
+                   
+                  >
+                    Export
+                  </Button>
+                  <RangePicker
+                    format="YYYY-MM-DD"
+                    onChange={(dates) => setDateRange(dates || [])}
+                    allowClear
+                    style={{ marginLeft: 10 }}
+                    className="datepiker"
+                  />
+          </div>
       </div>
 
       <div className="rating-page">

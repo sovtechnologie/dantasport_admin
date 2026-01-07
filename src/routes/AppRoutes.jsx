@@ -233,6 +233,11 @@ const CoupanAdmin = lazy(() =>
   import("../features/admin/pages/ReportsAdmin/CoupanAdmin")
 );
 
+const PeakHours = lazy(() =>
+  import("../features/admin/pages/ReportsAdmin/PeakHours")
+);
+
+
 const CorporateEnquiry = lazy(() =>
   import("../features/admin/pages/Enquires/CorporateEnquiry")
 );
@@ -326,6 +331,10 @@ const AppRoutes = () => {
             <Route
               path="/admin/ReportsAdmin/coupan"
               element={<CoupanAdmin />}
+            />
+              <Route
+              path="/admin/reports/peakHours"
+              element={<PeakHours/>}
             />
             <Route
               path="/admin/GymReports/gym-booking"

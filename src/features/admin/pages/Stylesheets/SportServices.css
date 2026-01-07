@@ -27,26 +27,28 @@
 /* Upload icon box wrapper */
 .upload-box {
     display: flex;
-    min-height: 54px;
     border-radius: 12px;
     min-width: 28vw;
+    height: 56px;
 
 }
 
 /* Button styling */
-.add-button-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.add-button-wrapper button {
     margin-top: 30px;
+    padding: 20px 20px;
+    background-color: #1163C7;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 11px;
     
 }
+.add-button-wrapper button:hover{
 
-.add-button {
-    padding: 10px 16px;
-    /* background-color:#1163C7;
-    color: #fff; */
+    background-color: #084ea3 !important;
 }
+
+
 
 /* Ensures upload and input align nicely */
 .input-wrapper {
@@ -56,21 +58,45 @@
 }
 
 
-.sport-icon {
+/* .sport-icon {
     width: 60px;
     height: 60px;
     object-fit: contain;
     border: 1px solid #B1B1B1;
     border-radius: 6px;
     padding: 6px;
-}
+} */
 
 .icon-cell {
     padding: 4px;
     display: flex;
+    border: 1px solid red;
+     width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 6px;
+    padding: 6px;
+    border: 0.5px solid #B1B1B1;
+}
+
+.icon-cell img {
+
+    height: 100%;
+    width: 100%;
 }
 
 .sports-table .ant-checkbox {
     pointer-events: none;
     /* makes checkboxes read-only */
 }
+ table thead.ant-table-thead tr th{
+
+  background-color: #fff !important;
+  color: #1163c7 !important;
+}
+
+:where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before, :where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+
+  display: none;
+}
+

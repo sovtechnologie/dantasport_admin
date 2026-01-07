@@ -100,7 +100,7 @@ const AdminSidebar = () => {
                   to="/admin/ReportsAdmin/coupan"
                   className="block px-2 py-1 rounded hover:bg-gray-100"
                 >
-                  Coupan
+                  Coupon
                 </Link>
               </li>
               <li>

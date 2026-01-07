@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message } from "antd";
+import { Table, Input, Button, Select, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/EventReports/EventRevenue.css";
 import { getEventRevenueReports } from "../../../../services/admin/EventReports/endpointApi";
@@ -12,6 +12,8 @@ const statusColors = {
 };
 
 export default function EventRevenueAdminPage() {
+
+   const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -144,21 +146,22 @@ export default function EventRevenueAdminPage() {
       {/* Export + timeframe */}
       <div className="revenue-page">
         <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-          <Select defaultValue="Last Week">
-            {["Last Week", "Last Month", "This Year"].map((v) => (
-              <Option key={v} value={v}>
-                {v}
-              </Option>
-            ))}
-          </Select>
-        </div>
+                           <Button
+                             type="default"
+                             className="export-btn"
+                             icon={<DownloadOutlined />}
+               
+                           >
+                             Export
+                           </Button>
+                           <RangePicker
+                             format="YYYY-MM-DD"
+                             onChange={(dates) => setDateRange(dates || [])}
+                             allowClear
+                             style={{ marginLeft: 10 }}
+                             className="datepiker"
+                           />
+               </div>
 
         <Spin spinning={loading}>
           <Table

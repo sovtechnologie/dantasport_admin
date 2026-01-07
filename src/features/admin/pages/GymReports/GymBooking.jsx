@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message } from "antd";
+import { Table, Input, Button, Select, Spin, message, DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 
 import "../Stylesheets/GymReports/GymBooking.css";
@@ -21,6 +21,7 @@ const statusLabels = {
 };
 
 export default function GymBookingAdminPage() {
+  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -210,16 +211,17 @@ export default function GymBookingAdminPage() {
             type="default"
             className="export-btn"
             icon={<DownloadOutlined />}
+
           >
             Export
           </Button>
-          <Select defaultValue="Last Week">
-            {["Last Week", "Last Month", "This Year"].map((v) => (
-              <Option key={v} value={v}>
-                {v}
-              </Option>
-            ))}
-          </Select>
+          <RangePicker
+            format="YYYY-MM-DD"
+            onChange={(dates) => setDateRange(dates || [])}
+            allowClear
+            style={{ marginLeft: 10 }}
+            className="datepiker"
+          />
         </div>
 
         <Spin spinning={loading}>

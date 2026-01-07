@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message } from "antd";
+import { Table, Input, Button, Spin, message, DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueCouponReports } from "../../../../services/admin/ReportsAdmin/endpointApi";
 import "../Stylesheets/ReportsAdmin/CoupanAdmin.css";
@@ -10,6 +10,7 @@ const statusColors = {
 };
 
 export default function CouponAdmin() {
+  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -97,16 +98,30 @@ export default function CouponAdmin() {
           prefix={<SearchOutlined />}
           className="search-input-field"
         />
+        <Button type="primary" className="search-btn">
+          SEARCH
+        </Button>
+      </div>
+      
+
+      <div className="coupon-page">
+        <div className="export-section mb-3 text-end">
         <Button
-          icon={<DownloadOutlined />}
+          type="default"
           className="export-btn"
-          onClick={() => message.info("Export functionality coming soon")}
+          icon={<DownloadOutlined />}
+
         >
           Export
         </Button>
+        <RangePicker
+          format="YYYY-MM-DD"
+          onChange={(dates) => setDateRange(dates || [])}
+          allowClear
+          style={{ marginLeft: 10 , padding: "10px"}}
+          className="datepiker"
+        />
       </div>
-
-      <div className="coupon-page">
         <Spin spinning={loading}>
           <Table
             columns={columns}

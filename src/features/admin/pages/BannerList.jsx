@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, message, Image, Input, Select } from "antd";
+import { Table, Button, message, Image, Input, Select,DatePicker } from "antd";
 import {
   EditOutlined,
   SearchOutlined,
@@ -12,6 +12,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 const { Option } = Select;
 
 const Banners = () => {
+
+  const { RangePicker } = DatePicker;
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("admin");
@@ -138,24 +140,25 @@ const Banners = () => {
         </Button>
       </div>
       <div className="bookings-page">
-        <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-          <Select defaultValue="Last Week">
-            {["Last Week", "Last Month", "This Year"].map((v) => (
-              <Option key={v} value={v}>
-                {v}
-              </Option>
-            ))}
-          </Select>
-        </div>
+         <div className="export-section">
+                    <Button
+                      type="default"
+                      className="export-btn"
+                      icon={<DownloadOutlined />}
+        
+                    >
+                      Export
+                    </Button>
+                    <RangePicker
+                      format="YYYY-MM-DD"
+                      onChange={(dates) => setDateRange(dates || [])}
+                      allowClear
+                      style={{ marginLeft: 10 }}
+                      className="datepiker"
+                    />
+                  </div>
         {/* 🔹 Tabs */}
-        <div style={{ display: "flex", gap: "20px", marginBottom: "20px" }}>
+        <div style={{ display: "flex", gap: "20px", marginBottom: "10px" ,marginTop: "40px", justifyContent:"space-between" }}>
           <div
             onClick={() => setActiveTab("admin")}
             style={{
@@ -201,7 +204,7 @@ const Banners = () => {
                 )
               }
             >
-              Add Banner
+             + Add Banner
             </Button>
           </div>
         </div>

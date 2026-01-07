@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message } from "antd";
+import { Table, Input, Button, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/EventReports/EventCoupan.css";
 import { getEventCouponReports } from "../../../../services/admin/EventReports/endpointApi";
@@ -10,6 +10,7 @@ const statusColors = {
 };
 
 export default function EventCouponAdminPage() {
+   const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -102,15 +103,23 @@ export default function EventCouponAdminPage() {
       </div>
 
       <div className="coupon-page">
-        <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-        </div>
+       <div className="export-section mb-3 text-end">
+                       <Button
+                         type="default"
+                         className="export-btn"
+                         icon={<DownloadOutlined />}
+               
+                       >
+                         Export
+                       </Button>
+                       <RangePicker
+                         format="YYYY-MM-DD"
+                         onChange={(dates) => setDateRange(dates || [])}
+                         allowClear
+                         style={{ marginLeft: 10 , padding: "10px"}}
+                         className="datepiker"
+                       />
+                     </div>
 
         <Spin spinning={loading}>
           <Table

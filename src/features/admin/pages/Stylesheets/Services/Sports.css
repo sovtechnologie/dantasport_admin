@@ -9,6 +9,12 @@
     margin-bottom: 2rem;
 }
 
+ table thead.ant-table-thead tr th{
+
+  background-color: #fff !important;
+  color: #1163c7 !important;
+}
+
 .filter-box {
     padding: 0.3rem;
     border-radius: 10px;

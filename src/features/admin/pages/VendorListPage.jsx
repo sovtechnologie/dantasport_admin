@@ -5,6 +5,7 @@ import { SearchOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useFetchVendorList } from '../../../hooks/admin/CreateVendor/useFetchVendorList';
 import { useStatusChange } from '../../../hooks/admin/CreateVendor/useStatusChange';
+import SearchBar from '../../Component/SearchBar';
 
 
 const { Option } = Select;
@@ -131,7 +132,7 @@ export default function VendorPage() {
         {
             title: 'Action',
             key: 'action',
-            render: (_,record) => (
+            render: (_, record) => (
                 <Button
                     type="text"
                     icon={<EditOutlined style={{ color: '#1163C7' }} />}
@@ -158,23 +159,13 @@ export default function VendorPage() {
     return (
 
         <>
-            <div className="search-container">
-                <div className="filter-box">
-                    <div className='filter-item'>
-                        <Input
-                            placeholder="Search by Anything"
-                            prefix={<SearchOutlined />}
-                            className="search-input" />
-                    </div>
-                </div>
-                <Button type="primary" className="search-button">
-                    SEARCH
-                </Button>
-            </div>
+
+
+            <SearchBar />
 
 
 
-            <div className="vendor-page-container">
+            <div className="vendor-page-container mt-5">
                 <div className="vendor-header-form">
                     <Button type="primary" icon={<PlusOutlined />} className="add-vendor-button" onClick={handleAddVendor}>
                         Add Vendor

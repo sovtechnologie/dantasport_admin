@@ -7,6 +7,7 @@ import UploadImage from "../../../assets/UploadIcon.png";
 import { useAddSport } from '../../../hooks/admin/sport/useAddSport';
 import { useStatusSport } from '../../../hooks/admin/sport/useStatusSport';
 import { useFetchSports } from '../../../hooks/admin/sport/useFetchSport';
+import { DeleteOutlined } from "@ant-design/icons";
 
 const SportsServicePage = () => {
     const [data, setData] = useState([]);
@@ -147,27 +148,27 @@ const SportsServicePage = () => {
                 </Popconfirm>
             )
         },
-        {
-            title: 'Popular sports',
-            dataIndex: 'popularSports',
-            render: (val, record) => (
-                <Popconfirm
-                    title={`Are you sure to ${val ? 'deactivate' : 'activate'} this sport?`}
-                    onConfirm={() => applyCheckboxChange(record.key, 'popularSports', !val)}
-                    onCancel={() => setPendingCheckboxChange(null)}
-                    okText="Yes"
-                    cancelText="No"
-                >
-                    <Checkbox
-                        checked={val}
-                        onClick={e => {
-                            e.preventDefault(); // prevent immediate toggle
-                            confirmCheckboxChange(record.key, 'popularSports', val);
-                        }}
-                    />
-                </Popconfirm>
-            )
-        },
+        // {
+        //     title: 'Popular sports',
+        //     dataIndex: 'popularSports',
+        //     render: (val, record) => (
+        //         <Popconfirm
+        //             title={`Are you sure to ${val ? 'deactivate' : 'activate'} this sport?`}
+        //             onConfirm={() => applyCheckboxChange(record.key, 'popularSports', !val)}
+        //             onCancel={() => setPendingCheckboxChange(null)}
+        //             okText="Yes"
+        //             cancelText="No"
+        //         >
+        //             <Checkbox
+        //                 checked={val}
+        //                 onClick={e => {
+        //                     e.preventDefault(); // prevent immediate toggle
+        //                     confirmCheckboxChange(record.key, 'popularSports', val);
+        //                 }}
+        //             />
+        //         </Popconfirm>
+        //     )
+        // },
         {
             title: 'Event',
             dataIndex: 'event',
@@ -192,7 +193,10 @@ const SportsServicePage = () => {
         {
             title: 'Action',
             render: () => (
-                <Button type="text" icon={<EditOutlined style={{ color: '#1163C7' }} />} />
+               <Button
+  type="text"
+  icon={<DeleteOutlined style={{ color: "#dc3545" }} />}
+/>
             )
         }
     ];

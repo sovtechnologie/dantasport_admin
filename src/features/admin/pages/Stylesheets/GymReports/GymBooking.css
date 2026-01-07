@@ -56,19 +56,33 @@
   gap: 10px;
 }
 
+
 .export-btn {
-  background: none;
-  border: 1px solid #ccc;
+ border: 1px solid #B1B1B1 !important;
+ box-shadow: none !important;
   color: #333;
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-weight: 500;
-  transition: all 0.2s;
+  font-weight: 600;
 }
 
-.export-btn:hover {
-  border-color: #1163c7;
+.export-btn:hover{
+
+  color: #333;
+}
+
+.ant-picker-input input::placeholder{
+
+  color: #718096 !important;
+}
+
+.bookings-page table thead.ant-table-thead tr th{
+
+  background-color: #fff !important;
   color: #1163c7;
+}
+
+:where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before, :where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+
+  display: none;
 }
 
 /* 🔹 Table dropdowns */

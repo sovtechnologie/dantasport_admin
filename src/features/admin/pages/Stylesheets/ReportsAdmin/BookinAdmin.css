@@ -84,14 +84,20 @@
 }
 
 .export-btn {
-  background: none;
-  border: 1px solid #ccc;
+ border: 1px solid #B1B1B1 !important;
+ box-shadow: none !important;
   color: #333;
+  font-weight: 600;
 }
 
 .export-btn:hover{
 
   color: #333;
+}
+
+.ant-picker-input input::placeholder{
+
+  color: #718096 !important;
 }
 
 /* Table dropdowns */

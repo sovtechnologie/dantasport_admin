@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message } from "antd";
+import { Table, Input, Button, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/GymReports/GymCoupan.css";
 import { getGymCouponReports } from "../../../../services/admin/GymReports/endpointApi";
@@ -10,6 +10,7 @@ const statusColors = {
 };
 
 export default function GymCouponAdmin() {
+  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -86,24 +87,41 @@ export default function GymCouponAdmin() {
 
   return (
     <div className="gym-coupon-admin-container">
-      <div className="search-bar-container">
-        <Input
-          placeholder="Search by Coupon ID / Vendor / Gym"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          prefix={<SearchOutlined />}
-          className="search-input-field"
-        />
-        <Button
-          icon={<DownloadOutlined />}
-          className="export-btn"
-          onClick={() => message.info("Export functionality coming soon")}
-        >
-          Export
-        </Button>
+     <div className="search-bar-container">
+               <div className="filter-section">
+                 <div className="filter-item">
+                   <Input
+                     placeholder="Search by Customer / Vendor / Gym / Review"
+                     prefix={<SearchOutlined />}
+                     className="search-input-field"
+                     value={searchText}
+                     onChange={(e) => setSearchText(e.target.value)}
+                   />
+                 </div>
+               </div>
+               <Button type="primary" className="search-btn">
+                 SEARCH
+               </Button>
       </div>
 
       <div className="gym-coupon-page">
+        <div className="export-section">
+                    <Button
+                      type="default"
+                      className="export-btn"
+                      icon={<DownloadOutlined />}
+        
+                    >
+                      Export
+                    </Button>
+                    <RangePicker
+                      format="YYYY-MM-DD"
+                      onChange={(dates) => setDateRange(dates || [])}
+                      allowClear
+                      style={{ marginLeft: 10 }}
+                      className="datepiker"
+                    />
+        </div>
         <Spin spinning={loading}>
           <Table
             columns={columns}
