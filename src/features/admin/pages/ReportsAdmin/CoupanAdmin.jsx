@@ -3,6 +3,8 @@ import { Table, Input, Button, Spin, message, DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueCouponReports } from "../../../../services/admin/ReportsAdmin/endpointApi";
 import "../Stylesheets/ReportsAdmin/CoupanAdmin.css";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const statusColors = {
   Active: "green",
@@ -90,38 +92,11 @@ export default function CouponAdmin() {
 
   return (
     <div className="coupon-admin-container">
-      <div className="search-bar-container">
-        <Input
-          placeholder="Search by Coupon ID / Vendor / Venue / Sport"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          prefix={<SearchOutlined />}
-          className="search-input-field"
-        />
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
+      <SearchBox/>
       
 
       <div className="coupon-page">
-        <div className="export-section mb-3 text-end">
-        <Button
-          type="default"
-          className="export-btn"
-          icon={<DownloadOutlined />}
-
-        >
-          Export
-        </Button>
-        <RangePicker
-          format="YYYY-MM-DD"
-          onChange={(dates) => setDateRange(dates || [])}
-          allowClear
-          style={{ marginLeft: 10 , padding: "10px"}}
-          className="datepiker"
-        />
-      </div>
+       <ExportFilter/>
         <Spin spinning={loading}>
           <Table
             columns={columns}

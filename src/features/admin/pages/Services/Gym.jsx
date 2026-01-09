@@ -5,6 +5,7 @@ import "../Stylesheets/Services/Gym.css";
 import { getUserTotalGymPassesAvailable } from "../../../../services/admin/ServicesAdmin/endpointApi";
 import ExportFilter from "../../../Component/ExportFilter";
 import SearchBar from "../../../Component/SearchBar";
+import SearchBox from "../../../Component/SearchBox";
 
 const columns = [
   { title: "User Name", dataIndex: "name", key: "name" },
@@ -74,23 +75,7 @@ export default function GymPage() {
 
   return (
     <>
-      {/* <div className="search-container">
-        <div className="filter-box">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Anything"
-              prefix={<SearchOutlined />}
-              className="search-input"
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-button">
-          SEARCH
-        </Button>
-      </div> */}
-      <div className="mb-5">
-        <SearchBar/>
-      </div>
+     <SearchBox/>
       <ExportFilter/>
       {loading ? (
         <div style={{ textAlign: "center", marginTop: "50px" }}>

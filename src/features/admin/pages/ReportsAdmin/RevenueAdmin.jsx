@@ -3,6 +3,8 @@ import { Table, Input, Button, Select, Spin, message,DatePicker  } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueRevenueReports } from "../../../../services/admin/ReportsAdmin/endpointApi";
 import "../Stylesheets/ReportsAdmin/RevenueAdmin.css";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -92,58 +94,11 @@ export default function RevenueAdmin() {
   return (
     <>
       {/* Search bar */}
-      <div className="search-bar-container">
-        <div className="filter-section">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Anything"
-              prefix={<SearchOutlined />}
-              className="search-input-field"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
-
+      <SearchBox/>
       {/* Table page */}
       <div className="revenue-page">
-        {/* <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-          <Select defaultValue="Last Week">
-            {["Last Week", "Last Month", "This Year"].map((v) => (
-              <Option key={v} value={v}>
-                {v}
-              </Option>
-            ))}
-          </Select>
-        </div> */}
-          <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-           
-          >
-            Export
-          </Button>
-          <RangePicker
-            format="YYYY-MM-DD"
-            onChange={(dates) => setDateRange(dates || [])}
-            allowClear
-            style={{ marginLeft: 10 }}
-            className="datepiker"
-          />
-        </div>
+       
+      <ExportFilter/>
 
         <Spin spinning={loading}>
           <Table

@@ -3,6 +3,8 @@ import { Table, Input, Button, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/GymReports/GymCoupan.css";
 import { getGymCouponReports } from "../../../../services/admin/GymReports/endpointApi";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const statusColors = {
   Active: "green",
@@ -87,41 +89,10 @@ export default function GymCouponAdmin() {
 
   return (
     <div className="gym-coupon-admin-container">
-     <div className="search-bar-container">
-               <div className="filter-section">
-                 <div className="filter-item">
-                   <Input
-                     placeholder="Search by Customer / Vendor / Gym / Review"
-                     prefix={<SearchOutlined />}
-                     className="search-input-field"
-                     value={searchText}
-                     onChange={(e) => setSearchText(e.target.value)}
-                   />
-                 </div>
-               </div>
-               <Button type="primary" className="search-btn">
-                 SEARCH
-               </Button>
-      </div>
+     <SearchBox/>
 
       <div className="gym-coupon-page">
-        <div className="export-section">
-                    <Button
-                      type="default"
-                      className="export-btn"
-                      icon={<DownloadOutlined />}
-        
-                    >
-                      Export
-                    </Button>
-                    <RangePicker
-                      format="YYYY-MM-DD"
-                      onChange={(dates) => setDateRange(dates || [])}
-                      allowClear
-                      style={{ marginLeft: 10 }}
-                      className="datepiker"
-                    />
-        </div>
+        <ExportFilter/>
         <Spin spinning={loading}>
           <Table
             columns={columns}

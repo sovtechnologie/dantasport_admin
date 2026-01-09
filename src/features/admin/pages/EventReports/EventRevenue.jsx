@@ -3,6 +3,8 @@ import { Table, Input, Button, Select, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/EventReports/EventRevenue.css";
 import { getEventRevenueReports } from "../../../../services/admin/EventReports/endpointApi";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const { Option } = Select;
 
@@ -126,42 +128,11 @@ export default function EventRevenueAdminPage() {
   return (
     <div className="revenue-admin-container">
       {/* Search bar */}
-      <div className="search-bar-container">
-        <div className="filter-section">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Txn ID / Vendor / Customer / Booking ID"
-              prefix={<SearchOutlined />}
-              className="search-input-field"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
+      <SearchBox/>
 
       {/* Export + timeframe */}
       <div className="revenue-page">
-        <div className="export-section">
-                           <Button
-                             type="default"
-                             className="export-btn"
-                             icon={<DownloadOutlined />}
-               
-                           >
-                             Export
-                           </Button>
-                           <RangePicker
-                             format="YYYY-MM-DD"
-                             onChange={(dates) => setDateRange(dates || [])}
-                             allowClear
-                             style={{ marginLeft: 10 }}
-                             className="datepiker"
-                           />
-               </div>
+       <ExportFilter/>
 
         <Spin spinning={loading}>
           <Table

@@ -3,6 +3,8 @@ import { Table, Input, Button, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/EventReports/EventCoupan.css";
 import { getEventCouponReports } from "../../../../services/admin/EventReports/endpointApi";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const statusColors = {
   Active: "green",
@@ -85,41 +87,10 @@ export default function EventCouponAdminPage() {
 
   return (
     <div className="coupon-admin-container">
-      <div className="search-bar-container">
-        <div className="filter-section">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Coupon / Event"
-              prefix={<SearchOutlined />}
-              className="search-input-field"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
+      <SearchBox/>
 
       <div className="coupon-page">
-       <div className="export-section mb-3 text-end">
-                       <Button
-                         type="default"
-                         className="export-btn"
-                         icon={<DownloadOutlined />}
-               
-                       >
-                         Export
-                       </Button>
-                       <RangePicker
-                         format="YYYY-MM-DD"
-                         onChange={(dates) => setDateRange(dates || [])}
-                         allowClear
-                         style={{ marginLeft: 10 , padding: "10px"}}
-                         className="datepiker"
-                       />
-                     </div>
+       <ExportFilter/>
 
         <Spin spinning={loading}>
           <Table

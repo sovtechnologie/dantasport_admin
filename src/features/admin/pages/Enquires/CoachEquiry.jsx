@@ -2,6 +2,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import { Table, Select } from "antd";
 import ExportFilter from "../../../Component/ExportFilter";
+import SearchBox from "../../../Component/SearchBox";
 
 const { Option } = Select;
 
@@ -78,6 +79,7 @@ const data = Array.from({ length: 10 }).map((_, index) => ({
 function CoachEquiry() {
   return (
     <section>
+      <SearchBox/>
       <Container className="bg-white p-3 rounded shadow-sm">
         <ExportFilter />
 

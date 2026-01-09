@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message,DatePicker } from "antd";
+import { Table, Input, Button, Spin, message, DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueReviewReports } from "../../../../services/admin/ReportsAdmin/endpointApi"; // create this API or replace with your endpoint
 import "../Stylesheets/ReportsAdmin/RatingAdmin.css";
 import ExportFilter from "../../../Component/ExportFilter";
+import SearchBox from "../../../Component/SearchBox";
 
 
 export default function RatingAdmin() {
@@ -17,7 +18,7 @@ export default function RatingAdmin() {
   const fetchRatings = async () => {
     try {
       setLoading(true);
-      const res = await getVenueReviewReports(); 
+      const res = await getVenueReviewReports();
       if (res?.status === 200 && Array.isArray(res.result)) {
         const mappedData = res.result.map((item) => ({
           id: item.id,
@@ -105,29 +106,13 @@ export default function RatingAdmin() {
   return (
     <div className="rating-admin-container">
       {/* Search bar (keeps same visual as booking) */}
-      <div className="search-bar-container">
-        <div className="filter-section">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Customer / Vendor / Venue / Sport / Review"
-              prefix={<SearchOutlined />}
-              className="search-input-field"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
+      <SearchBox />
 
       {/* Export + timeframe controls (right aligned like booking) */}
-    
+
 
       <div className="rating-page">
-        <ExportFilter/>
+        <ExportFilter />
         <Spin spinning={loading}>
           <Table
             columns={columns}

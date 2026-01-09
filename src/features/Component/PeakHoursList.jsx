@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button, Card, Table, Form } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Card,
+  Table,
+  Form,
+} from "react-bootstrap";
 import { Bar } from "react-chartjs-2";
-import {  DatePicker } from "antd";
+import { DatePicker } from "antd";
 
 import {
   CalendarOutlined,
@@ -16,17 +24,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import ExportFilter from "./ExportFilter";
 
-ChartJS.register(
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend
-);
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 function PeakHoursList() {
-   const { RangePicker } = DatePicker;
+  const { RangePicker } = DatePicker;
   const [dateRange, setDateRange] = useState({
     start: "",
     end: "",
@@ -93,46 +96,9 @@ function PeakHoursList() {
                 </h5>
               </Col>
 
-              {/* <Col className="text-end">
-                <Button variant="outline-primary" size="sm" className="me-2">
-                  Export
-                </Button>
-                 <label htmlFor="" className="text-gray-400">Start Date</label>
-                <Form.Control
-                  type="date"
-                  size="sm"
-                  className="d-inline w-auto me-2 ms-3"
-                  
-                  value={dateRange.start}
-                  onChange={(e) =>
-                    setDateRange({ ...dateRange, start: e.target.value })
-                  }
-                />
-                  <label htmlFor="" className="text-gray-400">End Date</label>
-                <Form.Control
-                  type="date"
-                  size="sm"
-                  className="d-inline w-auto ms-3"
-                  value={dateRange.end}
-                  onChange={(e) =>
-                    setDateRange({ ...dateRange, end: e.target.value })
-                  }
-                />
-              </Col> */}
+              
               <Col>
-                     <div className="export-section mb-3 text-end">
-                  <Button variant="outline-primary" size="lg" className="me-2">
-  <i className="bi bi-download me-2"></i>
-  Export
-</Button>
-        <RangePicker
-          format="YYYY-MM-DD"
-          onChange={(dates) => setDateRange(dates || [])}
-          allowClear
-          style={{ marginLeft: 10 , padding: "10px"}}
-          className="datepiker"
-        />
-      </div>
+                <ExportFilter/>
               </Col>
             </Row>
 
@@ -149,13 +115,13 @@ function PeakHoursList() {
             <Table responsive hover className="mb-0 align-middle">
               <thead className="table-white shadow-sm">
                 <tr className="bg-white">
-                  <th style={{color: "#1163C7"}}>Date</th>
-                  <th style={{color: "#1163C7"}}>Day & Time Slot</th>
-                  <th style={{color: "#1163C7"}}>Sport Type</th>
-                  <th style={{color: "#1163C7"}}>Venue Name</th>
-                  <th style={{color: "#1163C7"}}>Slots Booked / Total</th>
-                  <th style={{color: "#1163C7"}}>Utilization %</th>
-                  <th style={{color: "#1163C7"}}>Revenue</th>
+                  <th style={{ color: "#1163C7" }}>Date</th>
+                  <th style={{ color: "#1163C7" }}>Day & Time Slot</th>
+                  <th style={{ color: "#1163C7" }}>Sport Type</th>
+                  <th style={{ color: "#1163C7" }}>Venue Name</th>
+                  <th style={{ color: "#1163C7" }}>Slots Booked / Total</th>
+                  <th style={{ color: "#1163C7" }}>Utilization %</th>
+                  <th style={{ color: "#1163C7" }}>Revenue</th>
                 </tr>
               </thead>
               <tbody>

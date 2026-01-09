@@ -6,6 +6,7 @@ import { getUserTotalBookingTuf } from "../../../../services/admin/ServicesAdmin
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import ExportFilter from "../../../Component/ExportFilter";
 import SearchBar from "../../../Component/SearchBar";
+import SearchBox from "../../../Component/SearchBox";
 
 export default function SportsPage() {
   //  const { RangePicker } = DatePicker;
@@ -69,26 +70,8 @@ export default function SportsPage() {
 
   return (
     <>
-       <div className="mb-5">
-        <SearchBar/>
-      </div>
-        {/* <div className="export-section bg-white p-3 text-end">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-
-          >
-            Export
-          </Button>
-          <RangePicker
-            format="YYYY-MM-DD"
-            onChange={(dates) => setDateRange(dates || [])}
-            allowClear
-            style={{ marginLeft: 10 }}
-            className="datepiker"
-          />
-        </div> */}
+       <SearchBox/>
+        
         <ExportFilter/>
       {loading ? (
         <div style={{ textAlign: "center", padding: "2rem" }}>
