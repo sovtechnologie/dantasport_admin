@@ -4,6 +4,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/Services/Event.css";
 import { getUserTotalAttendEvents } from "../../../../services/admin/ServicesAdmin/endpointApi";
 import ExportFilter from "../../../Component/ExportFilter";
+import SearchBar from "../../../Component/SearchBar";
 
 const columns = [
   { title: "User Name", dataIndex: "full_name", key: "full_name" },
@@ -66,7 +67,7 @@ export default function EventPage() {
 
   return (
     <>
-      <div className="search-container">
+      {/* <div className="search-container">
         <div className="filter-box">
           <div className="filter-item">
             <Input
@@ -79,6 +80,9 @@ export default function EventPage() {
         <Button type="primary" className="search-button">
           SEARCH
         </Button>
+      </div> */}
+      <div className="mb-5">
+        <SearchBar/>
       </div>
       <ExportFilter/>
       {loading ? (

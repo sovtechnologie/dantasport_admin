@@ -4,6 +4,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/Services/Coaching.css";
 import { getCoachesOrAcademyDataByUsers } from "../../../../services/admin/ServicesAdmin/endpointApi";
 import ExportFilter from "../../../Component/ExportFilter";
+import SearchBar from "../../../Component/SearchBar";
 
 const columns = [
   { title: "Coach Name", dataIndex: "name", key: "name" },
@@ -76,7 +77,7 @@ export default function CoachPage() {
 
   return (
     <>
-      <div className="search-container">
+      {/* <div className="search-container">
         <div className="filter-box">
           <div className="filter-item">
             <Input
@@ -89,6 +90,9 @@ export default function CoachPage() {
         <Button type="primary" className="search-button">
           SEARCH
         </Button>
+      </div> */}
+      <div className="mb-5">
+        <SearchBar/>
       </div>
       <ExportFilter/>
       {loading ? (

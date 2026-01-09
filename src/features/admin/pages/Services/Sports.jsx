@@ -5,6 +5,7 @@ import { getUserTotalBookingTuf } from "../../../../services/admin/ServicesAdmin
 // import { SearchOutlined } from "@ant-design/icons";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import ExportFilter from "../../../Component/ExportFilter";
+import SearchBar from "../../../Component/SearchBar";
 
 export default function SportsPage() {
   //  const { RangePicker } = DatePicker;
@@ -68,19 +69,8 @@ export default function SportsPage() {
 
   return (
     <>
-      <div className="search-container">
-        <div className="filter-box">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Anything"
-              prefix={<SearchOutlined />}
-              className="search-input"
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-button">
-          SEARCH
-        </Button>
+       <div className="mb-5">
+        <SearchBar/>
       </div>
         {/* <div className="export-section bg-white p-3 text-end">
           <Button

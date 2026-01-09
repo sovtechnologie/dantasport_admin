@@ -11,7 +11,7 @@ function ExportFilter() {
     const { RangePicker } = DatePicker;
   return (
     <>
-       <div className="export-section bg-white p-2 text-end">
+       <div className="export-section bg-white p-4 text-end">
           <Button
             type="default"
             className="export-btn"

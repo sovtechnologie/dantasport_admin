@@ -4,6 +4,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/Services/Gym.css";
 import { getUserTotalGymPassesAvailable } from "../../../../services/admin/ServicesAdmin/endpointApi";
 import ExportFilter from "../../../Component/ExportFilter";
+import SearchBar from "../../../Component/SearchBar";
 
 const columns = [
   { title: "User Name", dataIndex: "name", key: "name" },
@@ -73,7 +74,7 @@ export default function GymPage() {
 
   return (
     <>
-      <div className="search-container">
+      {/* <div className="search-container">
         <div className="filter-box">
           <div className="filter-item">
             <Input
@@ -86,6 +87,9 @@ export default function GymPage() {
         <Button type="primary" className="search-button">
           SEARCH
         </Button>
+      </div> */}
+      <div className="mb-5">
+        <SearchBar/>
       </div>
       <ExportFilter/>
       {loading ? (
