@@ -3,6 +3,7 @@ import { Input, Button, Table, Spin, Alert } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/Services/Host.css";
 import { getUserTotalPlayGames } from "../../../../services/admin/ServicesAdmin/endpointApi";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const columns = [
   { title: "User Name", dataIndex: "full_name", key: "full_name" },
@@ -89,7 +90,7 @@ export default function HostPage() {
           SEARCH
         </Button>
       </div>
-
+      <ExportFilter/>
       {loading ? (
         <div style={{ textAlign: "center", padding: "2rem" }}>
           <Spin size="large" />

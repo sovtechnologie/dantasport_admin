@@ -3,6 +3,7 @@ import { Input, Button, Table, Spin, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/Services/Coaching.css";
 import { getCoachesOrAcademyDataByUsers } from "../../../../services/admin/ServicesAdmin/endpointApi";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const columns = [
   { title: "Coach Name", dataIndex: "name", key: "name" },
@@ -89,7 +90,7 @@ export default function CoachPage() {
           SEARCH
         </Button>
       </div>
-
+      <ExportFilter/>
       {loading ? (
         <div style={{ textAlign: "center", marginTop: "50px" }}>
           <Spin size="large" />

@@ -107,6 +107,7 @@ export default function VenueInfoForm({ vendorId }) {
                             rules={[{ required: true, message: "Please select a vendor" }]}
                         >
                             <Select
+                              style={{height: "56px"}}
                                 showSearch
                                 placeholder="Select a vendor"
                                 optionFilterProp="children"
@@ -139,7 +140,7 @@ export default function VenueInfoForm({ vendorId }) {
                             name="vendorId"
                             rules={[{ required: true }]}
                         >
-                            <Input />
+                            <Input style={{height: "56px"}}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -155,7 +156,7 @@ export default function VenueInfoForm({ vendorId }) {
                             name="venueName"
                             rules={[{ required: true }]}
                         >
-                            <Input />
+                            <Input style={{height: "56px"}}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -169,7 +170,7 @@ export default function VenueInfoForm({ vendorId }) {
                     </Col>
                 </Row>
 
-                <h3 className="section-title">Location Info</h3>
+                <h3 className="section-title mb-3">Location Info</h3>
 
                 {/* Address + Map/Search */}
                 <Row gutter={16}>
@@ -204,7 +205,7 @@ export default function VenueInfoForm({ vendorId }) {
                                     name="area"
                                     rules={[{ required: true }]}
                                 >
-                                    <Input placeholder="Enter Area" />
+                                    <Input placeholder="Enter Area" style={{height: "50px"}}/>
                                 </Form.Item>
                             </Col>
                             {/* city */}
@@ -214,7 +215,7 @@ export default function VenueInfoForm({ vendorId }) {
                                     name="city"
                                     rules={[{ required: true }]}
                                 >
-                                    <Input placeholder="Enter City" />
+                                    <Input placeholder="Enter City" style={{height: "50px"}}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -229,7 +230,7 @@ export default function VenueInfoForm({ vendorId }) {
                                     name="state"
                                     rules={[{ required: true }]}
                                 >
-                                    <Input placeholder='Enter State' />
+                                    <Input placeholder='Enter State' style={{height: "50px"}}/>
                                 </Form.Item>
                             </Col>
                             {/* pincode */}
@@ -239,7 +240,7 @@ export default function VenueInfoForm({ vendorId }) {
                                     name="pincode"
                                     rules={[{ required: true }]}
                                 >
-                                    <Input />
+                                    <Input style={{height: "50px"}}/>
                                 </Form.Item>
                             </Col>
                         </Row>

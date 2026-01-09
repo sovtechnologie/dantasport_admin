@@ -1,0 +1,100 @@
+import React from "react";
+import { Container } from "react-bootstrap";
+import { Table, Select } from "antd";
+import ExportFilter from "../../../Component/ExportFilter";
+
+const { Option } = Select;
+
+const columns = [
+  {
+    title: "Customer Name",
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: "Enquiry Type",
+    dataIndex: "type",
+    key: "type",
+  },
+  {
+    title: "Phone Number",
+    dataIndex: "phone",
+    key: "phone",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+  },
+  {
+    title: "Location",
+    dataIndex: "location",
+    key: "location",
+  },
+  {
+    title: "Remark",
+    dataIndex: "remark",
+    key: "remark",
+    width: 220,
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    render: (value) => (
+      <Select defaultValue={value} size="small" style={{ width: 90 }}>
+        <Option value="RNR">RNR</Option>
+        <Option value="Connected">Connected</Option>
+        <Option value="Pending">Pending</Option>
+      </Select>
+    ),
+  },
+  {
+    title: "Sub-Status",
+    dataIndex: "subStatus",
+    key: "subStatus",
+    render: (value) => (
+      <Select defaultValue={value} size="small" style={{ width: 130 }}>
+        <Option value="Switched Off">Switched Off</Option>
+        <Option value="Busy">Busy</Option>
+        <Option value="Not Reachable">Not Reachable</Option>
+      </Select>
+    ),
+  },
+];
+
+const data = Array.from({ length: 10 }).map((_, index) => ({
+  key: index + 1,
+  name: "Sahil Khan",
+  type: index % 2 === 0 ? "Individual" : "Academy",
+  phone: "+91 9284578663",
+  email: "mihirs@gmail.com",
+  location: "Hinjewadi, Pune",
+  remark: "Hi Want to connect sgcjnxbcgck",
+  status: "RNR",
+  subStatus: "Switched Off",
+}));
+
+function CoachEquiry() {
+  return (
+    <section>
+      <Container className="bg-white p-3 rounded shadow-sm">
+        <ExportFilter />
+
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={{
+            pageSize: 7,
+            position: ["bottomRight"],
+          }}
+          rowKey="key"
+          className="corporate-enquiry-table"
+          scroll={{ x: 1200 }}
+        />
+      </Container>
+    </section>
+  );
+}
+
+export default CoachEquiry;

@@ -3,6 +3,7 @@ import { Input, Button, Table, Spin, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/Services/Gym.css";
 import { getUserTotalGymPassesAvailable } from "../../../../services/admin/ServicesAdmin/endpointApi";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const columns = [
   { title: "User Name", dataIndex: "name", key: "name" },
@@ -86,7 +87,7 @@ export default function GymPage() {
           SEARCH
         </Button>
       </div>
-
+      <ExportFilter/>
       {loading ? (
         <div style={{ textAlign: "center", marginTop: "50px" }}>
           <Spin size="large" />

@@ -24,9 +24,11 @@ const AdminSidebar = () => {
   return (
     <aside className="w-64 bg-white  shadow-sm  px-2 py-6 admin_asidebar">
       {/* Logo */}
-      <div className="flex  mb-8 ">
-        <img src={logo} alt="Logo" className="w-50 h-50 m-auto" />
-      </div>
+     <div className="flex m-auto w-50 pb-3">
+      <Link to="/">
+        <img src={logo} alt="Logo" className="w-100 text-center" />
+      </Link>
+    </div>
 
       <ul className="space-y-2 ps-1 text-sm font-medium text-gray-600">
         {/* Dashboard */}

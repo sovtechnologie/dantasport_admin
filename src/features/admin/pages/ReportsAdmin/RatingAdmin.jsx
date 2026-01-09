@@ -3,6 +3,7 @@ import { Table, Input, Button, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueReviewReports } from "../../../../services/admin/ReportsAdmin/endpointApi"; // create this API or replace with your endpoint
 import "../Stylesheets/ReportsAdmin/RatingAdmin.css";
+import ExportFilter from "../../../Component/ExportFilter";
 
 
 export default function RatingAdmin() {
@@ -123,27 +124,10 @@ export default function RatingAdmin() {
       </div>
 
       {/* Export + timeframe controls (right aligned like booking) */}
-      <div className="revenue-page export-wrapper">
-          <div className="export-section">
-                  <Button
-                    type="default"
-                    className="export-btn"
-                    icon={<DownloadOutlined />}
-                   
-                  >
-                    Export
-                  </Button>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    onChange={(dates) => setDateRange(dates || [])}
-                    allowClear
-                    style={{ marginLeft: 10 }}
-                    className="datepiker"
-                  />
-          </div>
-      </div>
+    
 
       <div className="rating-page">
+        <ExportFilter/>
         <Spin spinning={loading}>
           <Table
             columns={columns}

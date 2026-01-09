@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Table, Spin, Alert, Input, Button } from "antd";
 import "../Stylesheets/Services/Sports.css";
 import { getUserTotalBookingTuf } from "../../../../services/admin/ServicesAdmin/endpointApi";
-import { SearchOutlined } from "@ant-design/icons";
+// import { SearchOutlined } from "@ant-design/icons";
+import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import ExportFilter from "../../../Component/ExportFilter";
 
 export default function SportsPage() {
+  //  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -79,6 +82,24 @@ export default function SportsPage() {
           SEARCH
         </Button>
       </div>
+        {/* <div className="export-section bg-white p-3 text-end">
+          <Button
+            type="default"
+            className="export-btn"
+            icon={<DownloadOutlined />}
+
+          >
+            Export
+          </Button>
+          <RangePicker
+            format="YYYY-MM-DD"
+            onChange={(dates) => setDateRange(dates || [])}
+            allowClear
+            style={{ marginLeft: 10 }}
+            className="datepiker"
+          />
+        </div> */}
+        <ExportFilter/>
       {loading ? (
         <div style={{ textAlign: "center", padding: "2rem" }}>
           <Spin size="large" />

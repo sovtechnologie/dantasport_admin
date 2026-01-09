@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Table, Input, Button, Select, Tooltip, Typography, Form,Popconfirm } from 'antd';
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";;
 import "../Stylesheets/Enquires/VendorEnquiry.css";
+import ExportFilter from '../../../Component/ExportFilter';
 
 const { Option } = Select;
 
@@ -133,18 +134,7 @@ export default function VendorEnquiryPage() {
             </div>
 
             <div className="vendor-enquiry-page">
-                <div className="search-export-bar">
-                    <Button type="default" className="export-button" icon={<DownloadOutlined />}>
-                        Export
-                    </Button>
-                    <Select defaultValue="Last Week" className="">
-                        {['Last Week', 'Last Month', 'This Year'].map((v) => (
-                            <Select.Option value={v} key={v}>
-                                {v}
-                            </Select.Option>
-                        ))}
-                    </Select>
-                </div>
+                <ExportFilter/>
 
                 <Table
                     columns={columns}

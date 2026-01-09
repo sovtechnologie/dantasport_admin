@@ -137,7 +137,7 @@ export default function EditVenueInfoForm() {
                             label="Enter Vendor Name"
                             name="vendorName"
                         >
-                            <Input  disabled={true}/>
+                            <Input  disabled={true} style={{height: "56px"}}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -145,7 +145,7 @@ export default function EditVenueInfoForm() {
                             label="Enter Vendor ID"
                             name="vendorId"
                         >
-                            <Input disabled={true} />
+                            <Input disabled={true} style={{height: "56px"}}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -161,7 +161,7 @@ export default function EditVenueInfoForm() {
                             name="venueName"
                             rules={[{ required: true }]}
                         >
-                            <Input />
+                            <Input style={{height: "56px"}} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -175,7 +175,7 @@ export default function EditVenueInfoForm() {
                     </Col>
                 </Row>
 
-                <h3 className="section-title">Location Info</h3>
+                <h3 className="section-title mb-3">Location Info</h3>
 
                 {/* Address + Map/Search */}
                 <Row gutter={16}>
@@ -214,7 +214,7 @@ export default function EditVenueInfoForm() {
                                     {/* <Select placeholder="Select Area">
                                         <Option value="Rk Nagar">Rk Nagar</Option>
                                     </Select> */}
-                                    <Input placeholder="Enter Area" />
+                                    <Input placeholder="Enter Area"style={{height: "50px"}} />
                                 </Form.Item>
                             </Col>
                             {/* city */}
@@ -227,7 +227,7 @@ export default function EditVenueInfoForm() {
                                     {/* <Select placeholder="Select City">
                                         <Option value="Ghazibad">Ghazibad</Option>
                                     </Select> */}
-                                    <Input placeholder="Enter City" />
+                                    <Input placeholder="Enter City" style={{height: "50px"}}/>
                                 </Form.Item>
                             </Col>
                         </Row>
@@ -245,7 +245,7 @@ export default function EditVenueInfoForm() {
                                     {/* <Select placeholder="Select State">
                                         <Option value="U.P">U.P</Option>
                                     </Select> */}
-                                    <Input placeholder='Enter State' />
+                                    <Input placeholder='Enter State'style={{height: "50px"}} />
                                 </Form.Item>
                             </Col>
                             {/* pincode */}
@@ -255,7 +255,7 @@ export default function EditVenueInfoForm() {
                                     name="pincode"
                                     rules={[{ required: true }]}
                                 >
-                                    <Input />
+                                    <Input style={{height: "50px"}}/>
                                 </Form.Item>
                             </Col>
                         </Row>

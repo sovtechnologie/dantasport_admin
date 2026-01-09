@@ -146,4 +146,24 @@ a {
 
   display: none;
 }
+.export-section{
+  margin-bottom: unset;
+}
+.export-section .export-btn {
 
+  /* background-color: #ccc !important; */
+  color: #dcd5d5;
+  box-shadow: none;
+  font-size: 18px;
+  border: 1px solid #d9d9d9 !important;
+}
+
+.export-section .export-btn:hover{
+
+  background-color: white !important;
+  color: #0654b2;
+}
+
+span.ant-select-selection-item {
+  color: #0654b2;
+}

@@ -23,6 +23,9 @@ import CoachDashboard from "../pages/vendor/CoachDashboard.jsx";
 import GymDashboard from "../pages/vendor/GymDashboard.jsx";
 import RunDashboard from "../pages/vendor/RunDashboard.jsx";
 import EventDashboard from "../pages/vendor/EventDashboard.jsx";
+import CoachEquiry from "../features/admin/pages/Enquires/CoachEquiry.jsx";
+import GymEnquiry from "../features/admin/pages/Enquires/GymEnquiry.jsx";
+import EventEnquiry from "../features/admin/pages/Enquires/EventEnquiry.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -314,6 +317,18 @@ const AppRoutes = () => {
             <Route
               path="/admin/enquires/corporate"
               element={<CorporateEnquiry />}
+            />
+              <Route
+              path="/admin/enquires/coach"
+              element={<CoachEquiry/>}
+            />
+               <Route
+              path="/admin/enquires/gym"
+              element={<GymEnquiry/>}
+            />
+                <Route
+              path="/admin/enquires/runEvent"
+              element={<EventEnquiry/>}
             />
             <Route
               path="/admin/ReportsAdmin/bookings"
