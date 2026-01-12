@@ -1,1 +1,0 @@
-import{u as e}from"./useMutation-CNNl5TnA.js";import{c as r}from"./endpointApi-DfRgDSAn.js";const n=()=>e({mutationFn:r,onSuccess:o=>{console.log("Coupon created successfully:",o)},onError:o=>{console.error("Failed to create coupon:",o)}});export{n as u};

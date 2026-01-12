@@ -1,1 +1,0 @@
-import{u as r}from"./useQuery-Beh9q-Hu.js";import{g as t}from"./endpointApi-onWuI-MI.js";const s=(e=1)=>r({queryKey:["sportsByCategory",e],queryFn:()=>t({sportsType:e}),staleTime:5*60*1e3,cacheTime:30*60*1e3,enabled:!!e});export{s as u};

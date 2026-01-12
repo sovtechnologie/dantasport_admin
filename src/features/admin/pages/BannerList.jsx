@@ -9,6 +9,8 @@ import { fetchBannerList } from "../../../services/admin/Banners/endpointApi";
 import dayjs from "dayjs";
 import "./Stylesheets/BannerList.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import SearchBox from "../../Component/SearchBox";
+import ExportFilter from "../../Component/ExportFilter";
 const { Option } = Select;
 
 const Banners = () => {
@@ -123,7 +125,7 @@ const Banners = () => {
 
   return (
     <>
-      <div className="search-bar-container">
+      {/* <div className="search-bar-container">
         <div className="filter-section">
           <div className="filter-item">
             <Input
@@ -138,25 +140,10 @@ const Banners = () => {
         <Button type="primary" className="search-btn">
           SEARCH
         </Button>
-      </div>
+      </div> */}
+      <SearchBox/>
       <div className="bookings-page">
-         <div className="export-section">
-                    <Button
-                      type="default"
-                      className="export-btn"
-                      icon={<DownloadOutlined />}
-        
-                    >
-                      Export
-                    </Button>
-                    <RangePicker
-                      format="YYYY-MM-DD"
-                      onChange={(dates) => setDateRange(dates || [])}
-                      allowClear
-                      style={{ marginLeft: 10 }}
-                      className="datepiker"
-                    />
-                  </div>
+         <ExportFilter/>
         {/* 🔹 Tabs */}
         <div style={{ display: "flex", gap: "20px", marginBottom: "10px" ,marginTop: "40px", justifyContent:"space-between" }}>
           <div
