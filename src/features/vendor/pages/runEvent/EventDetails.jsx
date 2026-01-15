@@ -161,7 +161,7 @@ function EventDetails({ payload, updatePayload }) {
           </Row>
 
           {/* ------------------- FILE UPLOADS ------------------- */}
-          <Row className='other_info'>
+          <Row className='other_info g-3'>
             {/* DESKTOP IMAGE */}
             <Col className='col-6'>
               <Form.Group className="mb-3">
@@ -252,7 +252,7 @@ function EventDetails({ payload, updatePayload }) {
             {/* EVENT CALENDAR */}
             <Col className="col-12">
               <label className="form-label">Event Calendar*</label>
-              <div className="d-flex">
+              <div className="d-flex align-items-center mt-3">
                 <div className="form-check">
                   <input
                     className="form-check-input"
@@ -260,7 +260,7 @@ function EventDetails({ payload, updatePayload }) {
                     checked={payload.eventCalender === 1}
                     onChange={() => updatePayload("eventCalender", 1)}
                   />
-                  <label className="form-check-label">One Time Event</label>
+                  <label className="form-check-label ms-2">One Time Event</label>
                 </div>
 
                 <div className="form-check ms-3">
@@ -270,7 +270,7 @@ function EventDetails({ payload, updatePayload }) {
                     checked={payload.eventCalender === 2}
                     onChange={() => updatePayload("eventCalender", 2)}
                   />
-                  <label className="form-check-label">Repetitive Event</label>
+                  <label className="form-check-label ms-3">Repetitive Event</label>
                 </div>
               </div>
             </Col>

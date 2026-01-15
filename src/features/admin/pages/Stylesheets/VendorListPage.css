@@ -1,13 +1,4 @@
-.search-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #1661D4;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0px 30px 40px -20px rgba(0, 0, 0, 0.25);
-  margin-bottom: 2rem;
-}
+
 
 .filter-box {
   padding: 0.3rem;
@@ -126,3 +117,65 @@
 .status-inactive .ant-select-item-option-selected {
   background-color: #fff1f0 !important;
 }
+
+/* Table Header */
+.vendor-table .ant-table-thead > tr > th {
+  color: #1d5ed8;
+  font-weight: 500;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Table Body */
+.vendor-table .ant-table-tbody > tr > td {
+  padding: 14px 16px;
+}
+
+.vendor-table .ant-table-tbody > tr:hover {
+  background: #fafcff;
+}
+
+/* Vendor Name */
+.vendor-name {
+  font-weight: 500;
+}
+
+/* Location */
+.location-text {
+  color: #334155;
+}
+
+/* Status Pill */
+.status-pill {
+  min-width: 90px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.status-pill.active {
+  background: #e9f7ef;
+  color: #16a34a;
+}
+
+.status-pill.inactive {
+  background: #e8f1ff;
+  color: #2563eb;
+}
+
+.status-pill .ant-select-selector {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Action Dots */
+.action-dots {
+  font-size: 20px;
+  color: #2563eb;
+  letter-spacing: 2px;
+}
+
+/* Header Button */
+.add-vendor-button {
+  border-radius: 8px;
+}
+

@@ -26,6 +26,11 @@ import EventDashboard from "../pages/vendor/EventDashboard.jsx";
 import CoachEquiry from "../features/admin/pages/Enquires/CoachEquiry.jsx";
 import GymEnquiry from "../features/admin/pages/Enquires/GymEnquiry.jsx";
 import EventEnquiry from "../features/admin/pages/Enquires/EventEnquiry.jsx";
+import NotificationsPage from "../features/admin/pages/NotificationsPage.jsx";
+import DisputesPage from "../features/admin/pages/DisputesPage.jsx";
+import PaymentSettlement from "../features/admin/pages/PaymentSettlement.jsx";
+import CoachReports from "../features/admin/pages/CoachReports/CoachReports.jsx";
+import UserReports from "../features/admin/pages/CoachReports/UserReports.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -45,6 +50,8 @@ const VendorServiceSelect = lazy(() =>
 const VendorBookingPage = lazy(() =>
   import("../features/vendor/pages/ReportPage/BookingPage")
 );
+
+
 const VenManBasicInfo = lazy(() =>
   import("../features/vendor/pages/ManagePage/BasicInfo")
 );
@@ -184,6 +191,7 @@ const EventLocation = lazy(() =>
 // Admin routes
 
 // ✅ Admin Gym Reports
+
 const GymBookingAdminPage = lazy(() =>
   import("../features/admin/pages/GymReports/GymBooking.jsx")
 );
@@ -312,6 +320,9 @@ const AppRoutes = () => {
             <Route index element={<AdminDashboard />} />
             {/* Sport/Services */}
             <Route path="/admin/sport-services" element={<AdmSportService />} />
+             <Route path="/admin/notifications" element={<NotificationsPage/>} />
+              <Route path="/admin/disputes" element={<DisputesPage/>} />
+               <Route path="/admin/payment-settlement" element={<PaymentSettlement/>} />
             {/* Enquires */}
             <Route path="/admin/enquires/vendor" element={<VendorEnquiry />} />
             <Route
@@ -416,6 +427,11 @@ const AppRoutes = () => {
             <Route path="/admin/services/hostPlay" element={<HostPlayPage />} />
             <Route path="/admin/services/gym" element={<GymPage />} />
             <Route path="/admin/services/coaching" element={<CoachPage />} />
+
+            {/* Coach reports */}
+            <Route path="/admin/CoachReports/coach-reports" element={<CoachReports/>} />
+             <Route path="/admin/CoachReports/user-reports" element={<UserReports/>} />
+
             {/* Amenties */}
             <Route path="/admin/amenities" element={<Amenities />} />
             {/* Catch-all for admin routes */}

@@ -46,7 +46,7 @@ function CoachAcademyList() {
 
             <Link
               to="/vendor/coach/coaches-academy"
-              className="btn btn-primary d-flex align-items-center gap-2"
+              className="btn btn-primary d-flex align-items-center gap-2 text-white"
             >
               <i className="bi bi-plus-lg"></i>
               Add Services
@@ -102,7 +102,7 @@ function CoachAcademyList() {
 
                   {/* EDIT ICON BUTTON */}
                   <td>
-                    <button className="btn btn-sm btn-primary px-3 d-flex align-items-center gap-1">
+                    <button className=" px-3 d-flex align-items-center gap-1">
                       <i className="bi bi-pencil-square"></i>
                     </button>
                   </td>

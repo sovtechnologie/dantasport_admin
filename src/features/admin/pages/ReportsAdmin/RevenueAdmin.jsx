@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message,DatePicker  } from "antd";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { Table, Spin, message } from "antd";
 import { getVenueRevenueReports } from "../../../../services/admin/ReportsAdmin/endpointApi";
 import "../Stylesheets/ReportsAdmin/RevenueAdmin.css";
 import SearchBox from "../../../Component/SearchBox";
 import ExportFilter from "../../../Component/ExportFilter";
 
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-const statusColors = {
-  Active: "green",
-  Deactive: "red",
+const statusClass = {
+  Completed: "status-completed",
+  Upcoming: "status-upcoming",
+  Canceled: "status-canceled",
+  Active: "status-completed",
+  Deactive: "status-canceled",
 };
 
 export default function RevenueAdmin() {
@@ -23,17 +23,28 @@ export default function RevenueAdmin() {
     try {
       setLoading(true);
       const res = await getVenueRevenueReports();
+
       if (res?.status === 200 && Array.isArray(res.result)) {
         const rawData = res.result.map((item) => ({
           id: item.id,
           txnId: item.transaction_id,
+          vendorName: item.vendorName || "—",
           venueName: item.venue_name,
-          vendorName: item.vendorName,
           customer: item.full_name,
           bookingId: item.booking_id,
+          bookingDate: new Date(item.created_at).toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
           amount: item.amount,
-          bookingDate: new Date(item.created_at).toLocaleDateString(),
-          status: item.status === 1 ? "Active" : "Deactive",
+          status:
+            item.status === 1
+              ? "Completed"
+              : item.status === 2
+              ? "Upcoming"
+              : "Canceled",
         }));
 
         setData(rawData);
@@ -42,7 +53,7 @@ export default function RevenueAdmin() {
         message.error("Failed to fetch revenue reports");
       }
     } catch (err) {
-      message.error("Something went wrong while fetching revenue reports");
+      message.error("Something went wrong");
       console.error(err);
     } finally {
       setLoading(false);
@@ -55,36 +66,41 @@ export default function RevenueAdmin() {
 
   // Search filter
   useEffect(() => {
-    let filtered = data;
-    if (searchText) {
-      const text = searchText.toLowerCase();
-      filtered = filtered.filter(
-        (item) =>
-          (item.txnId && item.txnId.toLowerCase().includes(text)) ||
-          (item.venueName && item.venueName.toLowerCase().includes(text)) ||
-          (item.customer && item.customer.toLowerCase().includes(text)) ||
-          (item.bookingId && String(item.bookingId).includes(text))
-      );
+    if (!searchText) {
+      setFilteredData(data);
+      return;
     }
+
+    const text = searchText.toLowerCase();
+    const filtered = data.filter(
+      (item) =>
+        item.txnId?.toLowerCase().includes(text) ||
+        item.venueName?.toLowerCase().includes(text) ||
+        item.vendorName?.toLowerCase().includes(text) ||
+        item.customer?.toLowerCase().includes(text) ||
+        String(item.bookingId).includes(text)
+    );
+
     setFilteredData(filtered);
   }, [searchText, data]);
 
   const columns = [
-    { title: "Txn ID", dataIndex: "txnId", key: "txnId" },
-    { title: "Venue Name", dataIndex: "venueName", key: "venueName" },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Customer Name & ID", dataIndex: "customer", key: "customer" },
-    { title: "Booking ID", dataIndex: "bookingId", key: "bookingId" },
-    { title: "Date", dataIndex: "bookingDate", key: "bookingDate" },
-    { title: "Amount", dataIndex: "amount", key: "amount" },
+    { title: "Txn. ID", dataIndex: "txnId" },
+    { title: "Vendor Name", dataIndex: "vendorName" },
+    { title: "Venue Name", dataIndex: "venueName" },
+    { title: "Customer Name & Num", dataIndex: "customer" },
+    { title: "Booking ID", dataIndex: "bookingId" },
+    { title: "Date", dataIndex: "bookingDate" },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      render: (val) => <span className="amount-text">₹{val}</span>,
+    },
     {
       title: "Status",
       dataIndex: "status",
-      key: "status",
       render: (val) => (
-        <span
-          style={{ color: statusColors[val] || "black", fontWeight: "bold" }}
-        >
+        <span className={`status-badge ${statusClass[val]}`}>
           {val}
         </span>
       ),
@@ -93,21 +109,18 @@ export default function RevenueAdmin() {
 
   return (
     <>
-      {/* Search bar */}
-      <SearchBox/>
-      {/* Table page */}
+      <SearchBox setSearchText={setSearchText} />
+
       <div className="revenue-page">
-       
-      <ExportFilter/>
+        <ExportFilter />
 
         <Spin spinning={loading}>
           <Table
             columns={columns}
             dataSource={filteredData}
             rowKey="id"
+            pagination={{ pageSize: 7 }}
             className="revenue-table"
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: true }}
           />
         </Spin>
       </div>

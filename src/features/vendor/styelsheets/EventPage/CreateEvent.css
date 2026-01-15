@@ -79,15 +79,16 @@
   height: 56px;
 }
 
-.container_wrapper input::placeholder {
+.container_wrapper .form-control::placeholder {
   color: #beb7b7;
 }
 
 .container_wrapper select {
   color: #beb7b7;
 }
-.other_info input {
-  height: 60px;
+.other_info .form-check-input {
+  height: 25px;
+  width: 25px;
 }
 .upload-box {
   width: 100%;
@@ -157,6 +158,13 @@
   color: #fff !important;
 }
 
+
+.accordion-button:not(.collapsed){
+
+  background-color: #1163C7;
+  color: #fff !important;
+}
+
 /* .container_wrapper .accordion-button::after {
     color: #1163C7 !important;
 } */
@@ -171,6 +179,7 @@
   transform: none !important;
   position: absolute;
   right: 20px;
+  top: 15px;
 }
 
 /* When Accordion is Open → show “–” */

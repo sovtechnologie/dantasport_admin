@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/Siderbarlogo/Danta-sports.png";
-import { LayoutDashboard, BarChart3, Dumbbell, CalendarDays, MessageCircleQuestion, Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
+import { LayoutDashboard,AlertCircle,ClipboardList,IndianRupee, BarChart3, Dumbbell,Bell, CalendarDays, MessageCircleQuestion, Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -58,6 +58,7 @@ const AdminSidebar = () => {
             Sports / Services
           </Link>
         </li>
+       
 
         {/* Reports - Submenu */}
         <li>
@@ -371,6 +372,82 @@ const AdminSidebar = () => {
               </li>
             </ul>
           )}
+        </li>
+
+        {/* Coach reposts */}
+        <li>
+          <button
+            onClick={() => toggleMenu("coachreports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+            <ClipboardList size={18} />
+
+              Coach Reports
+            </div>
+            {/* {openMenus.services ? <ChevronDown size={18} /> : <ChevronRight size={18} />} */}
+          </button>
+          {openMenus.coachreports && (
+            <ul className="ml-8 mt-1 space-y-1">
+              <li>
+                <Link
+                  to="/admin/CoachReports/coach-reports"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  Coach Reports
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/CoachReports/user-reports"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  User Reports
+                </Link>
+              </li>
+
+          
+              
+            </ul>
+          )}
+        </li>
+         <li>
+            <Link
+            to="/admin/notifications "
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sports")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+              }`}
+          >
+            <Bell size={18} />
+           Notifications 
+          </Link>
+        </li>
+         <li>
+            <Link
+            to="/admin/disputes "
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sports")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+              }`}
+          >
+           <AlertCircle size={18} />
+           Disputes
+          </Link>
+          
+        </li>
+         <li>
+            <Link
+            to="/admin/payment-settlement "
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sports")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+              }`}
+          >
+           <IndianRupee size={18} />
+            Payment Settlement
+          </Link>
+          
         </li>
       </ul>
     </aside>

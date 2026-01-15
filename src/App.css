@@ -42,6 +42,7 @@
 } */
 
 
+
 li {
 
   list-style-type: none !important;
@@ -79,21 +80,7 @@ li {
   color: white !important;
 
 }
-/* .custom_nav {
 
-  background-color: #0654b2 !important;
-} */
-
-/* header h3 {
-
-  color: white !important;
-}
-
-.vendor-sidebar {
-
-  background-color: #0654b2;
-  border-radius: 0 0 32px 32px;
-} */
 
 
 
@@ -110,8 +97,9 @@ li {
 }
 .sidebar-menu-item.active {
     background: linear-gradient(135deg, #1163C7, #0ea5e9);
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(17, 99, 199, 0.3);
+    color: #ffffff !important;
+    /* box-shadow: 0 4px 12px rgba(17, 99, 199, 0.3); */
+    padding: 15px;
 }
 
 

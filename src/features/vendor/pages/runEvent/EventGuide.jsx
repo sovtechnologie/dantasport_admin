@@ -96,7 +96,7 @@ function EventGuide({ payload, updatePayload }) {
           </Col>
 
           {/* Pets Friendly */}
-          <Col className="col-6">
+          <Col className="col-12">
             <div className="mb-3">
               <label className="form-label">Pets Friendly*</label>
               <select
@@ -113,12 +113,12 @@ function EventGuide({ payload, updatePayload }) {
             </div>
           </Col>
           {/* Things To Carry */}
-          <Col className="col-12">
+          <Col className="col-6">
             <div className="mb-3">
               <label className="form-label">Things To Carry*</label>
               <textarea
                 className="form-control"
-                rows={3}
+                rows={5}
                 placeholder="e.g., ID card, water bottle, yoga mat"
                 value={payload.thingsToCarry ?? ""}
                 onChange={(e) =>
@@ -129,12 +129,12 @@ function EventGuide({ payload, updatePayload }) {
           </Col>
 
           {/* Instructions */}
-          <Col className="col-12">
+          <Col className="col-6">
             <div className="mb-3">
               <label className="form-label">Instructions*</label>
               <textarea
                 className="form-control"
-                rows={3}
+                rows={5}
                 placeholder="e.g., Reach 15 minutes early, follow safety rules"
                 value={payload.instruction ?? ""}
                 onChange={(e) =>

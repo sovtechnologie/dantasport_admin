@@ -18,6 +18,7 @@ function SearchBox() {
                   type="text"
                   placeholder="Search By anything"
                   className="border-0 shadow-none"
+                  style={{ "--bs-secondary-color": "#1163C7" }}
                 />
               </InputGroup>
             </Col>

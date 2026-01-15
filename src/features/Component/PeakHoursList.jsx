@@ -111,17 +111,17 @@ function PeakHoursList() {
 
         {/* Table Card */}
         <Card className="border-0 shadow-sm mt-4">
-          <Card.Body className="p-0">
+          <Card.Body className="p-3">
             <Table responsive hover className="mb-0 align-middle">
               <thead className="table-white shadow-sm">
                 <tr className="bg-white">
-                  <th style={{ color: "#1163C7" }}>Date</th>
-                  <th style={{ color: "#1163C7" }}>Day & Time Slot</th>
-                  <th style={{ color: "#1163C7" }}>Sport Type</th>
-                  <th style={{ color: "#1163C7" }}>Venue Name</th>
-                  <th style={{ color: "#1163C7" }}>Slots Booked / Total</th>
-                  <th style={{ color: "#1163C7" }}>Utilization %</th>
-                  <th style={{ color: "#1163C7" }}>Revenue</th>
+                  <th style={{ color: "#1163C7", fontWeight:"500" }}>Date</th>
+                  <th style={{ color: "#1163C7", fontWeight:"500" }}>Day & Time Slot</th>
+                  <th style={{ color: "#1163C7", fontWeight:"500" }}>Sport Type</th>
+                  <th style={{ color: "#1163C7", fontWeight:"500" }}>Venue Name</th>
+                  <th style={{ color: "#1163C7", fontWeight:"500" }}>Slots Booked/ Total Slots</th>
+                  <th style={{ color: "#1163C7", fontWeight:"500" }}>Utilization %</th>
+                  <th style={{ color: "#1163C7", fontWeight:"500" }}>Revenue</th>
                 </tr>
               </thead>
               <tbody>

@@ -186,7 +186,7 @@ function CreateEvents() {
             </Accordion>
 
             <div className="d-flex justify-content-center mt-4">
-              <Button variant="primary" onClick={handleCreateEvent}>
+              <Button variant=" p-2 w-25 fs-5 text-white " style={{backgroundColor: "#1163C7"}} onClick={handleCreateEvent}>
                 Create Event
               </Button>
             </div>
