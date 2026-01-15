@@ -1,145 +1,38 @@
-/* 🔹 Search Bar Section */
-.search-bar-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #1661d4;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0px 30px 40px -20px rgba(0, 0, 0, 0.25);
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.filter-section {
-  padding: 0.3rem;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-}
-
-.filter-item {
-  min-width: 40vw;
-  margin-bottom: 0.5rem;
-}
-
-.search-input-field {
-  gap: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 6px;
-}
-
-.search-btn {
-  background-color: #fff;
-  color: #1163c7;
-  font-weight: bold;
-  height: 40px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.search-btn:hover {
-  background-color: #1163c7;
-  color: #fff;
-}
-
-
-.ant-picker-input input::placeholder{
-
-  color: #718096 !important;
-}
-
-.revenue-page table thead.ant-table-thead tr th{
-
-  background-color: #fff !important;
-  color: #1163c7;
-}
-
-:where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before, :where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
-
-  display: none;
-}
-
-/* 🔹 Revenue Page Section */
 .revenue-page {
-  background: #fff;
-  padding: 24px;
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  padding: 20px;
 }
 
-.export-section {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
-  gap: 10px;
-  flex-wrap: wrap;
+.revenue-table .ant-table-thead > tr > th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #2563eb;
 }
 
-.export-btn {
-  background: none;
-  border: 1px solid #ccc;
-  color: #333;
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-weight: 500;
-  transition: all 0.2s;
+.revenue-table .ant-table-tbody > tr > td {
+  padding: 16px;
+  color: #374151;
 }
 
-.export-btn:hover {
-  border-color: #1163c7;
-  color: #1163c7;
+.status-pill {
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
 }
 
-/* 🔹 Table Styling */
-.revenue-table .ant-select {
-  width: 140px;
+.revenue-table .ant-pagination {
+  margin-top: 20px;
+  text-align: right;
 }
 
-.dropdown-status .ant-select-selector,
-.dropdown-substatus .ant-select-selector,
-.dropdown-vendor .ant-select-selector,
-.dropdown-venue .ant-select-selector {
-  height: 32px !important;
-  border-radius: 4px;
+.revenue-table .ant-pagination-item-active {
+  background: #e6f0ff;
+  border-color: transparent;
 }
 
-.revenue-table .ant-table-cell {
-  vertical-align: middle;
-  font-size: 13px;
-  padding: 10px;
-}
-
-/* 🔹 Status Coloring for Revenue */
-.status-active {
-  color: #28a745; /* green */
-  font-weight: bold;
-}
-
-.status-deactive {
-  color: #dc3545; /* red */
-  font-weight: bold;
-}
-
-/* 🔹 Responsive Styling */
-@media (max-width: 768px) {
-  .search-bar-container {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
-  .filter-item {
-    min-width: 100%;
-  }
-
-  .revenue-table .ant-select {
-    width: 100% !important;
-  }
-
-  .export-section {
-    justify-content: flex-start;
-  }
+.revenue-table .ant-pagination-item-active a {
+  color: #2563eb;
 }

@@ -1,109 +1,124 @@
-import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message,DatePicker } from "antd";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { Table, Spin, Select, Pagination } from "antd";
+import { MoreOutlined,QrcodeOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 import "../Stylesheets/GymReports/GymCoupan.css";
-import { getGymCouponReports } from "../../../../services/admin/GymReports/endpointApi";
-import SearchBox from "../../../Component/SearchBox";
 import ExportFilter from "../../../Component/ExportFilter";
+import SearchBox from "../../../Component/SearchBox";
 
-const statusColors = {
-  Active: "green",
-  Deactive: "red",
-};
+const { Option } = Select;
 
 export default function GymCouponAdmin() {
-  const { RangePicker } = DatePicker;
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText] = useState("");
 
-  const fetchCouponReports = async () => {
-    try {
-      setLoading(true);
-      const res = await getGymCouponReports();
-      if (res?.status === 200 && Array.isArray(res.result)) {
-        const rawData = res.result.map((item) => ({
-          id: item.id,
-          couponId: item.coupon_code,
-          couponType: item.coupon_type,
-          vendorName: item.vendor_name || "-",
-          gymName: item.gym_name || "-",
-          date: new Date(item.created_at).toLocaleDateString(),
-          status: item.status === 1 ? "Active" : "Deactive",
-          usage: item.usage_count || 0,
-        }));
+  // Dummy data shaped exactly like UI (replace with API)
+  const recentChecking = Array.from({ length: 5 }).map((_, i) => ({
+    key: i,
+    userName: "Mihir Saha",
+    userId: "#123456",
+    bookingId: "#123456",
+    dateTime: "28 Jan, 12:30 AM",
+    location: "Banner,Pune",
+    checkin: i % 2 === 0 ? "QR" : "Manual",
+  }));
 
-        setData(rawData);
-        setFilteredData(rawData);
-      } else {
-        message.error("Failed to fetch gym coupon reports");
-      }
-    } catch (err) {
-      message.error("Something went wrong while fetching gym coupon reports");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const pendingChecking = Array.from({ length: 8 }).map((_, i) => ({
+    key: i,
+    userName: "Mihir Saha",
+    userId: "#123456",
+    bookingId: "#123456",
+    dateTime: "28 Jan, 12:30 AM",
+    location: "Banner,Pune",
+  }));
 
-  useEffect(() => {
-    fetchCouponReports();
-  }, []);
+  const commonColumns = [
+    { title: "User Name", dataIndex: "userName" },
+    { title: "User ID", dataIndex: "userId" },
+    { title: "Booking ID", dataIndex: "bookingId" },
+    { title: "Date & Time", dataIndex: "dateTime" },
+    { title: "Location", dataIndex: "location" },
+  ];
 
-  useEffect(() => {
-    let filtered = data;
-    if (searchText) {
-      const text = searchText.toLowerCase();
-      filtered = filtered.filter(
-        (item) =>
-          (item.couponId && item.couponId.toLowerCase().includes(text)) ||
-          (item.couponType && item.couponType.toLowerCase().includes(text)) ||
-          (item.vendorName && item.vendorName.toLowerCase().includes(text)) ||
-          (item.gymName && item.gymName.toLowerCase().includes(text))
-      );
-    }
-    setFilteredData(filtered);
-  }, [searchText, data]);
-
-  const columns = [
-    { title: "Coupon ID", dataIndex: "couponId", key: "couponId" },
-    { title: "Coupon Type", dataIndex: "couponType", key: "couponType" },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Gym Name", dataIndex: "gymName", key: "gymName" },
-    { title: "Date", dataIndex: "date", key: "date" },
+  const recentColumns = [
+    ...commonColumns,
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (val) => (
-        <span
-          style={{ color: statusColors[val] || "black", fontWeight: "bold" }}
-        >
-          {val}
-        </span>
+      title: "Check-In",
+      render: (_, record) => (
+        <div className="checkin-success">
+          <span className="green-dot" />
+          {record.checkin}
+        </div>
       ),
     },
-    { title: "Usage", dataIndex: "usage", key: "usage" },
+  ];
+
+  const pendingColumns = [
+    ...commonColumns,
+    {
+      title: "Check-In",
+      render: () => (
+        <div className="checkin-options">
+          <label>
+            <input type="radio" /> QR
+          </label>
+          <label>
+            <input type="radio" /> M Check-In
+          </label>
+        </div>
+      ),
+    },
+    {
+      title: "Action",
+      render: () => <MoreOutlined className="action-dots" />,
+    },
   ];
 
   return (
-    <div className="gym-coupon-admin-container">
-     <SearchBox/>
+    <div>
+      <SearchBox/>
+      
+      <Spin spinning={loading}>
+         <div className="coupon-wrapper">
+          <ExportFilter/>
+             {/* Header */}
+        <div className="top-bar my-3">
+          <Select className="gym-select" defaultValue="Select Gym">
+            <Option>Select Gym</Option>
+            <Option value="1">Fitness Hub</Option>
+          </Select>
 
-      <div className="gym-coupon-page">
-        <ExportFilter/>
-        <Spin spinning={loading}>
-          <Table
-            columns={columns}
-            dataSource={filteredData}
-            rowKey="id"
-            className="gym-coupon-table"
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: true }}
-          />
-        </Spin>
-      </div>
+          <div className="qr-box">
+  <QrcodeOutlined />
+</div>
+        </div>
+
+        {/* Recent Checking */}
+        <h3 className="section-title">Recent Checking</h3>
+        <Table
+          columns={recentColumns}
+          dataSource={recentChecking}
+          pagination={false}
+          className="coupon-table"
+        />
+         </div>
+
+        {/* Pending Checking */}
+        <div className="coupon-wrapper mt-4">
+        <h3 className="section-title">Pending Checking</h3>
+        <Table
+          columns={pendingColumns}
+          dataSource={pendingChecking}
+          pagination={false}
+          className="coupon-table"
+        />
+       
+
+        <div className="pagination-box">
+          <Pagination current={2} total={200} />
+        </div>
+         </div>
+      </Spin>
+      
     </div>
   );
 }

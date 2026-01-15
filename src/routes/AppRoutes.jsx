@@ -31,6 +31,7 @@ import DisputesPage from "../features/admin/pages/DisputesPage.jsx";
 import PaymentSettlement from "../features/admin/pages/PaymentSettlement.jsx";
 import CoachReports from "../features/admin/pages/CoachReports/CoachReports.jsx";
 import UserReports from "../features/admin/pages/CoachReports/UserReports.jsx";
+import GymPeak from "../features/Component/GymPeak.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -204,6 +205,9 @@ const GymRatingAdminPage = lazy(() =>
 const GymCouponAdminPage = lazy(() =>
   import("../features/admin/pages/GymReports/GymCoupan.jsx")
 );
+const GymPeakHours = lazy(() =>
+  import("../features/admin/pages/GymReports/GymPeakHours.jsx")
+);
 
 // ✅ Admin Event Reports
 const BannerList = lazy(() => import("../features/admin/pages/BannerList"));
@@ -365,6 +369,10 @@ const AppRoutes = () => {
             <Route
               path="/admin/GymReports/gym-booking"
               element={<GymBookingAdminPage />}
+            />
+             <Route
+              path="/admin/GymReports/gym-peak-hours"
+              element={<GymPeak/>}
             />
             <Route
               path="/admin/GymReports/gym-revenue"

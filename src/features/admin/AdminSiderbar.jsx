@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/Siderbarlogo/Danta-sports.png";
-import { LayoutDashboard,AlertCircle,ClipboardList,IndianRupee, BarChart3, Dumbbell,Bell, CalendarDays, MessageCircleQuestion, Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
+import { LayoutDashboard,AlertCircle,ClipboardList,IndianRupee, BarChart3, Dumbbell,Bell, CalendarDays, MessageCircleQuestion,LineChart , Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -67,8 +67,8 @@ const AdminSidebar = () => {
             className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
           >
             <div className="flex items-center gap-3">
-              <BarChart3 size={18} />
-              Sport Reports
+              <LineChart size={18} />
+              Turf Reports
             </div>
             {/* {openMenus.reports ? <ChevronDown size={18} /> : <ChevronRight size={18} />} */}
           </button>
@@ -141,6 +141,9 @@ const AdminSidebar = () => {
               </li>
               <li>
                 <Link to="/admin/GymReports/gym-coupon">Gym Coupon</Link>
+              </li>
+               <li>
+                <Link to="/admin/GymReports/gym-peak-hours">Gym Peak Hours</Link>
               </li>
             </ul>
           )}

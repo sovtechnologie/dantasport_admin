@@ -37,7 +37,7 @@ function UserReports() {
 
           <div className="bg-white p-3 mt-3 rounded shadow-sm">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <h5 className="mb-0 " style={{color: "#737791",fontWeight: "500"}}>Coach Reports</h5>
+              <h5 className="mb-0 " style={{color: "#737791",fontWeight: "500"}}>User Reports</h5>
               <ExportFilter />
             </div>
 

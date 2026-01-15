@@ -86,8 +86,9 @@ export default function GymRatingAdminPage() {
 
   const columns = [
     { title: "Customer Name", dataIndex: "customerName", key: "customerName" },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Gym Name", dataIndex: "gymName", key: "gymName" },
+    { title: "Event Name", dataIndex: "eventName", key: "eventName" },
+    { title: "Event ID", dataIndex: "eventID", key: "eventID" },
+    { title: "Event Type", dataIndex: "eventtype", key: "eventtype" },
     {
       title: "Rating",
       dataIndex: "rating",

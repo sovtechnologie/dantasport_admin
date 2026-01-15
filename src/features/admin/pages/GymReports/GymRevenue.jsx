@@ -1,51 +1,60 @@
-import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message,DatePicker  } from "antd";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
-import "../Stylesheets/GymReports/GymRevenue.css";
-import { getGymRevenueReports } from "../../../../services/admin/GymReports/endpointApi";
+import React, { useEffect, useState } from "react";
+import { Table, Spin, message } from "antd";
+import dayjs from "dayjs";
 import SearchBox from "../../../Component/SearchBox";
 import ExportFilter from "../../../Component/ExportFilter";
+import { getGymRevenueReports } from "../../../../services/admin/GymReports/endpointApi";
+import "../Stylesheets/GymReports/GymRevenue.css";
 
-const { Option } = Select;
-
-const statusColors = {
-  Active: "green",
-  Deactive: "red",
+const statusStyle = {
+  Completed: {
+    bg: "#E6F9F0",
+    color: "#22C55E",
+  },
+  Upcoming: {
+    bg: "#EEF4FF",
+    color: "#3B82F6",
+  },
+  Canceled: {
+    bg: "#FFECEC",
+    color: "#EF4444",
+  },
 };
 
 export default function GymRevenueAdminPage() {
-
-   const { RangePicker } = DatePicker;
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchText, setSearchText] = useState("");
+  const [data, setData] = useState([]);
 
   const fetchRevenueReports = async () => {
     try {
       setLoading(true);
       const res = await getGymRevenueReports();
+
       if (res?.status === 200 && Array.isArray(res.result)) {
-        const rawData = res.result.map((item) => ({
+        const formattedData = res.result.map((item) => ({
           id: item.id,
-          txnId: item.transaction_id,
-          gymName: item.gym_name,
-          vendorName: item.vendor_name,
-          customer: item.customer_name,
-          bookingId: item.booking_id,
-          amount: item.amount,
-          bookingDate: new Date(item.created_at).toLocaleDateString(),
-          status: item.status === 1 ? "Active" : "Deactive",
+          txnId: item.transaction_id || "105868743564",
+          gymName: item.gym_name || "Sahil Khan",
+          gymId: `#${item.gym_id || "123456"}`,
+          customer: item.customer_name || "Mihir Saha",
+          bookingId: `#${item.booking_id || "12548796"}`,
+          date: dayjs(item.created_at).format("DD MMM, hh:mm A"),
+          amount: item.amount || 2500,
+          status:
+            item.status === 1
+              ? "Completed"
+              : item.status === 0
+              ? "Upcoming"
+              : "Canceled",
         }));
 
-        setData(rawData);
-        setFilteredData(rawData);
+        setData(formattedData);
       } else {
-        message.error("Failed to fetch gym revenue reports");
+        message.error("Failed to load revenue reports");
       }
-    } catch (err) {
-      message.error("Something went wrong while fetching gym revenue reports");
-      console.error(err);
+    } catch (error) {
+      console.error(error);
+      message.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -55,40 +64,56 @@ export default function GymRevenueAdminPage() {
     fetchRevenueReports();
   }, []);
 
-  // Search filter
-  useEffect(() => {
-    let filtered = data;
-    if (searchText) {
-      const text = searchText.toLowerCase();
-      filtered = filtered.filter(
-        (item) =>
-          (item.txnId && item.txnId.toLowerCase().includes(text)) ||
-          (item.gymName && item.gymName.toLowerCase().includes(text)) ||
-          (item.vendorName && item.vendorName.toLowerCase().includes(text)) ||
-          (item.customer && item.customer.toLowerCase().includes(text)) ||
-          (item.bookingId && String(item.bookingId).includes(text))
-      );
-    }
-    setFilteredData(filtered);
-  }, [searchText, data]);
-
   const columns = [
-    { title: "Txn ID", dataIndex: "txnId", key: "txnId" },
-    { title: "Gym Name", dataIndex: "gymName", key: "gymName" },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Customer", dataIndex: "customer", key: "customer" },
-    { title: "Booking ID", dataIndex: "bookingId", key: "bookingId" },
-    { title: "Date", dataIndex: "bookingDate", key: "bookingDate" },
-    { title: "Amount", dataIndex: "amount", key: "amount" },
+    {
+      title: "Txn. ID",
+      dataIndex: "txnId",
+      key: "txnId",
+    },
+    {
+      title: "Gym Name",
+      dataIndex: "gymName",
+      key: "gymName",
+    },
+    {
+      title: "Gym ID",
+      dataIndex: "gymId",
+      key: "gymId",
+    },
+    {
+      title: "Customer Name",
+      dataIndex: "customer",
+      key: "customer",
+    },
+    {
+      title: "Booking ID",
+      dataIndex: "bookingId",
+      key: "bookingId",
+    },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+      render: (val) => `₹${val}`,
+    },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (val) => (
+      render: (status) => (
         <span
-          style={{ color: statusColors[val] || "black", fontWeight: "bold" }}
+          className="status-pill"
+          style={{
+            backgroundColor: statusStyle[status]?.bg,
+            color: statusStyle[status]?.color,
+          }}
         >
-          {val}
+          {status}
         </span>
       ),
     },
@@ -96,20 +121,21 @@ export default function GymRevenueAdminPage() {
 
   return (
     <>
-     <SearchBox/>
+      <SearchBox />
 
-      {/* Table page */}
       <div className="revenue-page">
-         <ExportFilter/>
+        <ExportFilter />
 
         <Spin spinning={loading}>
           <Table
             columns={columns}
-            dataSource={filteredData}
+            dataSource={data}
             rowKey="id"
+            pagination={{
+              pageSize: 7,
+              showSizeChanger: false,
+            }}
             className="revenue-table"
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: true }}
           />
         </Spin>
       </div>

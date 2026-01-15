@@ -19,13 +19,14 @@ import {
   Legend,
 } from "chart.js";
 import ExportFilter from "./ExportFilter";
+import SearchBox from "./SearchBox";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-function PeakHoursList() {
+function GymPeak() {
   const { RangePicker } = DatePicker;
 
-  /* ---------------- CHART DATA ---------------- */
+  /* ================= CHART DATA ================= */
   const chartData = {
     labels: [
       "12 PM - 1 PM",
@@ -38,7 +39,7 @@ function PeakHoursList() {
     datasets: [
       {
         label: "Utilization %",
-        data: [66, 15, 90, 100, 95, 70],
+        data: [66, 15, 90, 100, 80, 100],
         backgroundColor: "#1565d8",
         borderRadius: 6,
         barThickness: 42,
@@ -72,67 +73,53 @@ function PeakHoursList() {
     },
   };
 
-  /* ---------------- TABLE DATA ---------------- */
+  /* ================= TABLE DATA ================= */
   const tableData = [
     {
-      date: "20-06-2025",
-      slot: "Wed | 12 PM - 1 PM",
-      sport: "Cricket",
-      venue: "Lions Turf",
-      slots: "10 / 15",
-      utilization: "66%",
-      revenue: "7200",
+      bookingId: "BK-10231",
+      redeemPasses: "Gold Pass",
+      gymName: "Lions Turf",
+      userDetails: "Rahul Sharma",
+      purchaseDate: "20-06-2025",
+      amount: "₹1,200",
     },
     {
-      date: "20-06-2025",
-      slot: "Wed | 1 PM - 2 PM",
-      sport: "Cricket",
-      venue: "Lions Turf",
-      slots: "4 / 15",
-      utilization: "15%",
-      revenue: "2200",
+      bookingId: "BK-10232",
+      redeemPasses: "Silver Pass",
+      gymName: "Lions Turf",
+      userDetails: "Amit Verma",
+      purchaseDate: "20-06-2025",
+      amount: "₹800",
     },
     {
-      date: "20-06-2025",
-      slot: "Wed | 3 PM - 4 PM",
-      sport: "Cricket",
-      venue: "Lions Turf",
-      slots: "14 / 15",
-      utilization: "90%",
-      revenue: "9200",
+      bookingId: "BK-10233",
+      redeemPasses: "Platinum Pass",
+      gymName: "Arena Sports",
+      userDetails: "Neha Singh",
+      purchaseDate: "21-06-2025",
+      amount: "₹1,500",
     },
     {
-      date: "20-06-2025",
-      slot: "Wed | 4 PM - 5 PM",
-      sport: "Cricket",
-      venue: "Lions Turf",
-      slots: "15 / 15",
-      utilization: "100%",
-      revenue: "10000",
+      bookingId: "BK-10234",
+      redeemPasses: "Gold Pass",
+      gymName: "Arena Sports",
+      userDetails: "Rohit Mehta",
+      purchaseDate: "21-06-2025",
+      amount: "₹1,200",
     },
     {
-      date: "21-06-2025",
-      slot: "Thu | 5 PM - 6 PM",
-      sport: "Football",
-      venue: "Arena Sports",
-      slots: "12 / 15",
-      utilization: "80%",
-      revenue: "8500",
-    },
-    {
-      date: "21-06-2025",
-      slot: "Thu | 6 PM - 7 PM",
-      sport: "Football",
-      venue: "Arena Sports",
-      slots: "15 / 15",
-      utilization: "100%",
-      revenue: "11000",
+      bookingId: "BK-10235",
+      redeemPasses: "Silver Pass",
+      gymName: "Lions Turf",
+      userDetails: "Pooja Patel",
+      purchaseDate: "22-06-2025",
+      amount: "₹900",
     },
   ];
 
-  /* ---------------- PAGINATION ---------------- */
+  /* ================= PAGINATION ================= */
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const totalPages = Math.ceil(tableData.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -145,8 +132,8 @@ function PeakHoursList() {
   return (
     <section className="py-4">
       <Container>
-
-        {/* ---------------- CHART CARD ---------------- */}
+        <SearchBox/>
+        {/* ================= CHART CARD ================= */}
         <Card className="border-0 shadow-sm">
           <Card.Body>
             <Row className="align-items-center mb-4">
@@ -166,56 +153,44 @@ function PeakHoursList() {
           </Card.Body>
         </Card>
 
-        {/* ---------------- TABLE CARD ---------------- */}
+        {/* ================= TABLE CARD ================= */}
         <Card className="border-0 shadow-sm mt-4">
           <Card.Body className="p-3">
             <Table responsive hover className="mb-0 align-middle">
-              <thead className="table-white">
+              <thead>
                 <tr>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>Date</th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
-                    Day & Time Slot
+                  <th className="text-primary fw-medium">Booking ID</th>
+                  <th className="text-primary fw-medium">Redeem Passes</th>
+                  <th className="text-primary fw-medium">Gym Name</th>
+                  <th className="text-primary fw-medium">User Details</th>
+                  <th className="text-primary fw-medium">
+                    Date of Purchase
                   </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
-                    Sport Type
-                  </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
-                    Venue Name
-                  </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
-                    Slots Booked / Total
-                  </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
-                    Utilization %
-                  </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
-                    Revenue
-                  </th>
+                  <th className="text-primary fw-medium">Amount</th>
                 </tr>
               </thead>
 
               <tbody>
                 {currentRows.map((row, index) => (
                   <tr key={index}>
-                    <td>{row.date}</td>
-                    <td>{row.slot}</td>
-                    <td>{row.sport}</td>
-                    <td>{row.venue}</td>
-                    <td>{row.slots}</td>
-                    <td>{row.utilization}</td>
-                    <td>{row.revenue}</td>
+                    <td>{row.bookingId}</td>
+                    <td>{row.redeemPasses}</td>
+                    <td>{row.gymName}</td>
+                    <td>{row.userDetails}</td>
+                    <td>{row.purchaseDate}</td>
+                    <td className="fw-semibold">{row.amount}</td>
                   </tr>
                 ))}
               </tbody>
             </Table>
 
-            {/* ---------------- PAGINATION FOOTER ---------------- */}
+            {/* ================= PAGINATION ================= */}
             <Row className="align-items-center mt-3">
               <Col md={6} className="d-flex align-items-center gap-2">
                 <span className="text-muted">Show result:</span>
                 <Form.Select
                   size="sm"
-                  style={{ width: "80px" }}
+                  style={{ width: "90px" }}
                   value={rowsPerPage}
                   onChange={(e) => {
                     setRowsPerPage(Number(e.target.value));
@@ -223,7 +198,6 @@ function PeakHoursList() {
                   }}
                 >
                   <option value={5}>5</option>
-                  <option value={7}>7</option>
                   <option value={10}>10</option>
                 </Form.Select>
               </Col>
@@ -232,9 +206,7 @@ function PeakHoursList() {
                 <Pagination className="mb-0">
                   <Pagination.Prev
                     disabled={currentPage === 1}
-                    onClick={() =>
-                      setCurrentPage(currentPage - 1)
-                    }
+                    onClick={() => setCurrentPage(currentPage - 1)}
                   />
 
                   {[...Array(totalPages)].map((_, i) => (
@@ -249,9 +221,7 @@ function PeakHoursList() {
 
                   <Pagination.Next
                     disabled={currentPage === totalPages}
-                    onClick={() =>
-                      setCurrentPage(currentPage + 1)
-                    }
+                    onClick={() => setCurrentPage(currentPage + 1)}
                   />
                 </Pagination>
               </Col>
@@ -263,4 +233,4 @@ function PeakHoursList() {
   );
 }
 
-export default PeakHoursList;
+export default GymPeak;
