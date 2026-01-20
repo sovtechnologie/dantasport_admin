@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/Siderbarlogo/Danta-sports.png";
-import { LayoutDashboard,AlertCircle,ClipboardList,IndianRupee, BarChart3, Dumbbell,Bell, CalendarDays, MessageCircleQuestion,LineChart , Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
+import { LayoutDashboard,Ticket,AlertCircle,ClipboardList,IndianRupee, BarChart3, Dumbbell,Bell, CalendarDays, MessageCircleQuestion,LineChart , Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
+
+
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -49,7 +51,7 @@ const AdminSidebar = () => {
         <li>
           <Link
             to="/admin/sport-services"
-            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sports")
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sport-services")
                 ? "bg-blue-600 text-white"
                 : "hover:bg-gray-100"
               }`}
@@ -70,14 +72,14 @@ const AdminSidebar = () => {
               <LineChart size={18} />
               Turf Reports
             </div>
-            {/* {openMenus.reports ? <ChevronDown size={18} /> : <ChevronRight size={18} />} */}
+            
           </button>
           {openMenus.reports && (
             <ul className="ml-8 mt-1 space-y-1">
               <li>
                 <Link
                   to="/admin/ReportsAdmin/bookings"
-                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 txt"
                 >
                   Bookings
                 </Link>
@@ -111,12 +113,14 @@ const AdminSidebar = () => {
                   to="/admin/reports/peakHours"
                   className="block px-2 py-1 rounded hover:bg-gray-100"
                 >
-                  Peak Hours
+                  Turf Peak Hours
                 </Link>
               </li>
             </ul>
           )}
         </li>
+
+        
         <li>
           <button
             onClick={() => toggleMenu("gymReports")}
@@ -179,6 +183,9 @@ const AdminSidebar = () => {
               <li>
                 <Link to="/admin/EventReports/event-coupon">Event Coupon</Link>
               </li>
+              {/* <li>
+                <Link to="/admin/EventReports/event-peak-hours">Event Peak Hours</Link>
+              </li> */}
             </ul>
           )}
         </li>
@@ -236,89 +243,18 @@ const AdminSidebar = () => {
                   Run/Event enquiry
                 </Link>
               </li>
+              {/* <li>
+                <Link
+                  to="/admin/enquires/enquires-peak-hours"
+                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                >
+                 Enquires Peak Hours
+                </Link>
+              </li> */}
             </ul>
           )}
         </li>
-
-        {/* Vendors */}
-        <li>
-          <Link
-            to="/admin/vendors"
-            className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/vendors")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-              }`}
-          >
-            <Store size={18} />
-
-            Vendors
-          </Link>
-        </li>
-
-        {/* Venues */}
-        <li>
-          <Link
-            to="/admin/venues"
-            className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/venues")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-              }`}
-          >
-            <MapPin size={18} />
-            Venues
-          </Link>
-        </li>
-
-        {/* Amenities */}
-        <li>
-          <Link
-            to="/admin/amenities"
-            className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/amenities")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-              }`}
-          >
-            <ListChecks size={18} />
-
-            Amenities
-          </Link>
-        </li>
-
-        {/* Banners - Submenu */}
-        <li>
-          <button
-            onClick={() => toggleMenu("banners")}
-            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
-          >
-            <div className="flex items-center gap-3">
-              <Image size={18} />
-              Banners
-            </div>
-            {/* {openMenus.banners ? <ChevronDown size={18} /> : <ChevronRight size={18} />} */}
-          </button>
-          {openMenus.banners && (
-            <ul className="ml-8 mt-1 space-y-1">
-              <li>
-                <Link
-                  to="/admin/banners/bannerlist"
-                  className="block px-2 py-1 rounded hover:bg-gray-100"
-                >
-                  By Admin
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/banners/vendor"
-                  className="block px-2 py-1 rounded hover:bg-gray-100"
-                >
-                  By Vendor
-                </Link>
-              </li>
-            </ul>
-          )}
-        </li>
-
-        {/* Services - Submenu */}
+         {/* Services - Submenu */}
         <li>
           <button
             onClick={() => toggleMenu("services")}
@@ -414,10 +350,111 @@ const AdminSidebar = () => {
             </ul>
           )}
         </li>
+
+
+
+
+         {/* Banners - Submenu */}
+        <li>
+          <button
+            onClick={() => toggleMenu("banners")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              <Image size={18} />
+              Banners
+            </div>
+            {/* {openMenus.banners ? <ChevronDown size={18} /> : <ChevronRight size={18} />} */}
+          </button>
+          {openMenus.banners && (
+            <ul className="ml-8 mt-1 space-y-1">
+              <li>
+                <Link
+                  to="/admin/banners/bannerlist"
+                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                >
+                  By Admin
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/banners/vendor"
+                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                >
+                  By Vendor
+                </Link>
+              </li>
+            </ul>
+          )}
+        </li>
+
+
+
+
+        {/* Vendors */}
+        <li>
+          <Link
+            to="/admin/vendors"
+            className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/vendors")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+              }`}
+          >
+            <Store size={18} />
+
+            Vendors
+          </Link>
+        </li>
+
+        {/* Venues */}
+        <li>
+          <Link
+            to="/admin/venues"
+            className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/venues")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+              }`}
+          >
+            <MapPin size={18} />
+            Venues
+          </Link>
+        </li>
+
+        {/* Amenities */}
+        <li>
+          <Link
+            to="/admin/amenities"
+            className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/amenities")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+              }`}
+          >
+            <ListChecks size={18} />
+
+            Amenities
+          </Link>
+        </li>
+
+         <li>
+          <Link
+            to="/admin/admin-coupon"
+            className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/coupon")
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-100"
+              }`}
+          >
+            <Ticket size={18} />
+
+            Coupon
+          </Link>
+        </li>
+       
+       
+        {/*  Notifications  */}
          <li>
             <Link
             to="/admin/notifications "
-            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sports")
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/notifications")
                 ? "bg-blue-600 text-white"
                 : "hover:bg-gray-100"
               }`}
@@ -429,7 +466,7 @@ const AdminSidebar = () => {
          <li>
             <Link
             to="/admin/disputes "
-            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sports")
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/disputes")
                 ? "bg-blue-600 text-white"
                 : "hover:bg-gray-100"
               }`}
@@ -441,8 +478,8 @@ const AdminSidebar = () => {
         </li>
          <li>
             <Link
-            to="/admin/payment-settlement "
-            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sports")
+            to="/admin/payment-settlement"
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/payment-settlement")
                 ? "bg-blue-600 text-white"
                 : "hover:bg-gray-100"
               }`}

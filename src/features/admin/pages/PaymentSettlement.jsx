@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Table } from "react-bootstrap";
+
 import SearchBox from "../../Component/SearchBox";
 import ExportFilter from "../../Component/ExportFilter";
+import FilterDropDawn from "../../Component/FilterDropDawn";
+import PayOutModal from "../../Component/PayOutModal";
+import TotalListingPrice from "../../Component/TotalListingPrice";
 
 function PaymentSettlement() {
+  const [showPayout, setShowPayout] = useState(false);
+
   const paymentData = [
     {
       bookingId: "BK-1001",
-      bookingDate: "12 Jan 2026, 10:30 AM",
+      vendorName: "Play Arena Pvt Ltd",
+      venueName: "Green Turf Ground",
+      bookingDate: "12 Jan 2026",
+      bookingTime: "10:30 AM",
       userName: "Rahul Sharma",
       phoneNumber: "8429813814",
       grossValue: "5,000",
@@ -19,11 +28,15 @@ function PaymentSettlement() {
       utr: "UTR123456789",
       payoutDate: "15 Jan 2026",
       status: "Paid",
-      remarks: "-"
+      remarks: "-",
+      PaymentStatements: "Null",
     },
     {
       bookingId: "BK-1002",
-      bookingDate: "13 Jan 2026, 02:15 PM",
+      vendorName: "Sports Hub India",
+      venueName: "Elite Football Turf",
+      bookingDate: "13 Jan 2026",
+      bookingTime: "02:15 PM",
       userName: "Amit Verma",
       phoneNumber: "9123456789",
       grossValue: "3,000",
@@ -32,104 +45,162 @@ function PaymentSettlement() {
       tds: "30",
       gst: "54",
       netAmount: "2,516",
-      utr: "UTR987654321",
-      payoutDate: "16 Jan 2026",
+      utr: "-",
+      payoutDate: "-",
       status: "Pending",
-      remarks: "Processing"
-    }
+      remarks: "Processing",
+      PaymentStatements: "file",
+    },
   ];
 
   return (
-    <>
-      <section className="py-4">
-        <Container>
-          <SearchBox />
+    <section className="py-4">
+      <Container>
+        <SearchBox />
 
-          <div className="shadow-sm">
+        <div>
+          <TotalListingPrice />
+        </div>
+
+        <div className="bg-white shadow-sm rounded p-3">
+          {/* Header */}
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <FilterDropDawn />
+            <button
+              className="btn btn-outline-primary"
+              onClick={() => setShowPayout(true)}
+            >
+              Payout
+            </button>
             <ExportFilter />
           </div>
 
-          <div
-            className="bg-white p-3 mt-2 shadow-sm"
-            style={{ maxWidth: "1200px", margin: "0 auto" }}
-          >
-            <div style={{ overflowX: "auto" }}>
-              <Table
-                bordered
-                hover
-                className="align-middle text-center"
-                style={{ minWidth: "1400px" }}
-              >
-                <thead>
-                  <tr style={{ backgroundColor: "#F5F9FF", borderTop: "none" }}>
-                    <th style={thStyle}>Booking <br /> ID</th>
-                    <th style={thStyle}>Booking <br /> Date & Time</th>
-                    <th style={thStyle}>User Name <br /> Contact No</th>
-                    <th style={thStyle}>Gross Order Value <br /> (₹)</th>
-                    <th style={thStyle}>Danta-funded Discount <br /> (₹)</th>
-                    <th style={thStyle}>Venue-funded Discount <br /> (₹)</th>
-                    <th style={thStyle}>TDS <br /> (₹)</th>
-                    <th style={thStyle}>GST / Service Tax <br /> (₹)</th>
-                    <th style={thStyle}>Net Payable Amount <br /> (₹)</th>
-                    <th style={thStyle}>UTR <br /> Transaction Reference</th>
-                    <th style={thStyle}>Payout <br /> Date</th>
-                    <th style={thStyle}>Payment <br /> Status</th>
-                    <th style={thStyle}>Remarks</th>
-                  </tr>
-                </thead>
+          {/* Table */}
+          <div style={{ overflowX: "auto", maxWidth: "1100px" }}>
 
-                <tbody>
-                  {paymentData.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.bookingId}</td>
+            <Table
+              bordered
+              hover
+              className="align-middle text-center"
+              style={{ width: "100%", margin: "0 auto" }}
+            >
+              <thead>
+                <tr style={{ backgroundColor: "#F5F9FF" }}>
+                  <th style={thStyle}>Select</th>
+                  <th style={thStyle}>Booking ID</th>
+                  <th style={thStyle}>Vendor Name</th>
+                  <th style={thStyle}>Venue Name</th>
+                  <th style={thStyle}>
+                    Booking <br /> Date & Time
+                  </th>
+                  <th style={thStyle}>
+                    Customer Details <br /> Contact No
+                  </th>
+                  <th style={thStyle}>
+                    Listing <br /> Price (₹)
+                  </th>
+                  <th style={thStyle}>
+                    Danta Discount <br /> (₹)
+                  </th>
+                  <th style={thStyle}>
+                    Venue Discount <br /> (₹)
+                  </th>
+                  <th style={thStyle}>
+                    Taxable  <br /> Value (₹)
+                  </th>
+                  <th style={thStyle}>
+                    GST / Tax <br /> (₹)
+                  </th>
+                  <th style={thStyle}>
+                    TDS <br /> (₹)
+                  </th>
+                  <th style={thStyle}>
+                    Net Payable <br /> Amount (₹)
+                  </th>
+                  <th style={thStyle}>
+                    UTR <br /> Reference
+                  </th>
+                  <th style={thStyle}>Payout Date</th>
+                  <th style={thStyle}>
+                    Payment <br /> Status
+                  </th>
+                  <th style={thStyle}>Remarks</th>
+                  <th style={thStyle}>Payment Statements</th>
+                </tr>
+              </thead>
 
-                      {/* Booking Date & Time (new line using <small>) */}
-                      <td>
-                        <div>{item.bookingDate.split(",")[0]}</div>
-                        <small className="text-muted">
-                          {item.bookingDate.split(",")[1]?.trim()}
-                        </small>
-                      </td>
+              <tbody>
+                {paymentData.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <input type="checkbox" className="form-check-input" />
+                    </td>
 
-                      {/* User Name & Phone */}
-                      <td>
-                        <div>{item.userName}</div>
-                        <small className="text-muted">
-                          {item.phoneNumber}
-                        </small>
-                      </td>
+                    <td>{item.bookingId}</td>
+                    <td>{item.vendorName}</td>
+                    <td>{item.venueName}</td>
 
-                      <td>{item.grossValue}</td>
-                      <td>{item.dantaDiscount}</td>
-                      <td>{item.venueDiscount}</td>
-                      <td>{item.tds}</td>
-                      <td>{item.gst}</td>
-                      <td>{item.netAmount}</td>
-                      <td>{item.utr}</td>
-                      <td>{item.payoutDate}</td>
+                    <td>
+                      <div>{item.bookingDate}</div>
+                      <small className="text-muted">
+                        {item.bookingTime}
+                      </small>
+                    </td>
 
-                      <td>
-                        <span
-                          className={`badge ${
-                            item.status === "Paid"
-                              ? "bg-success"
-                              : "bg-warning text-dark"
+                    <td>
+                      <div>{item.userName}</div>
+                      <small className="text-muted">
+                        {item.phoneNumber}
+                      </small>
+                    </td>
+
+                    <td>{item.grossValue}</td>
+                    <td>{item.dantaDiscount}</td>
+                    <td>{item.venueDiscount}</td>
+                    <td>{item.grossValue}</td>
+                    <td>{item.gst}</td>
+                    <td>{item.tds}</td>
+                    <td className="fw-semibold">{item.netAmount}</td>
+                    <td>{item.utr}</td>
+                    <td>{item.payoutDate}</td>
+
+                    <td>
+                      <span
+                        className={`badge ${item.status === "Paid"
+                            ? "bg-success"
+                            : "bg-warning text-dark"
                           }`}
-                        >
-                          {item.status}
-                        </span>
-                      </td>
+                      >
+                        {item.status}
+                      </span>
+                    </td>
 
-                      <td>{item.remarks}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
+                    <td>{item.remarks}</td>
+
+                    <td>
+                      {item.PaymentStatements ? (
+                        <button className="btn btn-sm btn-outline-primary">
+                          View
+                        </button>
+                      ) : (
+                        <span className="text-muted">-</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </div>
-        </Container>
-      </section>
-    </>
+        </div>
+      </Container>
+
+      {/* Payout Modal */}
+      <PayOutModal
+        show={showPayout}
+        onClose={() => setShowPayout(false)}
+        paymentData={paymentData}
+      />
+    </section>
   );
 }
 
@@ -139,7 +210,8 @@ const thStyle = {
   fontSize: "14px",
   fontWeight: "500",
   whiteSpace: "nowrap",
-  padding: "20px"
+  padding: "16px",
+  verticalAlign: "middle",
 };
 
 export default PaymentSettlement;

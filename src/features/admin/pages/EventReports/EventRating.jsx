@@ -89,19 +89,50 @@ export default function EventRatingAdminPage() {
     );
   };
 
-  const columns = [
-    { title: "Booking ID", dataIndex: "bookingId", key: "bookingId" },
-    { title: "Customer Name", dataIndex: "customerName", key: "customerName" },
+ const columns = [
+  {
+    title: "Customer Name",
+    dataIndex: "customerName",
+    key: "customerName",
+    render: (text) => <span className="text-dark fw-500">{text}</span>,
+  },
+  {
+    title: "Venue Name",
+    dataIndex: "eventName",
+    key: "eventName",
+  },
+  {
+    title: "Venue ID",
+    dataIndex: "bookingId",
+    key: "bookingId",
+    render: (id) => <span className="text-muted">#{id}</span>,
+  },
+  {
+    title: "Sport",
+    key: "sport",
+    render: () => <span>Cricket</span>, // UI-only static (as shown in image)
+  },
+  {
+    title: "Rating",
+    dataIndex: "rating",
+    key: "rating",
+    render: (rating) => (
+      <div className="rating-ui">
+        <span className="star">★</span>
+        <span className="rating-value">{rating.toFixed(1)}</span>
+      </div>
+    ),
+  },
+  {
+    title: "Reviews",
+    dataIndex: "review",
+    key: "review",
+    render: (text) => (
+      <span className="review-text">{text}</span>
+    ),
+  },
+];
 
-    {
-      title: "Rating",
-      dataIndex: "rating",
-      key: "rating",
-      render: (val) => renderStars(val),
-    },
-    { title: "Review", dataIndex: "review", key: "review" },
-    { title: "Date", dataIndex: "date", key: "date" },
-  ];
 
   return (
     <div className="rating-admin-container">

@@ -1,41 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message,DatePicker } from "antd";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { Table, Select, Spin, message } from "antd";
+import dayjs from "dayjs";
 
 import "../Stylesheets/EventReports/EventBooking.css";
 import { fetchVendorList } from "../../../../services/admin/CreateVendor/endpointApi";
 import { getEventBookingReports } from "../../../../services/admin/EventReports/endpointApi";
+
 import SearchBox from "../../../Component/SearchBox";
 import ExportFilter from "../../../Component/ExportFilter";
 
 const { Option } = Select;
 
-const statusColors = {
-  Upcoming: "blue",
-  Complete: "green",
-  Cancel: "red",
+/* ---------------- HELPERS ---------------- */
+
+const formatDateTime = (date) =>
+  date ? dayjs(date).format("DD MMM, hh:mm A") : "-";
+
+const maskMobile = (mobile) =>
+  mobile ? mobile.slice(0, 6) + "****" : "";
+
+const statusMap = {
+  0: "Upcoming",
+  1: "Completed",
+  2: "Canceled",
 };
 
-const statusLabels = {
-  0: "Upcoming",
-  1: "Complete",
-  2: "Cancel",
-};
+/* ---------------- COMPONENT ---------------- */
 
 export default function EventBookingAdminPage() {
-
-
-    const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const [vendors, setVendors] = useState([]);
   const [events, setEvents] = useState([]);
+
   const [selectedVendor, setSelectedVendor] = useState("All");
   const [selectedEvent, setSelectedEvent] = useState("All");
   const [searchText, setSearchText] = useState("");
 
-  // Vendors fetch
+  /* ---------------- FETCH VENDORS ---------------- */
+
   const fetchVendors = async () => {
     try {
       const res = await fetchVendorList();
@@ -54,142 +59,156 @@ export default function EventBookingAdminPage() {
     }
   };
 
-  // Event bookings fetch
+  /* ---------------- FETCH REPORTS ---------------- */
+
   const fetchReports = async (vendorList) => {
     try {
       setLoading(true);
       const res = await getEventBookingReports();
+
       if (res?.status === 200 && Array.isArray(res.result)) {
-        const rawData = res.result.map((item) => {
+        const mappedData = res.result.map((item) => {
           const vendor = vendorList.find(
             (v) => Number(v.id) === Number(item.vendorId)
           );
+
           return {
-            id: item.eventId + "-" + item.vendorId,
+            key: item.booking_id,
+            bookingId: `#${item.booking_id}`,
             vendorId: item.vendorId,
             vendorName: vendor ? vendor.name : item.full_name,
             eventId: item.eventId,
             eventName: item.event_name,
-            customer: item.full_name,
-            bookingDate: new Date(item.created_at).toLocaleDateString(),
-            status: statusLabels[item.status] || "Unknown",
+            eventType: item.event_type,
+            customerName: item.full_name,
+            customerMobile: maskMobile(item.mobile),
+            bookingDate: formatDateTime(item.created_at),
+            eventDate: formatDateTime(item.event_date),
+            duration: `${item.duration || 2} hours`,
+            status: statusMap[item.status],
           };
         });
-        setData(rawData);
-        setFilteredData(rawData);
-        const uniqueEvents = [...new Set(rawData.map((d) => d.eventName))];
+
+        setData(mappedData);
+        setFilteredData(mappedData);
+
+        const uniqueEvents = [
+          ...new Set(mappedData.map((d) => d.eventName)),
+        ];
         setEvents(uniqueEvents);
       } else {
-        message.error("Failed to fetch event booking reports");
+        message.error("Failed to fetch booking reports");
       }
     } catch (err) {
-      message.error("Something went wrong while fetching reports");
+      message.error("Something went wrong");
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
+  /* ---------------- EFFECTS ---------------- */
+
   useEffect(() => {
     fetchVendors().then((vendorList) => fetchReports(vendorList));
   }, []);
 
   useEffect(() => {
-    let filtered = data;
+    let filtered = [...data];
+
     if (selectedVendor !== "All") {
       filtered = filtered.filter(
-        (item) => item.vendorId === Number(selectedVendor)
+        (item) => Number(item.vendorId) === Number(selectedVendor)
       );
     }
+
     if (selectedEvent !== "All") {
       filtered = filtered.filter(
-        (item) => item.eventId === Number(selectedEvent)
+        (item) => item.eventName === selectedEvent
       );
     }
+
     if (searchText) {
-      const text = searchText.toLowerCase();
+      const txt = searchText.toLowerCase();
       filtered = filtered.filter(
         (item) =>
-          (item.customer && item.customer.toLowerCase().includes(text)) ||
-          (item.eventName && item.eventName.toLowerCase().includes(text)) ||
-          (item.vendorName && item.vendorName.toLowerCase().includes(text))
+          item.customerName.toLowerCase().includes(txt) ||
+          item.eventName.toLowerCase().includes(txt) ||
+          item.vendorName.toLowerCase().includes(txt)
       );
     }
+
     setFilteredData(filtered);
   }, [selectedVendor, selectedEvent, searchText, data]);
 
+  /* ---------------- TABLE COLUMNS ---------------- */
+
   const columns = [
     {
-      title: (
-        <Select
-          value={selectedVendor}
-          onChange={setSelectedVendor}
-          className="dropdown-vendor"
-          showSearch
-          placeholder="Select Vendor"
-          optionFilterProp="children"
-        >
-          <Option value="All">All Vendors</Option>
-          {vendors.map((v) => (
-            <Option key={v.id} value={v.id}>
-              {v.name}
-            </Option>
-          ))}
-        </Select>
-      ),
-      dataIndex: "vendorName",
-      key: "vendorName",
+      title: "Booking ID",
+      dataIndex: "bookingId",
+      render: (val) => <strong className="fw-light">{val}</strong>,
     },
     {
-      title: (
-        <Select
-          value={selectedEvent}
-          onChange={setSelectedEvent}
-          className="dropdown-event"
-          showSearch
-          placeholder="Select Event"
-          optionFilterProp="children"
-        >
-          <Option value="All">All Events</Option>
-          {events.map((e, idx) => (
-            <Option key={idx} value={idx + 1}>
-              {e}
-            </Option>
-          ))}
-        </Select>
-      ),
+      title: "Event Name",
       dataIndex: "eventName",
-      key: "eventName",
     },
-    { title: "Customer", dataIndex: "customer", key: "customer" },
-    { title: "Booking Date", dataIndex: "bookingDate", key: "bookingDate" },
+    {
+      title: "Event Type",
+      dataIndex: "eventType",
+    },
+    {
+      title: "Customer Name",
+      render: (_, row) => (
+        <div>
+          <div className="customer-name">{row.customerName}</div>
+          <div className="customer-mobile">{row.customerMobile}</div>
+        </div>
+      ),
+    },
+    {
+      title: "Booking Date",
+      dataIndex: "bookingDate",
+    },
+    {
+      title: "Event Date",
+      dataIndex: "eventDate",
+    },
+    {
+      title: "Duration",
+      dataIndex: "duration",
+    },
     {
       title: "Status",
       dataIndex: "status",
-      key: "status",
-      render: (val) => (
-        <span
-          style={{ color: statusColors[val] || "black", fontWeight: "bold" }}
-        >
-          {val}
-        </span>
-      ),
+      render: (status) => {
+        let cls = "";
+        if (status === "Completed") cls = "status-completed";
+        if (status === "Upcoming") cls = "status-upcoming";
+        if (status === "Canceled") cls = "status-canceled";
+
+        return (
+          <span className={`status-pill ${cls}`}>
+            {status}
+          </span>
+        );
+      },
     },
   ];
 
+  /* ---------------- RENDER ---------------- */
+
   return (
     <>
-    <SearchBox/>
+      <SearchBox onSearch={setSearchText} />
 
       <div className="bookings-page">
-        <ExportFilter/>
+        <ExportFilter />
 
         <Spin spinning={loading}>
           <Table
             columns={columns}
             dataSource={filteredData}
-            rowKey="id"
-            className="bookings-table"
             pagination={{ pageSize: 10 }}
             scroll={{ x: true }}
           />

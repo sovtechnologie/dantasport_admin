@@ -54,7 +54,7 @@ function CoachReports() {
                       Diet Plans Shared
                     </th>
                     <th style={thStyle} className="text-center">
-                      Active Plans Shared
+                      Activity Plans Shared
                     </th>
                     <th style={thStyle} className="text-center">
                       Inquiries Received

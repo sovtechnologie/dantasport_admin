@@ -107,7 +107,7 @@ const SportsServicePage = () => {
             ),
         },
         {
-            title: 'Sports',
+            title: 'Truf',
             dataIndex: 'sports',
             render: (val, record) => (
                 <Popconfirm

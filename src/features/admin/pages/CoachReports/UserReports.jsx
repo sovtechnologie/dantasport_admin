@@ -51,7 +51,7 @@ function UserReports() {
                     <th style={thStyle}>Category</th>
                     <th style={thStyle}>User Name & Number</th>
                     <th style={thStyle} className="text-center">Diet Plan</th>
-                    <th style={thStyle} className="text-center">Active Plan</th>
+                    <th style={thStyle} className="text-center">Activity Plan</th>
                     <th style={thStyle} className="text-center">
                       Classes Attended
                     </th>

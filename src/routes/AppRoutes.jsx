@@ -32,6 +32,12 @@ import PaymentSettlement from "../features/admin/pages/PaymentSettlement.jsx";
 import CoachReports from "../features/admin/pages/CoachReports/CoachReports.jsx";
 import UserReports from "../features/admin/pages/CoachReports/UserReports.jsx";
 import GymPeak from "../features/Component/GymPeak.jsx";
+import EnquiresPeakHours from "../features/admin/pages/Enquires/EnquiresPeakHours.jsx";
+import EventPeakHours from "../features/admin/pages/EventReports/EventPeakHours.jsx";
+import CouponAdmin from "../features/admin/pages/ReportsAdmin/CoupanAdmin";
+import Coupon from "../features/admin/pages/Coupon.jsx";
+import AddCoupon from "../features/vendor/pages/ManagePage/addCoupan";
+import AdminAddCoupon from "../features/admin/pages/AdminAddCoupon.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -257,6 +263,7 @@ const CorporateEnquiry = lazy(() =>
   import("../features/admin/pages/Enquires/CorporateEnquiry")
 );
 
+
 const VendorListPage = lazy(() =>
   import("../features/admin/pages/VendorListPage")
 );
@@ -291,6 +298,7 @@ const CoachPage = lazy(() =>
   import("../features/admin/pages/Services/Coaching")
 );
 const Amenities = lazy(() => import("../features/admin/pages/AmenitiesPage"));
+const AdminCoupon = lazy(() => import("../features/admin/pages/Coupon.jsx"));
 
 const AppRoutes = () => {
   const roleNum = useSelector((state) => state.auth.user?.role);
@@ -336,6 +344,10 @@ const AppRoutes = () => {
               <Route
               path="/admin/enquires/coach"
               element={<CoachEquiry/>}
+            />
+               <Route
+              path="/admin/enquires/enquires-peak-hours"
+              element={<EnquiresPeakHours/>}
             />
                <Route
               path="/admin/enquires/gym"
@@ -404,6 +416,10 @@ const AppRoutes = () => {
               path="/admin/EventReports/event-coupon"
               element={<EventCouponAdminPage />}
             />
+             {/* <Route
+              path="/admin/EventReports/event-peak-hours"
+              element={<EventPeakHours/>}
+            /> */}
 
             {/* Vendor */}
             <Route path="/admin/vendors" element={<VendorListPage />} />
@@ -442,6 +458,8 @@ const AppRoutes = () => {
 
             {/* Amenties */}
             <Route path="/admin/amenities" element={<Amenities />} />
+            <Route path="/admin/admin-coupon" element={<Coupon/>} />
+            <Route path="/admin/admin-add-coupon" element={<AdminAddCoupon/>} />
             {/* Catch-all for admin routes */}
             <Route path="*" element={<AdminNotFound />} />
           </Route>

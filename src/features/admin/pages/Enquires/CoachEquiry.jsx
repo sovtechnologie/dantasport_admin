@@ -23,7 +23,7 @@ const columns = [
     key: "phone",
   },
   {
-    title: "Email",
+    title: "Email ID",
     dataIndex: "email",
     key: "email",
   },
