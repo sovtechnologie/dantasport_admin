@@ -101,6 +101,7 @@ export default function AddBannerForm() {
                   vendorId: selectedVendor?.id || "",
                 });
               }}
+              style={{height: "56px"}}
             >
               {vendorlist?.result?.map((vendor) => (
                 <Option key={vendor.id} value={vendor.id}>
@@ -115,6 +116,7 @@ export default function AddBannerForm() {
             rules={[{ required: true }]}
           >
             <Select
+            style={{height: "56px"}}
               showSearch
               placeholder="Select a venueId"
               optionFilterProp="children"
@@ -152,14 +154,14 @@ export default function AddBannerForm() {
             name="startDate"
             rules={[{ required: true }]}
           >
-            <DatePicker style={{ width: "100%" }} />
+            <DatePicker style={{ width: "100%", height: "56px" }}  />
           </Form.Item>
           <Form.Item
             label="End Date"
             name="endDate"
             rules={[{ required: true }]}
           >
-            <DatePicker style={{ width: "100%" }} />
+            <DatePicker style={{ width: "100%" , height: "56px"}} />
           </Form.Item>
         </div>
 
@@ -169,20 +171,20 @@ export default function AddBannerForm() {
             name="radius"
             rules={[{ required: true }]}
           >
-            <Input type="number" placeholder="Enter Radius in KM" />
+            <Input type="number" placeholder="Enter Radius in KM" style={{height: "56px"}}/>
           </Form.Item>
           <Form.Item
             label="Enter Page Link To Redirect"
             name="pageLink"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Enter URL" />
+            <Input placeholder="Enter URL"  style={{height: "56px"}}/>
           </Form.Item>
         </div>
 
         <div className="form-row">
-          <Form.Item label="Pages" name="page" rules={[{ required: true }]}>
-            <Select placeholder="Select Pages" mode="multiple" allowClear>
+          <Form.Item label="Pages" name="page" rules={[{ required: true }]} >
+            <Select placeholder="Select Pages" mode="multiple" allowClear style={{height: "56px"}}>
               <Option value={1}>Home</Option>
               <Option value={2}>List Page</Option>
               <Option value={3}>VenueDetails</Option>
@@ -197,7 +199,7 @@ export default function AddBannerForm() {
             name="position"
             rules={[{ required: true }]}
           >
-            <Select placeholder="Select Banner Position">
+            <Select placeholder="Select Banner Position" style={{height: "56px"}}>
               <Option value="1">1</Option>
               <Option value="2">2</Option>
               <Option value="3">3</Option>
@@ -263,7 +265,7 @@ export default function AddBannerForm() {
             htmlType="submit"
             className="submit-btn"
           >
-            UPDATE VENDOR BANNER
+            ADD VENDOR BANNER
           </Button>
         </Form.Item>
       </Form>

@@ -47,13 +47,13 @@
   gap: 10px;
   align-items: center;
 }
-.export-btn {
+/* .export-btn {
   background: none;
   border: 1px solid #ccc;
   color: #333;
   padding: 6px 10px;
   border-radius: 6px;
-}
+} */
 
 .rating-page table thead.ant-table-thead tr th{
 
@@ -65,7 +65,7 @@
 /* Page wrapper */
 .rating-page {
   background: #fff;
-  padding: 18px;
+  padding: 20px;
   border-radius: 12px;
 }
 

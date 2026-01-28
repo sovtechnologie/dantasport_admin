@@ -42,6 +42,7 @@
 } */
 
 
+
 li {
 
   list-style-type: none !important;
@@ -79,21 +80,7 @@ li {
   color: white !important;
 
 }
-/* .custom_nav {
 
-  background-color: #0654b2 !important;
-} */
-
-/* header h3 {
-
-  color: white !important;
-}
-
-.vendor-sidebar {
-
-  background-color: #0654b2;
-  border-radius: 0 0 32px 32px;
-} */
 
 
 
@@ -110,8 +97,9 @@ li {
 }
 .sidebar-menu-item.active {
     background: linear-gradient(135deg, #1163C7, #0ea5e9);
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(17, 99, 199, 0.3);
+    color: #ffffff !important;
+    /* box-shadow: 0 4px 12px rgba(17, 99, 199, 0.3); */
+    padding: 15px;
 }
 
 
@@ -133,3 +121,38 @@ a {
   border: none !important;
 }
 
+
+ table thead.ant-table-thead tr th{
+
+  background-color: #fff !important;
+  color: #1163c7 !important;
+}
+
+
+
+:where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before, :where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+
+  display: none;
+}
+/* .export-section{
+  margin-bottom: unset !important;
+  padding: 20px 0 !important;
+} */
+.export-section .export-btn {
+
+  /* background-color: #ccc !important; */
+  color: #dcd5d5;
+  box-shadow: none;
+  font-size: 18px;
+  border: 1px solid #d9d9d9 !important;
+}
+
+.export-section .export-btn:hover{
+
+  background-color: white !important;
+  color: #0654b2;
+}
+
+span.ant-select-selection-item {
+  color: #0654b2;
+}

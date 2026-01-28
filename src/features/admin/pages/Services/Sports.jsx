@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Table, Spin, Alert, Input, Button } from "antd";
 import "../Stylesheets/Services/Sports.css";
 import { getUserTotalBookingTuf } from "../../../../services/admin/ServicesAdmin/endpointApi";
-import { SearchOutlined } from "@ant-design/icons";
+// import { SearchOutlined } from "@ant-design/icons";
+import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import ExportFilter from "../../../Component/ExportFilter";
+import SearchBar from "../../../Component/SearchBar";
+import SearchBox from "../../../Component/SearchBox";
 
 export default function SportsPage() {
+  //  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -65,20 +70,9 @@ export default function SportsPage() {
 
   return (
     <>
-      <div className="search-container">
-        <div className="filter-box">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Anything"
-              prefix={<SearchOutlined />}
-              className="search-input"
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-button">
-          SEARCH
-        </Button>
-      </div>
+       <SearchBox/>
+        
+        <ExportFilter/>
       {loading ? (
         <div style={{ textAlign: "center", padding: "2rem" }}>
           <Spin size="large" />

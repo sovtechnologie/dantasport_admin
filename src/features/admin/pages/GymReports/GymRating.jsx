@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message } from "antd";
+import { Table, Input, Button, Spin, message, DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/GymReports/GymRating.css";
 import { getGymRatingReports } from "../../../../services/admin/GymReports/endpointApi";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 export default function GymRatingAdminPage() {
+  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -83,8 +86,9 @@ export default function GymRatingAdminPage() {
 
   const columns = [
     { title: "Customer Name", dataIndex: "customerName", key: "customerName" },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Gym Name", dataIndex: "gymName", key: "gymName" },
+    { title: "Event Name", dataIndex: "eventName", key: "eventName" },
+    { title: "Event ID", dataIndex: "eventID", key: "eventID" },
+    { title: "Event Type", dataIndex: "eventtype", key: "eventtype" },
     {
       title: "Rating",
       dataIndex: "rating",
@@ -97,39 +101,15 @@ export default function GymRatingAdminPage() {
   return (
     <div className="gym-rating-admin-container">
       {/* Search bar */}
-      <div className="search-bar-container">
-        <div className="filter-section">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Customer / Vendor / Gym / Review"
-              prefix={<SearchOutlined />}
-              className="search-input-field"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
+      <SearchBox/>
+      <div className="boxdiv">
+        
 
-      {/* Export section */}
-      <div className="revenue-page export-wrapper">
-        <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-          <div className="timeframe-select">Last Week</div>
+        {/* Export section */}
+        <div className="revenue-page export-wrapper">
+          <ExportFilter/>
         </div>
-      </div>
-
-      {/* Table */}
-      <div className="rating-page">
+         <div className="rating-page">
         <Spin spinning={loading}>
           <Table
             columns={columns}
@@ -141,6 +121,10 @@ export default function GymRatingAdminPage() {
           />
         </Spin>
       </div>
+      </div>
+
+      {/* Table */}
+     
     </div>
   );
 }

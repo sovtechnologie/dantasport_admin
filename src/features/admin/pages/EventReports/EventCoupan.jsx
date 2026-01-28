@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message } from "antd";
+import { Table, Input, Button, Spin, message,DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import "../Stylesheets/EventReports/EventCoupan.css";
 import { getEventCouponReports } from "../../../../services/admin/EventReports/endpointApi";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const statusColors = {
   Active: "green",
@@ -10,6 +12,7 @@ const statusColors = {
 };
 
 export default function EventCouponAdminPage() {
+   const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -62,55 +65,65 @@ export default function EventCouponAdminPage() {
     setFilteredData(filtered);
   }, [searchText, data]);
 
-  const columns = [
-    { title: "Coupon Code", dataIndex: "couponCode", key: "couponCode" },
-    { title: "Coupon Type", dataIndex: "couponType", key: "couponType" },
-    { title: "Event", dataIndex: "eventName", key: "eventName" },
-    { title: "Usage", dataIndex: "usage", key: "usage" },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (val) => (
-        <span
-          style={{ color: statusColors[val] || "black", fontWeight: "bold" }}
-        >
-          {val}
-        </span>
-      ),
-    },
-    { title: "Date", dataIndex: "date", key: "date" },
-  ];
+ const columns = [
+  {
+    title: "Coupon ID",
+    dataIndex: "couponCode",
+    key: "couponCode",
+    render: (code) => <span className="fw-500">#{code}</span>,
+  },
+  {
+    title: "Coupon Type",
+    dataIndex: "couponType",
+    key: "couponType",
+  },
+  {
+    title: "Venue Name",
+    dataIndex: "eventName",
+    key: "eventName",
+  },
+  {
+    title: "Venue ID",
+    key: "venueId",
+    render: (_, record) => (
+      <span className="text-muted">#{record.id}</span>
+    ),
+  },
+  {
+    title: "Sports",
+    key: "sports",
+    render: () => <span>Cricket</span>, // UI-only (as per design)
+  },
+  {
+    title: "Date",
+    dataIndex: "date",
+    key: "date",
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    render: (status) => (
+      <span className={`status-pill ${status.toLowerCase()}`}>
+        {status === "Active" ? "Ongoing" : "Completed"}
+      </span>
+    ),
+  },
+  {
+    title: "Usage",
+    dataIndex: "usage",
+    key: "usage",
+    render: (val) => <span className="usage-pill">{val}</span>,
+  },
+];
+
 
   return (
     <div className="coupon-admin-container">
-      <div className="search-bar-container">
-        <div className="filter-section">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Coupon / Event"
-              prefix={<SearchOutlined />}
-              className="search-input-field"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
+      <SearchBox/>
 
       <div className="coupon-page">
-        <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-        </div>
+       <ExportFilter/>
 
         <Spin spinning={loading}>
           <Table

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Spin, message } from "antd";
+import { Table, Input, Button, Spin, message, DatePicker } from "antd";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { getVenueCouponReports } from "../../../../services/admin/ReportsAdmin/endpointApi";
 import "../Stylesheets/ReportsAdmin/CoupanAdmin.css";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const statusColors = {
   Active: "green",
@@ -10,6 +12,7 @@ const statusColors = {
 };
 
 export default function CouponAdmin() {
+  const { RangePicker } = DatePicker;
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -89,24 +92,11 @@ export default function CouponAdmin() {
 
   return (
     <div className="coupon-admin-container">
-      <div className="search-bar-container">
-        <Input
-          placeholder="Search by Coupon ID / Vendor / Venue / Sport"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          prefix={<SearchOutlined />}
-          className="search-input-field"
-        />
-        <Button
-          icon={<DownloadOutlined />}
-          className="export-btn"
-          onClick={() => message.info("Export functionality coming soon")}
-        >
-          Export
-        </Button>
-      </div>
+      <SearchBox/>
+      
 
       <div className="coupon-page">
+       <ExportFilter/>
         <Spin spinning={loading}>
           <Table
             columns={columns}

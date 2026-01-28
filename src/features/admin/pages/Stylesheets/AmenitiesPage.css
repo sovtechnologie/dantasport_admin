@@ -6,18 +6,14 @@
 
 .header {
   display: flex;
-  gap: 7rem;
+  gap: 4rem;
   align-items: center;
-  margin-bottom: 16px;
-  flex-direction: row;
 }
 
 .amenities-form {
   display: flex;
   gap: 7rem;
   align-items: center;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
 }
 
 /* Sport Name input field */
@@ -33,26 +29,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 30px;
 
 }
 
+
+ table thead.ant-table-thead tr th{
+
+  background-color: #fff !important;
+  color: #1163c7 !important;
+}
 .add-button {
-  padding: 10px 16px;
-  /* background-color:#1163C7;
-    color: #fff; */
+  padding: 20px;
+  margin-top: 20px;
+   font-size: 18px;
+   font-weight: 500 !important;
+      background-color: #1163c7 !important;
 }
 
 .upload-button {
   font-weight: 500;
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-bottom: 21px;
+  font-size: 18px;
+   padding: 20px;
+   background-color: #1163c7 !important;
 }
 
 .amenity-item {
   padding-left: 8px;
-  font-size: 14px;
+  font-size: 16px;
   color: #000;
 }
 

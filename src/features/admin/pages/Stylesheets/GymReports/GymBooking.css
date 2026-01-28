@@ -1,108 +1,40 @@
-/* 🔹 Search bar section */
-.search-bar-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #1661d4;
-  padding: 1rem;
+.booking-page {
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0px 30px 40px -20px rgba(0, 0, 0, 0.25);
-  margin-bottom: 2rem;
+  padding: 16px;
 }
 
-.filter-section {
-  padding: 0.3rem;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
+.booking-table .ant-table-thead > tr > th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #2563eb;
 }
 
-.filter-item {
-  min-width: 40vw;
+.booking-table .ant-table-tbody > tr > td {
+  padding: 16px;
 }
 
-.search-input-field {
-  gap: 0.5rem;
-  padding: 0.5rem;
+.user-name {
+  font-weight: 400;
 }
 
-.search-btn {
-  background-color: #fff;
-  color: #1163c7;
-  font-weight: bold;
-  height: 40px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+.user-id {
+  font-size: 12px;
+  color: #6b7280;
 }
 
-.search-btn:hover {
-  background-color: #1163c7;
-  color: #fff;
+.status-pill {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
 }
 
-/* 🔹 Bookings page section */
-.bookings-page {
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
+.booking-table .ant-pagination-item-active {
+  border-color: #3b82f6;
 }
 
-.export-section {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
-  gap: 10px;
-}
-
-.export-btn {
-  background: none;
-  border: 1px solid #ccc;
-  color: #333;
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.export-btn:hover {
-  border-color: #1163c7;
-  color: #1163c7;
-}
-
-/* 🔹 Table dropdowns */
-.bookings-table .ant-select {
-  width: 140px;
-}
-
-.dropdown-status .ant-select-selector,
-.dropdown-substatus .ant-select-selector,
-.dropdown-vendor .ant-select-selector,
-.dropdown-venue .ant-select-selector {
-  height: 32px !important;
-  border-radius: 4px;
-}
-
-.bookings-table .ant-table-cell {
-  vertical-align: middle;
-  font-size: 13px;
-  padding: 10px;
-}
-
-/* 🔹 Responsive */
-@media (max-width: 768px) {
-  .search-bar-container {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-  }
-
-  .filter-item {
-    min-width: 100%;
-  }
-
-  .bookings-table .ant-select {
-    width: 100% !important;
-  }
+.booking-table .ant-pagination-item-active a {
+  color: #3b82f6;
 }

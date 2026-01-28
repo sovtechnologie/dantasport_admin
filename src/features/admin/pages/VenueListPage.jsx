@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFetchVenueList } from "../../../hooks/admin/CreateVenue/useFetchVenueList";
 import { useUpdateVenueStatus } from "../../../hooks/admin/CreateVenue/useUpdateVenueStatus";
+import SearchBox from "../../Component/SearchBox";
 
 const { Option } = Select;
 
@@ -108,7 +109,7 @@ export default function VenuePage() {
   return (
     <>
       <Spin spinning={isLoading} size="large">
-        <div className="search-container">
+        {/* <div className="search-container">
           <div className="filter-box">
             <div className="filter-item">
               <Input
@@ -121,7 +122,8 @@ export default function VenuePage() {
           <Button type="primary" className="search-button">
             SEARCH
           </Button>
-        </div>
+        </div> */}
+        <SearchBox/>
 
         <div className="venue-page-container">
           <div className="venue-header-form">

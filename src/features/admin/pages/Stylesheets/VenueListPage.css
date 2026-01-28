@@ -9,6 +9,12 @@
     margin-bottom: 2rem;
 }
 
+
+.venue-page-container table thead.ant-table-thead tr th{
+
+  background-color: #fff !important;
+  color: #1163c7 !important;
+}
 .filter-box {
     padding: 0.3rem;
     border-radius: 10px;
@@ -65,6 +71,19 @@
   background-color: #1163c7;
   color: #fff;
   font-weight: bold;
+  font-size: 18px;
+  padding: 20px;
+}
+
+.add-venue-button:hover{
+
+  background-color: #0e50b3 !important;
+}
+
+
+:where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before, :where(.css-dev-only-do-not-override-16dneet).ant-table-wrapper .ant-table-thead >tr>td:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before{
+
+  display: none;
 }
 .status-select {
   width: 120px;

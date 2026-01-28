@@ -6,6 +6,8 @@ import {
   getBookingEnquires,
   updateEnquiryStatus,
 } from "../../../../services/admin/Enquiryes/endpintApi";
+import ExportFilter from "../../../Component/ExportFilter";
+import SearchBox from "../../../Component/SearchBox";
 
 const { Option } = Select;
 
@@ -266,7 +268,7 @@ export default function CorporateEnquiry() {
 
   return (
     <>
-      <div className="corporate-search-container">
+      {/* <div className="corporate-search-container">
         <div className="corporate-filter-box">
           <div className="corporate-filter-item">
             <Input
@@ -279,25 +281,11 @@ export default function CorporateEnquiry() {
         <Button type="primary" className="corporate-search-button">
           Search
         </Button>
-      </div>
+      </div> */}
+      <SearchBox/>
 
       <div className="corporate-enquiry-page">
-        <div className="corporate-search-export-bar">
-          <Button
-            type="default"
-            className="corporate-export-button"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-          <Select defaultValue="Last Week">
-            {["Last Week", "Last Month", "This Year"].map((v) => (
-              <Select.Option value={v} key={v}>
-                {v}
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
+        <ExportFilter/>
 
         {loading ? (
           <div style={{ textAlign: "center", padding: "2rem" }}>

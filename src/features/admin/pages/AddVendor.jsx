@@ -545,7 +545,7 @@ const VendorInfoForm = () => {
               loading={isCreatingVendor || isAddingBank}
               disabled={isCreatingVendor || isAddingBank}
             >
-              {isAddingBank ? "Updading.." : " UPDATE VENDOR"}
+              {isAddingBank ? "Updading.." : " ADD VENDOR"}
             </Button>
           </div>
         </Form.Item>

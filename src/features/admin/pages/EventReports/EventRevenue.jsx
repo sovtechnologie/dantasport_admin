@@ -1,28 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Select, Spin, message } from "antd";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
+import { Table, Select, Spin, message } from "antd";
+import dayjs from "dayjs";
+
 import "../Stylesheets/EventReports/EventRevenue.css";
 import { getEventRevenueReports } from "../../../../services/admin/EventReports/endpointApi";
+import SearchBox from "../../../Component/SearchBox";
+import ExportFilter from "../../../Component/ExportFilter";
 
 const { Option } = Select;
 
-const statusColors = {
-  Active: "green",
-  Deactive: "red",
+/* ---------------- HELPERS (UI ONLY) ---------------- */
+
+const formatDateTime = (date) =>
+  date ? dayjs(date).format("DD MMM, hh:mm A") : "-";
+
+const formatAmount = (amt) => `₹${amt}`;
+
+const statusMap = {
+  0: "Canceled",
+  1: "Completed",
+  2: "Upcoming",
 };
+
+/* ---------------- COMPONENT ---------------- */
 
 export default function EventRevenueAdminPage() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const [searchText, setSearchText] = useState("");
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState("All");
+
+  /* ---------------- FETCH API (UNCHANGED) ---------------- */
 
   const fetchRevenueReports = async () => {
     try {
       setLoading(true);
       const res = await getEventRevenueReports();
+
       if (res?.status === 200 && Array.isArray(res.result)) {
         const rawData = res.result.map((item) => ({
           id: item.id,
@@ -31,10 +48,10 @@ export default function EventRevenueAdminPage() {
           eventName: item.event_name,
           vendorName: item.vendor_name || "-",
           customer: item.customer_name,
-          bookingId: item.booking_id,
-          amount: item.amount,
-          bookingDate: new Date(item.created_at).toLocaleDateString(),
-          status: item.status === 1 ? "Active" : "Deactive",
+          bookingId: `#${item.booking_id}`,
+          amount: formatAmount(item.amount),
+          bookingDate: formatDateTime(item.created_at),
+          status: statusMap[item.status] || "Completed",
         }));
 
         setData(rawData);
@@ -46,9 +63,7 @@ export default function EventRevenueAdminPage() {
         message.error("Failed to fetch event revenue reports");
       }
     } catch (err) {
-      message.error(
-        "Something went wrong while fetching event revenue reports"
-      );
+      message.error("Something went wrong while fetching revenue reports");
       console.error(err);
     } finally {
       setLoading(false);
@@ -59,106 +74,89 @@ export default function EventRevenueAdminPage() {
     fetchRevenueReports();
   }, []);
 
+  /* ---------------- FILTER LOGIC (UNCHANGED) ---------------- */
+
   useEffect(() => {
-    let filtered = data;
+    let filtered = [...data];
+
     if (selectedEvent !== "All") {
-      filtered = filtered.filter((item) => item.eventName === selectedEvent);
+      filtered = filtered.filter(
+        (item) => item.eventName === selectedEvent
+      );
     }
 
     if (searchText) {
       const text = searchText.toLowerCase();
       filtered = filtered.filter(
         (item) =>
-          (item.txnId && item.txnId.toLowerCase().includes(text)) ||
-          (item.vendorName && item.vendorName.toLowerCase().includes(text)) ||
-          (item.customer && item.customer.toLowerCase().includes(text)) ||
-          (item.bookingId && String(item.bookingId).includes(text))
+          item.txnId?.toLowerCase().includes(text) ||
+          item.vendorName?.toLowerCase().includes(text) ||
+          item.customer?.toLowerCase().includes(text) ||
+          item.bookingId?.includes(text)
       );
     }
 
     setFilteredData(filtered);
   }, [selectedEvent, searchText, data]);
 
+  /* ---------------- TABLE COLUMNS (UI MATCH) ---------------- */
+
   const columns = [
-    { title: "Txn ID", dataIndex: "txnId", key: "txnId" },
     {
-      title: (
-        <Select
-          value={selectedEvent}
-          onChange={setSelectedEvent}
-          className="dropdown-event"
-          showSearch
-          placeholder="Select Event"
-          optionFilterProp="children"
-        >
-          <Option value="All">All Events</Option>
-          {events.map((e, idx) => (
-            <Option key={idx} value={e}>
-              {e}
-            </Option>
-          ))}
-        </Select>
-      ),
-      dataIndex: "eventName",
-      key: "eventName",
+      title: "Txn. ID",
+      dataIndex: "txnId",
+      render: (val) => <strong>{val}</strong>,
     },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Customer", dataIndex: "customer", key: "customer" },
-    { title: "Booking ID", dataIndex: "bookingId", key: "bookingId" },
-    { title: "Date", dataIndex: "bookingDate", key: "bookingDate" },
-    { title: "Amount", dataIndex: "amount", key: "amount" },
+    {
+      title: "Vendor Name",
+      dataIndex: "vendorName",
+    },
+    {
+      title: "Venue Name",
+      dataIndex: "eventName",
+    },
+    {
+      title: "Customer Name",
+      dataIndex: "customer",
+    },
+    {
+      title: "Booking ID",
+      dataIndex: "bookingId",
+    },
+    {
+      title: "Date",
+      dataIndex: "bookingDate",
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+    },
     {
       title: "Status",
       dataIndex: "status",
-      key: "status",
-      render: (val) => (
-        <span
-          style={{ color: statusColors[val] || "black", fontWeight: "bold" }}
-        >
-          {val}
-        </span>
-      ),
+      render: (status) => {
+        let cls = "";
+        if (status === "Completed") cls = "status-completed";
+        if (status === "Upcoming") cls = "status-upcoming";
+        if (status === "Canceled") cls = "status-canceled";
+
+        return (
+          <span className={`status-pill ${cls}`}>
+            {status}
+          </span>
+        );
+      },
     },
   ];
 
+  /* ---------------- RENDER ---------------- */
+
   return (
     <div className="revenue-admin-container">
-      {/* Search bar */}
-      <div className="search-bar-container">
-        <div className="filter-section">
-          <div className="filter-item">
-            <Input
-              placeholder="Search by Txn ID / Vendor / Customer / Booking ID"
-              prefix={<SearchOutlined />}
-              className="search-input-field"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </div>
-        </div>
-        <Button type="primary" className="search-btn">
-          SEARCH
-        </Button>
-      </div>
+      <SearchBox onSearch={setSearchText} />
 
-      {/* Export + timeframe */}
       <div className="revenue-page">
-        <div className="export-section">
-          <Button
-            type="default"
-            className="export-btn"
-            icon={<DownloadOutlined />}
-          >
-            Export
-          </Button>
-          <Select defaultValue="Last Week">
-            {["Last Week", "Last Month", "This Year"].map((v) => (
-              <Option key={v} value={v}>
-                {v}
-              </Option>
-            ))}
-          </Select>
-        </div>
+        <ExportFilter />
 
         <Spin spinning={loading}>
           <Table

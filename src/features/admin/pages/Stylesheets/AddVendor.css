@@ -5,10 +5,58 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
 }
 
+.ant-form-item-control-input-content input{
+
+  height: 56px;
+  border-radius: 12px;
+  border: 1px solid #B1B1B1
+}
+
+select{
+
+  height: 56px !important;
+}
+button.ant-btn.css-dev-only-do-not-override-16dneet.ant-btn-default.ant-btn-color-default.ant-btn-variant-outlined.upload-btn {
+    height: 56px;
+      border-radius: 12px;
+  border: 1px solid #B1B1B1;
+}
+
+.ant-select-selection-overflow {
+    height: 56px;
+}
+
+.ant-select.ant-select-outlined.ant-select-in-form-item.css-dev-only-do-not-override-16dneet.ant-select-single.ant-select-show-arrow {
+    height: 56px;
+}
+
+input#mobile {
+    border: none;
+}
+
+label{
+
+  color: #666666 !important;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+input#otp {
+    border: none;
+}
+/* span.ant-input-wrapper.ant-input-group.css-dev-only-do-not-override-16dneet {
+    border: 1px solid #B1B1B1;
+    border-radius: 12px;
+} */
 .vendor-form h3 {
-    font-size: 16px;
+    font-size: 22x;
     margin-bottom: 16px;
     color: #1163c7;
+}
+
+.otp-input {
+    border: none !important;
+    border-radius: unset;
 }
 
 .upload-btn{
