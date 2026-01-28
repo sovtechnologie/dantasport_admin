@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/Siderbarlogo/Danta-sports.png";
-import { LayoutDashboard,Ticket,AlertCircle,ClipboardList,IndianRupee, BarChart3, Dumbbell,Bell, CalendarDays, MessageCircleQuestion,LineChart , Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
+import { LayoutDashboard, Wallet, Ticket, AlertCircle, ClipboardList, IndianRupee, BarChart3, Dumbbell, Bell, CalendarDays, MessageCircleQuestion, LineChart, Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
 
 
 
@@ -26,11 +26,11 @@ const AdminSidebar = () => {
   return (
     <aside className="w-64 bg-white  shadow-sm  px-2 py-6 admin_asidebar">
       {/* Logo */}
-     <div className="flex m-auto w-50 pb-3">
-      <Link to="/">
-        <img src={logo} alt="Logo" className="w-100 text-center" />
-      </Link>
-    </div>
+      <div className="flex m-auto w-50 pb-3">
+        <Link to="/">
+          <img src={logo} alt="Logo" className="w-100 text-center" />
+        </Link>
+      </div>
 
       <ul className="space-y-2 ps-1 text-sm font-medium text-gray-600">
         {/* Dashboard */}
@@ -38,8 +38,8 @@ const AdminSidebar = () => {
           <Link
             to="/admin"
             className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
             <LayoutDashboard size={18} />
@@ -52,15 +52,15 @@ const AdminSidebar = () => {
           <Link
             to="/admin/sport-services"
             className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/sport-services")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
             <BarChart3 size={18} />
             Sports / Services
           </Link>
         </li>
-       
+
 
         {/* Reports - Submenu */}
         <li>
@@ -72,7 +72,7 @@ const AdminSidebar = () => {
               <LineChart size={18} />
               Turf Reports
             </div>
-            
+
           </button>
           {openMenus.reports && (
             <ul className="ml-8 mt-1 space-y-1">
@@ -120,7 +120,7 @@ const AdminSidebar = () => {
           )}
         </li>
 
-        
+
         <li>
           <button
             onClick={() => toggleMenu("gymReports")}
@@ -146,7 +146,7 @@ const AdminSidebar = () => {
               <li>
                 <Link to="/admin/GymReports/gym-coupon">Gym Coupon</Link>
               </li>
-               <li>
+              <li>
                 <Link to="/admin/GymReports/gym-peak-hours">Gym Peak Hours</Link>
               </li>
             </ul>
@@ -254,7 +254,7 @@ const AdminSidebar = () => {
             </ul>
           )}
         </li>
-         {/* Services - Submenu */}
+        {/* Services - Submenu */}
         <li>
           <button
             onClick={() => toggleMenu("services")}
@@ -320,7 +320,7 @@ const AdminSidebar = () => {
             className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
           >
             <div className="flex items-center gap-3">
-            <ClipboardList size={18} />
+              <ClipboardList size={18} />
 
               Coach Reports
             </div>
@@ -345,8 +345,134 @@ const AdminSidebar = () => {
                 </Link>
               </li>
 
-          
-              
+
+
+            </ul>
+          )}
+        </li>
+        {/* host reposts */}
+        <li>
+          <button
+            onClick={() => toggleMenu("hostReports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              <ClipboardList size={18} />
+
+              Host Reports
+            </div>
+          </button>
+          {openMenus.hostReports && (
+            <ul className="ml-8 mt-1 space-y-1">
+              <li>
+                <Link
+                  to="/admin/HostReports/game-reports"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  Game Report
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/HostReports/host-user-reports"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  User Report
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/HostReports/host-earning"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  Host Earnings & Settlement
+                </Link>
+              </li>
+
+
+
+            </ul>
+          )}
+        </li>
+        {/* play reposts */}
+        <li>
+          <button
+            onClick={() => toggleMenu("PlayReports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              <ClipboardList size={18} />
+
+              Play Reports
+            </div>
+          </button>
+          {openMenus.PlayReports && (
+            <ul className="ml-8 mt-1 space-y-1">
+              <li>
+                <Link
+                  to="/admin/PlayReports/play-game-reports"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  Game Report
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/PlayReports/play-user-reports"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  User Report
+                </Link>
+              </li>
+
+
+
+
+            </ul>
+          )}
+        </li>
+        {/* turf  Payment Settlement */}
+        <li>
+          <button
+            onClick={() => toggleMenu("PaymentSettlement")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              <Wallet size={18} />
+
+              Payment Settlement
+            </div>
+          </button>
+          {openMenus.PaymentSettlement && (
+            <ul className="ml-8 mt-1 space-y-1">
+              <li>
+                <Link
+                  to="/admin/payment-settlement"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  Turf Payment Settlement
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/gym-payment-settlement"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  GYM Payment Settlement
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/events-payment-settlement"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 text-decoration-none"
+                >
+                  Events Payment Settlement
+                </Link>
+              </li>
+
+
+
+
             </ul>
           )}
         </li>
@@ -354,7 +480,7 @@ const AdminSidebar = () => {
 
 
 
-         {/* Banners - Submenu */}
+        {/* Banners - Submenu */}
         <li>
           <button
             onClick={() => toggleMenu("banners")}
@@ -396,8 +522,8 @@ const AdminSidebar = () => {
           <Link
             to="/admin/vendors"
             className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/vendors")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
             <Store size={18} />
@@ -411,8 +537,8 @@ const AdminSidebar = () => {
           <Link
             to="/admin/venues"
             className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/venues")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
             <MapPin size={18} />
@@ -425,8 +551,8 @@ const AdminSidebar = () => {
           <Link
             to="/admin/amenities"
             className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/amenities")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
             <ListChecks size={18} />
@@ -435,12 +561,12 @@ const AdminSidebar = () => {
           </Link>
         </li>
 
-         <li>
+        <li>
           <Link
             to="/admin/admin-coupon"
             className={`flex items-center gap-3 px-4 text-decoration-none py-2 rounded-lg ${isActive("/admin/coupon")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
             <Ticket size={18} />
@@ -448,47 +574,37 @@ const AdminSidebar = () => {
             Coupon
           </Link>
         </li>
-       
-       
+
+
         {/*  Notifications  */}
-         <li>
-            <Link
+        <li>
+          <Link
             to="/admin/notifications "
             className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/notifications")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
             <Bell size={18} />
-           Notifications 
+            Notifications
           </Link>
         </li>
-         <li>
-            <Link
+
+        <li>
+          <Link
             to="/admin/disputes "
             className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/disputes")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
               }`}
           >
-           <AlertCircle size={18} />
-           Disputes
+            <AlertCircle size={18} />
+            Disputes
           </Link>
-          
+
         </li>
-         <li>
-            <Link
-            to="/admin/payment-settlement"
-            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/payment-settlement")
-                ? "bg-blue-600 text-white"
-                : "hover:bg-gray-100"
-              }`}
-          >
-           <IndianRupee size={18} />
-            Payment Settlement
-          </Link>
-          
-        </li>
+
+
       </ul>
     </aside>
   );

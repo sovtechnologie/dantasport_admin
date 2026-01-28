@@ -9,24 +9,18 @@ import CouponUsageReport from './CouponUsageReport '
 import SlotUtilizationHeatmap from './SlotUtilizationHeatmap'
 
 function TurfDashboard() {
+
+  
   return (
     <>
-     
-      
-       <section>
-        <DateExportBar/>
-       <DashboardCards/>
-       </section>
-      <section className='sales_section'>
-        <Container>
-          <SalesChart/>
-        </Container>
-      </section>
       <section>
-        <DashboardStats/>
-        <DashboardTabs/>
-        <CouponUsageReport/>
-        <SlotUtilizationHeatmap/>
+        <DateExportBar />
+        <DashboardCards />
+        <SalesChart />
+        <DashboardStats />
+        <DashboardTabs />
+        <CouponUsageReport />
+        <SlotUtilizationHeatmap />
       </section>
     </>
   )

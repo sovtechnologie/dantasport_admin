@@ -23,7 +23,7 @@ const data = [
 
 const SalesChart = () => {
   return (
-    <Container className="mt-4 p-0">
+    <Container className="my-4 p-0">
       <Card
         className="border-0"
         style={{ borderRadius: "16px" }}
@@ -36,16 +36,7 @@ const SalesChart = () => {
             </h5>
 
             <div className="d-flex align-items-center gap-4">
-              <Dropdown>
-                <Dropdown.Toggle variant="light" className="border">
-                  Last Week
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item>Today</Dropdown.Item>
-                  <Dropdown.Item>This Week</Dropdown.Item>
-                  <Dropdown.Item>This Month</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+             
 
               <div>
                 <small className="text-primary fw-semibold">

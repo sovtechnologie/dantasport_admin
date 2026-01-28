@@ -38,6 +38,13 @@ import CouponAdmin from "../features/admin/pages/ReportsAdmin/CoupanAdmin";
 import Coupon from "../features/admin/pages/Coupon.jsx";
 import AddCoupon from "../features/vendor/pages/ManagePage/addCoupan";
 import AdminAddCoupon from "../features/admin/pages/AdminAddCoupon.jsx";
+import GameReports from "../features/admin/pages/HostReports/GameReports.jsx";
+import HostUserReports from "../features/admin/pages/HostReports/HostUserReports.jsx";
+import HostEarningsSettlement from "../features/admin/pages/HostReports/HostEarningsSettlement.jsx";
+import PlayGameReports from "../features/admin/pages/PlayReports/PlayGameReports.jsx";
+import PlayUserReports from "../features/admin/pages/PlayReports/PlayUserReports.jsx";
+import GymPaymentSettlement from "../features/admin/pages/GymPaymentSettlement.jsx";
+import EventsPaymentSettlement from "../features/admin/pages/EventsPaymentSettlement.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -335,6 +342,8 @@ const AppRoutes = () => {
              <Route path="/admin/notifications" element={<NotificationsPage/>} />
               <Route path="/admin/disputes" element={<DisputesPage/>} />
                <Route path="/admin/payment-settlement" element={<PaymentSettlement/>} />
+               <Route path="/admin/gym-payment-settlement" element={<GymPaymentSettlement/>} />
+                <Route path="/admin/events-payment-settlement" element={<EventsPaymentSettlement/>} />
             {/* Enquires */}
             <Route path="/admin/enquires/vendor" element={<VendorEnquiry />} />
             <Route
@@ -455,10 +464,20 @@ const AppRoutes = () => {
             {/* Coach reports */}
             <Route path="/admin/CoachReports/coach-reports" element={<CoachReports/>} />
              <Route path="/admin/CoachReports/user-reports" element={<UserReports/>} />
+             {/* Host Reports */}
+
+            <Route path="/admin/HostReports/game-reports" element={<GameReports/>} />
+            <Route path="/admin/HostReports/host-user-reports" element={<HostUserReports/>} />
+             <Route path="/admin/HostReports/host-earning" element={<HostEarningsSettlement/>} />
+             <Route path="/admin/PlayReports/play-game-reports" element={<PlayGameReports/>} />
+            <Route path="/admin/PlayReports/play-user-reports" element={<PlayUserReports/>} />
+
+
 
             {/* Amenties */}
             <Route path="/admin/amenities" element={<Amenities />} />
             <Route path="/admin/admin-coupon" element={<Coupon/>} />
+            
             <Route path="/admin/admin-add-coupon" element={<AdminAddCoupon/>} />
             {/* Catch-all for admin routes */}
             <Route path="*" element={<AdminNotFound />} />

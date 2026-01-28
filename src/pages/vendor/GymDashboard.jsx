@@ -40,7 +40,7 @@ function GymDashboard() {
                 </Col>
             </Row>
             <Row>
-              <Col className='col-10'>
+              <Col className='col-12'>
                  <DashboardTabs/>
               </Col>
             </Row>

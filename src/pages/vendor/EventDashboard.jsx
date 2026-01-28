@@ -15,7 +15,7 @@ function EventDashboard() {
       <section>
         <Container>
           <DateExportBar />
-          <div className="bg-white p-2 rounded-2xl mb-1">
+          <div>
             <h2 className="section_heading mb-1">Today’s Sales</h2>
             <p>Sales Summery</p>
           </div>

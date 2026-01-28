@@ -16,7 +16,7 @@ function AllDashboard() {
 
   return (
     <>
-      <section className='all_dashboards'>
+      <section className='all_dashboards bg-white'>
         <div className="row">
           <div className="col-12">
             <Form.Select aria-label="Select Page" onChange={handleChange}>

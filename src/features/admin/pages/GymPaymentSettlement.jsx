@@ -7,7 +7,7 @@ import FilterDropDawn from "../../Component/FilterDropDawn";
 import PayOutModal from "../../Component/PayOutModal";
 import TotalListingPrice from "../../Component/TotalListingPrice";
 
-function PaymentSettlement() {
+function GymPaymentSettlement() {
   const [showPayout, setShowPayout] = useState(false);
 
   const paymentData = [
@@ -64,7 +64,7 @@ function PaymentSettlement() {
 
         <div className="bg-white shadow-sm rounded p-3">
           {/* Header */}
-           <h5 style={{color:"#1163C7"}}> Turf Payment Settlement </h5>
+           <h5 style={{color:"#1163C7"}}> Gym Payment Settlement </h5>
           <div className="d-flex justify-content-between align-items-center mb-3">
             <FilterDropDawn />
             <button
@@ -217,4 +217,4 @@ const thStyle = {
   verticalAlign: "middle",
 };
 
-export default PaymentSettlement;
+export default GymPaymentSettlement;
