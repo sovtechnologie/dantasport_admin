@@ -462,7 +462,7 @@ const AppRoutes = () => {
               element={<VenManAddDiscount />}
             />
             <Route
-              path="/vendor/manage/editcoupon"
+              path="/vendor/manage/editcoupon/:couponId"
               element={<VenManEditDiscount />}
             />
             <Route

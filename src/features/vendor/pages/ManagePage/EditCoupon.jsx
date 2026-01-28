@@ -14,7 +14,7 @@ import {
   DatePicker,
   Space,
 } from "antd";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useUpdateCoupon } from "../../../../hooks/vendor/coupons/useUpdateCoupon";
@@ -26,6 +26,7 @@ import {
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useFetchVendorSportsList } from "../../../../hooks/vendor/sports/useFetchSportVendor";
+import { useGetSingleCoupon } from "../../../../hooks/vendor/coupons/useGetSingleCoupon";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -39,7 +40,11 @@ export default function EditCoupon() {
   const [selectedVenueId, setSelectedVenueId] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedSports, setSelectedSports] = useState(["All Sports"]);
-  const [couponData, setCouponData] = useState(null);
+  // const [couponData, setCouponData] = useState(null);
+const { couponId } = useParams();
+
+
+  const { data: couponData, isLoading: couponLoading } = useGetSingleCoupon(couponId);
 
   // Fetch venue list
   const {
@@ -59,47 +64,79 @@ export default function EditCoupon() {
   const updateCouponMutation = useUpdateCoupon();
 
   // Get coupon data from location state
-  useEffect(() => {
-    if (location.state?.couponData) {
-      const data = location.state.couponData;
-      setCouponData(data);
-      setSelectedVenueId(data.venueId);
+  // useEffect(() => {
+  //   if (location.state?.couponData) {
+  //     const data = location.state.couponData;
+  //     setCouponData(data);
+  //     setSelectedVenueId(data.venueId);
 
-      // Set form values
-      form.setFieldsValue({
-        selectVenue: data.venueId,
-        couponCode: data.coupon,
-        couponType: data.type === "Upto" ? "percentage" : "flat",
-        value: parseFloat(data.value.replace(/[%₹]/g, "")),
-        startDate: data.startDate ? dayjs(data.startDate) : null,
-        endDate: data.rawExpiryDate ? dayjs(data.rawExpiryDate) : null,
-        description: data.description,
-      });
+  //     // Set form values
+  //     form.setFieldsValue({
+  //       selectVenue: data.venueId,
+  //       couponCode: data.coupon,
+  //       couponType: data.type === "Upto" ? "percentage" : "flat",
+  //       value: parseFloat(data.value.replace(/[%₹]/g, "")),
+  //       startDate: data.startDate ? dayjs(data.startDate) : null,
+  //       endDate: data.rawExpiryDate ? dayjs(data.rawExpiryDate) : null,
+  //       description: data.description,
+  //     });
 
-      // Set selected sports - check if it's actually all sports or specific sports
-      if (
-        data.isAllSports === 1 &&
-        (!data.sportsIds || data.sportsIds.length === 0)
-      ) {
-        // True "All Sports" - no specific sports selected
-        setSelectedSports(["All Sports"]);
-      } else if (data.sportsIds && data.sportsIds.length > 0) {
-        // Specific sports selected, even if isAllSports is 1
-        const sportsNames = data.sportsIds
-          .map((sportId) => {
-            const sport = sportsData?.result?.find((s) => s.id === sportId);
-            return sport?.sports_name || `Sport ${sportId}`;
-          })
-          .filter(Boolean);
-        setSelectedSports(
-          sportsNames.length > 0 ? sportsNames : ["All Sports"]
-        );
-      } else {
-        // Fallback to All Sports
-        setSelectedSports(["All Sports"]);
-      }
+  //     // Set selected sports - check if it's actually all sports or specific sports
+  //     if (
+  //       data.isAllSports === 1 &&
+  //       (!data.sportsIds || data.sportsIds.length === 0)
+  //     ) {
+  //       // True "All Sports" - no specific sports selected
+  //       setSelectedSports(["All Sports"]);
+  //     } else if (data.sportsIds && data.sportsIds.length > 0) {
+  //       // Specific sports selected, even if isAllSports is 1
+  //       const sportsNames = data.sportsIds
+  //         .map((sportId) => {
+  //           const sport = sportsData?.result?.find((s) => s.id === sportId);
+  //           return sport?.sports_name || `Sport ${sportId}`;
+  //         })
+  //         .filter(Boolean);
+  //       setSelectedSports(
+  //         sportsNames.length > 0 ? sportsNames : ["All Sports"]
+  //       );
+  //     } else {
+  //       // Fallback to All Sports
+  //       setSelectedSports(["All Sports"]);
+  //     }
+  //   }
+  // }, [location.state, form, sportsData]);
+
+ useEffect(() => {
+  if (couponData?.result?.length) {
+    const data = couponData.result[0];
+    setSelectedVenueId(data.venue_id);
+
+    form.setFieldsValue({
+      selectVenue: data.venue_id,
+      couponCode: data.coupon_code,
+      couponType: data.coupon_type, // percentage / flat
+      value: parseFloat(data.value),
+      startDate: data.start_date ? dayjs(data.start_date) : null,
+      endDate: data.expiry_date ? dayjs(data.expiry_date) : null,
+      description: data.coupon_description,
+    });
+
+    // Sports auto-fill
+    if (data.isAllSports === 1 && (!data.sports_id || data.sports_id.length === 0)) {
+      setSelectedSports(["All Sports"]);
+    } else if (data.sports_id?.length > 0) {
+      const sportsNames = data.sports_id
+        .map((sportId) => {
+          const sport = sportsData?.result?.find((s) => s.id === sportId);
+          return sport?.sports_name || `Sport ${sportId}`;
+        })
+        .filter(Boolean);
+      setSelectedSports(sportsNames.length ? sportsNames : ["All Sports"]);
+    } else {
+      setSelectedSports(["All Sports"]);
     }
-  }, [location.state, form, sportsData]);
+  }
+}, [couponData, sportsData, form]);
 
   // Handle sports selection after sports data is loaded
   useEffect(() => {
@@ -287,6 +324,12 @@ export default function EditCoupon() {
     );
   }
 
+  const formatVenueLabel = (venue) => {
+  if (!venue) return "—";
+  return `${venue.name} • ${venue.type} ${venue.id})`;
+};
+
+
   return (
     <div className="add-coupon-conatiner">
       {/* Compact Header */}
@@ -309,7 +352,7 @@ export default function EditCoupon() {
         </div>
         <div className="header-right">
           <Text type="secondary" className="venue-info">
-            {selectedVenue?.venue_name || "Select venue"}
+            {selectedVenue?.name || "Select venue"}
           </Text>
         </div>
       </div>
@@ -326,26 +369,25 @@ export default function EditCoupon() {
             {/* Left Column */}
             <div className="form-column">
               {/* Venue Selection */}
-              <Form.Item
-                name="selectVenue"
-                label="Venue"
-                rules={[{ required: true, message: "Please select a venue" }]}
-                className="form-item-compact"
-              >
-                <Select
-                  placeholder="Select Venue"
-                  className="venue-select-compact"
-                  loading={venueLoading}
-                  onChange={handleVenueChange}
-                  value={selectedVenueId}
-                >
-                  {venueList?.resutl?.map((venue) => (
-                    <Option key={venue.venue_id} value={venue.venue_id}>
-                      {venue.venue_name}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
+             <Form.Item
+  name="selectVenue"
+  label="Venue"
+  className="form-item-compact"
+>
+ <Select disabled value={selectedVenueId}>
+              {venueList?.resutl?.map((venue) => (
+                <Option key={venue.venue_id} value={venue.venue_id}>
+                  {venue.name} • {venue.type} ({venue.id})
+                </Option>
+              ))}
+            </Select>
+
+  {/* Small helper text */}
+  <Text type="secondary" style={{ fontSize: 11 }}>
+    Venue cannot be changed while editing a coupon
+  </Text>
+</Form.Item>
+
 
               {/* Coupon Code */}
               <Form.Item

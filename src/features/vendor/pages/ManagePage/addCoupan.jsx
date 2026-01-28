@@ -34,12 +34,15 @@ const { Option } = Select;
 const { Title, Text } = Typography;
 
 export default function AddCoupon() {
+
   const navigate = useNavigate();
   const id = useSelector((state) => state.auth.user.id);
   const [form] = Form.useForm();
   const [selectedVenueId, setSelectedVenueId] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedSports, setSelectedSports] = useState(["All Sports"]);
+const [selectedSports, setSelectedSports] = useState([]);
+const [selectedVenueKey, setSelectedVenueKey] = useState(null);
+const [selectedVenueType, setSelectedVenueType] = useState(null);
 
   // Fetch venue list
   const {
@@ -60,12 +63,30 @@ export default function AddCoupon() {
   const createCouponMutation = useCreateCoupon();
 
   // Set default venue when venue list loads
-  useEffect(() => {
-    if (venueList?.resutl?.length && !selectedVenueId) {
-      setSelectedVenueId(venueList.resutl[0].venue_id);
-      form.setFieldsValue({ selectVenue: venueList.resutl[0].venue_id });
-    }
-  }, [venueList, selectedVenueId, form]);
+  // useEffect(() => {
+  //   if (venueList?.resutl?.length && !selectedVenueId) {
+  //     setSelectedVenueId(venueList.resutl[0].id);
+  //     form.setFieldsValue({ selectVenue: venueList.resutl[0].id });
+  //   }
+  // }, [venueList, selectedVenueId, form]);
+
+// useEffect(() => {
+//   if (venueList?.resutl?.length && !selectedVenueKey) {
+//     const v = venueList.resutl[0];
+
+//     const key = `${v.id}-${v.venue_type}`;
+
+//     setSelectedVenueKey(key);
+//     setSelectedVenueId(Number(v.id));
+//     setSelectedVenueType(Number(v.venue_type));
+
+//     form.setFieldsValue({
+//       selectVenue: key,   // ✅ STRING
+//     });
+//   }
+// }, [venueList, selectedVenueKey, form]);
+
+
 
   // Handle errors
   useEffect(() => {
@@ -83,48 +104,49 @@ export default function AddCoupon() {
   }, [selectedSports, form]);
 
   // Memoized selected venue for performance
+  // const selectedVenue = useMemo(() => {
+  //   return venueList?.resutl?.find(
+  //     (venue) => venue.id === selectedVenueId
+  //   );
+  // }, [venueList?.resutl, selectedVenueId]);
+
   const selectedVenue = useMemo(() => {
+    if (!selectedVenueKey) return null;
+  
+    const [id, venue_type] = selectedVenueKey.split("-");
+  
     return venueList?.resutl?.find(
-      (venue) => venue.venue_id === selectedVenueId
+      v =>
+        Number(v.id) === Number(id) &&
+        Number(v.venue_type) === Number(venue_type)
     );
-  }, [venueList?.resutl, selectedVenueId]);
+  }, [venueList?.resutl, selectedVenueKey]);
 
-  const handleVenueChange = useCallback(
-    (venueId) => {
-      setSelectedVenueId(venueId);
-      form.setFieldsValue({ selectVenue: venueId });
-    },
-    [form]
-  );
+ const handleVenueChange = (value) => {
+  const [id, venueType] = value.split("-");
 
-  const handleSportToggle = useCallback(
-    (sport) => {
-      setSelectedSports((prev) => {
-        let newSports;
-        if (sport === "All Sports") {
-          newSports = ["All Sports"];
-        } else if (prev.includes(sport)) {
-          newSports = prev.filter((s) => s !== sport);
-          newSports = newSports.length === 0 ? ["All Sports"] : newSports;
-        } else {
-          newSports = prev.filter((s) => s !== "All Sports");
-          newSports = [...newSports, sport];
-        }
+  setSelectedVenueKey(value);
+  setSelectedVenueId(Number(id));
+  setSelectedVenueType(Number(venueType));
 
-        // Update form field value for validation
-        form.setFieldsValue({ sport: newSports });
+  form.setFieldsValue({ selectVenue: value });
+};
 
-        return newSports;
-      });
-    },
-    [form]
-  );
+ const handleSportToggle = (sportId) => {
+  setSelectedSports((prev) => {
+    if (prev.includes(sportId)) {
+      return prev.filter((id) => id !== sportId);
+    }
+    return [...prev, sportId];
+  });
+};
+
 
   // Memoized sports list for performance
   const sportsList = useMemo(() => {
     if (!sportsData?.result) return [];
     return sportsData.result.map((sport) => ({
-      id: sport.id,
+      id: sport.sports_id,
       name: sport.sports_name,
       image: sport.sports_images,
       status: sport.status,
@@ -162,9 +184,9 @@ export default function AddCoupon() {
         description: values.description,
         startDate: values.startDate?.format("YYYY-MM-DD"),
         endDate: values.endDate?.format("YYYY-MM-DD"),
-        sportsIds: sportsIds,
-        isAllSports: isAllSports ? 1 : 0,
-        type: 1,
+  sportsIds: selectedSports,              // ✅ IDs DIRECT
+  isAllSports: selectedSports.length === 0 ? 1 : 0,
+  type: selectedVenueType,
       };
 
       console.log("API Payload:", payload);
@@ -191,6 +213,17 @@ export default function AddCoupon() {
     }
   };
 
+  useEffect(() => {
+  if (!sportsLoading && sportsList.length === 0) {
+    setSelectedSports([]); // empty = All Sports
+    form.setFieldsValue({ sport: [] });
+  }
+}, [sportsList, sportsLoading, form]);
+
+
+      const couponType = Form.useWatch("couponType", form);
+
+
   // Show loading state when venues or sports are loading
   if (venueLoading || sportsLoading) {
     return (
@@ -204,6 +237,8 @@ export default function AddCoupon() {
       </div>
     );
   }
+
+  
 
   return (
     <div className="add-coupon-conatiner">
@@ -227,7 +262,7 @@ export default function AddCoupon() {
         </div>
         <div className="header-right">
           <Text type="secondary" className="venue-info">
-            {selectedVenue?.venue_name || "Select venue"}
+            {selectedVenue?.name || "Select venue"}
           </Text>
         </div>
       </div>
@@ -254,14 +289,16 @@ export default function AddCoupon() {
                   placeholder="Select Venue"
                   className="venue-select-compact"
                   loading={venueLoading}
-                  onChange={handleVenueChange}
-                  value={selectedVenueId}
+                 value={selectedVenueKey}     // ✅
+  onChange={handleVenueChange} // ✅
                 >
-                  {venueList?.resutl?.map((venue) => (
-                    <Option key={venue.venue_id} value={venue.venue_id}>
-                      {venue.venue_name}
-                    </Option>
-                  ))}
+                {venueList?.resutl?.map((venue) => (
+    <Option
+      key={`${venue.id}-${venue.venue_type}`}
+      value={`${venue.id}-${venue.venue_type}`}   // ✅ SAME FORMAT
+    >
+ {venue.name} - {venue.type} {venue.id}    </Option>
+  ))}
                 </Select>
               </Form.Item>
 
@@ -281,7 +318,47 @@ export default function AddCoupon() {
               </Form.Item>
 
               {/* Coupon Type */}
+         <Form.Item
+  name="maxDiscount"
+  label="Maximum Discount Amount"
+  rules={
+    couponType === "percentage"
+      ? [
+          { required: true, message: "Please enter maximum discount amount" },
+          { type: "number", min: 1, message: "Value must be greater than 0" },
+        ]
+      : [] // ✅ fixed me validation nahi
+  }
+>
+  <InputNumber
+    style={{ width: "100%" }}
+    placeholder={
+      couponType === "flat"
+        ? "Not applicable for Fixed discount"
+        : "Enter maximum discount"
+    }
+    min={1}
+    disabled={couponType === "flat"} // ✅ MAIN LOGIC
+  />
+</Form.Item>
+
+
+              {/* Discount Value */}
               <Form.Item
+                name="value"
+                label="Discount Value"
+                rules={[{ required: true, message: "Please enter value" }]}
+                className="form-item-compact"
+              >
+                <InputNumber
+                  // suffix="₹"
+                  style={{ width: "100%" }}
+                  placeholder="Enter value"
+                  className="form-input-compact"
+                />
+              </Form.Item>
+            </div>
+               <Form.Item
                 name="couponType"
                 label="Type"
                 rules={[{ required: true, message: "Please select type" }]}
@@ -298,43 +375,7 @@ export default function AddCoupon() {
                   </Radio>
                 </Radio.Group>
               </Form.Item>
-
-              {/* Discount Value */}
-              <Form.Item
-                name="value"
-                label="Discount Value"
-                rules={[{ required: true, message: "Please enter value" }]}
-                className="form-item-compact"
-              >
-                <InputNumber
-                  suffix="₹"
-                  style={{ width: "100%" }}
-                  placeholder="Enter value"
-                  className="form-input-compact"
-                />
-              </Form.Item>
-            </div>
-            <Form.Item
-              name="maxDiscount"
-              label="Maximum Discount Amount"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter maximum discount amount",
-                },
-                {
-                  type: "number",
-                  min: 1,
-                  message: "Value must be greater than 0",
-                },
-              ]}
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                placeholder="Enter maximum discount"
-                min={1}
-              />
-            </Form.Item>
+            
 
             {/* ✅ NEW FIELD 2: Minimum Booking Value */}
             <Form.Item
@@ -408,56 +449,68 @@ export default function AddCoupon() {
             </Form.Item>
 
             {/* Applicable Sports */}
-            <Form.Item
-              name="sport"
-              label="Applicable Sports"
-              rules={[{ required: true, message: "Please select sports" }]}
-              className="form-item-compact"
-              initialValue={selectedSports}
-            >
-              <div className="sports-selection-container">
-                {sportsLoading ? (
-                  <div className="sports-loading">
-                    <Spin size="small" />
-                    <Text type="secondary" style={{ marginLeft: 8 }}>
-                      Loading sports...
-                    </Text>
-                  </div>
-                ) : (
-                  <Space wrap className="sports-container">
-                    <Button
-                      key="All Sports"
-                      type={
-                        selectedSports.includes("All Sports")
-                          ? "primary"
-                          : "default"
-                      }
-                      onClick={() => handleSportToggle("All Sports")}
-                      className="sport-button-compact"
-                      size="small"
-                    >
-                      All Sports
-                    </Button>
-                    {sportsList.map((sport) => (
-                      <Button
-                        key={sport.id}
-                        type={
-                          selectedSports.includes(sport.name)
-                            ? "primary"
-                            : "default"
-                        }
-                        onClick={() => handleSportToggle(sport.name)}
-                        className="sport-button-compact"
-                        size="small"
-                        disabled={sport.status !== 1}
-                      >
-                        {sport.name}
-                      </Button>
-                    ))}
-                  </Space>
-                )}
-              </div>
-            </Form.Item>
+       <Form.Item
+  name="sport"
+  label="Applicable Sports"
+  className="form-item-compact"
+  rules={[
+    {
+      validator: (_, value) => {
+        // 🔹 agar sports list hi empty hai → no error
+        if (!sportsList || sportsList.length === 0) {
+          return Promise.resolve();
+        }
+
+        // 🔹 sports list hai but kuch select nahi kiya
+        if (!selectedSports || selectedSports.length === 0) {
+          return Promise.reject(
+            new Error("Please select at least one sport")
+          );
+        }
+
+        return Promise.resolve();
+      },
+    },
+  ]}
+>
+  <div className="sports-selection-container">
+  {sportsLoading ? (
+    <div className="sports-loading">
+      <Spin size="small" />
+      <Text type="secondary" style={{ marginLeft: 8 }}>
+        Loading sports...
+      </Text>
+    </div>
+  ) : (
+    <Space wrap className="sports-container">
+      {/* ✅ ALL SPORTS — hamesha dikhega */}
+      <Button
+        type={selectedSports.length === 0 ? "primary" : "default"}
+        onClick={() => setSelectedSports([])}
+        className="sport-button-compact"
+      >
+        All Sports
+      </Button>
+
+      {/* ✅ Sirf tab sports buttons dikhao jab data ho */}
+      {sportsList.length > 0 &&
+        sportsList.map((sport) => (
+          <Button
+            key={sport.id}
+            type={selectedSports.includes(sport.id) ? "primary" : "default"}
+            onClick={() => handleSportToggle(sport.id)}
+            disabled={sport.status !== 1}
+            className="sport-button-compact"
+          >
+            {sport.name}
+          </Button>
+        ))}
+    </Space>
+  )}
+</div>
+
+</Form.Item>
+
           </div>
 
           {/* Compact Submit Button */}
@@ -467,7 +520,7 @@ export default function AddCoupon() {
               htmlType="submit"
               size="large"
               loading={isSubmitting || createCouponMutation.isPending}
-              className="submit-button-compact"
+                        className="sport-button-compact"
               block
             >
               {isSubmitting || createCouponMutation.isPending

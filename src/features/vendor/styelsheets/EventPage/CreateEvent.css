@@ -160,7 +160,25 @@
 /* .container_wrapper .accordion-button::after {
     color: #1163C7 !important;
 } */
+/* Chrome, Safari, Edge */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+.form-check-input[type="radio"] {
+  width: 25px;
+  height: 25px;
+  margin-top: 0;
+  cursor: pointer;
+}
 /* Remove default arrow */
 .accordion-button::after {
   background-image: none !important;

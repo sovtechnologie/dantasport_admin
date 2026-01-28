@@ -276,6 +276,8 @@ const SortableImageCard = ({
 const VenueImagesPage = () => {
   const id = useSelector((state) => state.auth.user.id);
   const [selectedVenueId, setSelectedVenueId] = useState(null);
+  const [selectedVenueKey, setSelectedVenueKey] = useState(null);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showImageViewModal, setShowImageViewModal] = useState(false);
@@ -286,7 +288,38 @@ const VenueImagesPage = () => {
   const [isVenueChanging, setIsVenueChanging] = useState(false);
   const navigate = useNavigate();
   const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorVenueList();
-  const { data: galleryList, loading: galleryLoading, error: galleryError } = useFetchGalleryImage({ venueId: selectedVenueId || 1, type: 1 });
+const selectedVenue = useMemo(() => {
+  if (!selectedVenueKey) return null;
+
+  const [id, venue_type] = selectedVenueKey.split("-");
+
+  return venueList?.resutl?.find(
+    v =>
+      Number(v.id) === Number(id) &&
+      Number(v.venue_type) === Number(venue_type)
+  );
+}, [venueList?.resutl, selectedVenueKey]);
+
+
+
+const shouldFetchGallery =
+  Boolean(selectedVenue?.id && selectedVenue?.venue_type);
+
+const {
+  data: galleryList,
+  loading: galleryLoading,
+  error: galleryError
+} = useFetchGalleryImage(
+  shouldFetchGallery
+    ? {
+        venueId: selectedVenue.id,
+        type: selectedVenue.venue_type
+      }
+    : null
+);
+
+
+
   const deleteImageMutation = useDeleteGalleryImage();
   const updateImageMutation = useUpdateGalleryImage();
 
@@ -343,22 +376,21 @@ const VenueImagesPage = () => {
       timestamp: new Date().toISOString()
     });
   };
+useEffect(() => {
+  if (venueList?.resutl?.length && !selectedVenueKey) {
+    const v = venueList.resutl[0];
+    setSelectedVenueKey(`${v.id}-${v.venue_type}`);
+  }
+}, [venueList, selectedVenueKey]);
 
-  useEffect(() => {
-    if (venueList?.resutl?.length && !selectedVenueId) {
-      setSelectedVenueId(venueList.resutl[0].venue_id);
-    }
-  }, [venueList, selectedVenueId]);
 
   // Handle venue change with loading state
-  const handleVenueChange = (venueId) => {
-    setIsVenueChanging(true);
-    setSelectedVenueId(venueId);
-    // Reset loading state after a short delay to allow data to load
-    setTimeout(() => {
-      setIsVenueChanging(false);
-    }, 500);
-  };
+ const handleVenueChange = (value) => {
+  setIsVenueChanging(true);
+  setSelectedVenueKey(value); // "86-2"
+  setTimeout(() => setIsVenueChanging(false), 300);
+};
+
 
   // Handle errors
   useEffect(() => {
@@ -372,14 +404,13 @@ const VenueImagesPage = () => {
 
   // Enterprise-level memoized sorted images for performance
   const sortedImages = useMemo(() => {
-    if (!galleryList?.result) return [];
-    return [...galleryList.result].sort((a, b) => a.display_order - b.display_order);
-  }, [galleryList?.result]);
+  if (!galleryList?.result) return [];
+  return [...galleryList.result].sort((a, b) => a.display_order - b.display_order);
+}, [galleryList?.result]);
+
 
   // Memoized selected venue for performance
-  const selectedVenue = useMemo(() => {
-    return venueList?.resutl?.find(venue => venue.venue_id === selectedVenueId);
-  }, [venueList?.resutl, selectedVenueId]);
+ 
 
   // Memoized drag items for performance
   const dragItems = useMemo(() => {
@@ -442,16 +473,16 @@ const VenueImagesPage = () => {
         try {
           const formData = new FormData();
           formData.append("venueId", String(selectedVenueId));
-          formData.append("type", "1");
+          formData.append("type", String(selectedVenue?.venue_type));
           formData.append("displayOrder", String(imageData.newDisplayOrder));
           formData.append("imageGalleryId", String(imageData.id));
           
           console.log(`📤 Updating image ${imageData.id}: ${imageData.oldDisplayOrder} → ${imageData.newDisplayOrder}`);
           
-          const result = await updateImageMutation.mutateAsync(formData);
+          const resutl = await updateImageMutation.mutateAsync(formData);
           
-          if (result?.status !== 200) {
-            throw new Error(`Unexpected response status: ${result?.status}`);
+          if (resutl?.status !== 200) {
+            throw new Error(`Unexpected response status: ${resutl?.status}`);
           }
           
           return { success: true, imageId: imageData.id, newOrder: imageData.newDisplayOrder };
@@ -473,17 +504,17 @@ const VenueImagesPage = () => {
         }
       });
 
-      const results = await Promise.allSettled(updatePromises);
+      const resutls = await Promise.allSettled(updatePromises);
       
-      // Analyze results
-      const successful = results.filter(r => r.status === 'fulfilled').length;
-      const failed = results.filter(r => r.status === 'rejected').length;
+      // Analyze resutls
+      const successful = resutls.filter(r => r.status === 'fulfilled').length;
+      const failed = resutls.filter(r => r.status === 'rejected').length;
       
-      console.log("📊 Reorder operation results:", {
-        total: results.length,
+      console.log("📊 Reorder operation resutls:", {
+        total: resutls.length,
         successful,
         failed,
-        successRate: `${Math.round((successful / results.length) * 100)}%`
+        successRate: `${Math.round((successful / resutls.length) * 100)}%`
       });
 
       if (failed === 0) {
@@ -500,9 +531,9 @@ const VenueImagesPage = () => {
         });
         
         // Log failed operations for debugging
-        results.forEach((result, index) => {
-          if (result.status === 'rejected') {
-            console.error(`Failed image update:`, result.reason);
+        resutls.forEach((resutl, index) => {
+          if (resutl.status === 'rejected') {
+            console.error(`Failed image update:`, resutl.reason);
           }
         });
       } else {
@@ -545,14 +576,18 @@ const VenueImagesPage = () => {
     try {
       setDeletingImageId(image.id);
       console.log("🗑️ Deleting image:", image);
-      const payload = { imageId: image.id, venueId: selectedVenueId };
+       const payload = {
+    imageId: image.id,
+    venueId: selectedVenue.id,
+    venueType: selectedVenue.venue_type
+  };
       console.log("📋 Delete payload:", payload);
       
-      const result = await deleteImageMutation.mutateAsync(payload);
-      console.log("✅ Delete result:", result);
+      const resutl = await deleteImageMutation.mutateAsync(payload);
+      console.log("✅ Delete resutl:", resutl);
       
       // Check if response status is 200
-      if (result?.status === 200) {
+      if (resutl?.status === 200) {
         message.success("Image deleted successfully!");
         console.log("✅ Delete successful - Status 200 confirmed");
 
@@ -569,7 +604,7 @@ const VenueImagesPage = () => {
               imagesToReorder.map(async (img) => {
                 const formData = new FormData();
                 formData.append("venueId", String(selectedVenueId));
-                formData.append("type", "1");
+formData.append("type", String(selectedVenue?.venue_type));
                 formData.append("displayOrder", String(img.display_order - 1));
                 formData.append("imageGalleryId", String(img.id));
                 return updateImageMutation.mutateAsync(formData);
@@ -585,7 +620,7 @@ const VenueImagesPage = () => {
         }
       } else {
         message.warning("Image deleted but unexpected response status");
-        console.log("⚠️ Unexpected status:", result?.status);
+        console.log("⚠️ Unexpected status:", resutl?.status);
       }
     } catch (error) {
       console.error("❌ Delete error:", error);
@@ -623,35 +658,43 @@ const VenueImagesPage = () => {
 
   // Show loading state when no venue is selected, when gallery is loading, or when venue is changing
   // Also show loading if we have a venue but no gallery data yet (prevents showing static data)
-  if (!selectedVenueId || galleryLoading || isVenueChanging || (selectedVenueId && !galleryList)) {
+if (
+  !selectedVenue ||
+  galleryLoading ||
+  isVenueChanging ||
+  (selectedVenue && !galleryList)
+) {
     return (
       <div className="venue-card">
         <div className="venue-toolbar">
-          <Select
-            placeholder="Select Venue"
-            className="venue-select"
-            loading={venueLoading}
-            onChange={handleVenueChange}
-            value={selectedVenueId || undefined}
-            disabled={venueLoading || !venueList?.resutl?.length}
-          >
-            {venueList?.resutl?.map((venue) => (
-              <Option key={venue.venue_id} value={venue.venue_id}>
-                {venue.venue_name}
+         <Select
+          placeholder="Select Venue"
+          className="venue-select"
+          loading={venueLoading}
+          onChange={handleVenueChange}
+value={selectedVenueKey || undefined}
+          disabled={venueLoading || !venueList?.resutl?.length}
+        >
+          {venueList?.resutl?.map((venue) => (
+              <Option   key={`${venue.id}-${venue.venue_type}`}
+  value={`${venue.id}-${venue.venue_type}`}>
+                {venue.name} - {venue.type} {venue.id}
               </Option>
             ))}
-          </Select>
-          <Button 
-            type="primary" 
-            className="add-btn"
-            disabled={true}
-          >
-            + Add Venue Image
-          </Button>
+        </Select>
+        <Button 
+  type="primary" 
+  className="add-btn"
+  disabled={!selectedVenue || sortedImages?.length >= 6 || galleryLoading || isReordering}
+  onClick={handleAddImage}
+>
+  + Add Venue Image
+</Button>
+
         </div>
 
         <h3 className="venue-title">
-          {selectedVenue?.venue_name || "Select a venue to view images"}
+          {selectedVenue?.name || "Select a venue to view images"}
         </h3>
 
         <div className="page-loading-container">
@@ -679,33 +722,34 @@ const VenueImagesPage = () => {
           className="venue-select"
           loading={venueLoading}
           onChange={handleVenueChange}
-          value={selectedVenueId || undefined}
+value={selectedVenueKey || undefined}
           disabled={venueLoading || !venueList?.resutl?.length}
         >
           {venueList?.resutl?.map((venue) => (
-            <Option key={venue.venue_id} value={venue.venue_id}>
-              {venue.venue_name}
-            </Option>
-          ))}
+              <Option   key={`${venue.id}-${venue.venue_type}`}
+  value={`${venue.id}-${venue.venue_type}`}>
+                {venue.name} - {venue.type} {venue.id}
+              </Option>
+            ))}
         </Select>
-        <Button 
-          type="primary" 
-          className="add-btn"
-          disabled={!selectedVenueId || (sortedImages?.length >= 6) || galleryLoading || isReordering}
-          onClick={handleAddImage}
-        >
-          + Add Venue Image
-          {sortedImages?.length >= 6 && (
-            <span className="max-limit-indicator"> (Max 6)</span>
-          )}
-          {isReordering && (
-            <span className="reordering-indicator"> (Reordering...)</span>
-          )}
-        </Button>
+      <Button 
+  type="primary" 
+  className="add-btn"
+  disabled={
+    !selectedVenue ||
+    sortedImages?.length >= 6 ||
+    galleryLoading ||
+    isReordering
+  }
+  onClick={handleAddImage}
+>
+  + Add Venue Image
+</Button>
+
       </div>
 
       <h3 className="venue-title">
-        {selectedVenue?.venue_name || "Select a venue to view images"}
+        {selectedVenue?.name || "Select a venue to view images"}
       </h3>
 
 
@@ -727,7 +771,7 @@ const VenueImagesPage = () => {
             >
               {sortedImages.map((img, index) => (
                 <SortableImageCard
-                  key={img.id}
+                 key={img.id ?? `image-${index}`}
                   image={img}
                   index={index}
                   deletingImageId={deletingImageId}
@@ -773,18 +817,21 @@ const VenueImagesPage = () => {
       <AddVenueImage
         isVisible={showAddModal}
         onClose={() => setShowAddModal(false)}
-        selectedVenueId={selectedVenueId}
+       selectedVenueId={selectedVenue?.id}
+  venueType={selectedVenue?.venue_type}
       />
 
-      <EditVenueImage
-        isVisible={showEditModal}
-        onClose={() => {
-          setShowEditModal(false);
-          setSelectedImage(null);
-        }}
-        selectedImage={selectedImage}
-        selectedVenueId={selectedVenueId}
-      />
+    <EditVenueImage
+  isVisible={showEditModal}
+  onClose={() => {
+    setShowEditModal(false);
+    setSelectedImage(null);
+  }}
+  selectedImage={selectedImage}
+  selectedVenueId={selectedVenue?.id}
+  venueType={selectedVenue?.venue_type}
+/>
+
 
       {/* Image View Modal */}
       <Modal

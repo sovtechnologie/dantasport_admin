@@ -3,7 +3,7 @@ import api from "../../api";
 
 export const fetchVendorVenueList = async () => {
     try {
-        const response = await api.get('vendor/venues/getVenueSelectList');
+        const response = await api.get('vendor/venues/getAllVenueEventAndGym');
         return response?.data;
     } catch (error) {
         console.error("Error fetching venue list:", error);
@@ -76,7 +76,7 @@ export const fetchGymDetails = async (gymId) => {
 // Update gym by id
 export const updateGym = async ({ gymId, formData }) => {
     try {
-        const response = await api.post(`vendor/gym/updateGym/${gymId}`, formData);
+        const response = await api.put(`vendor/gym/updateGym/${gymId}`, formData);
         return response?.data;
     } catch (error) {
         console.error("Error updating gym:", error);
