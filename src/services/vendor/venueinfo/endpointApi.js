@@ -3,6 +3,17 @@ import api from "../../api";
 
 export const fetchVendorVenueList = async () => {
     try {
+        const response = await api.get('vendor/venues/getVenueSelectList');
+        return response?.data;
+    } catch (error) {
+        console.error("Error fetching venue list:", error);
+        throw error;
+
+    }
+}
+
+export const fetchAllVenueEventAndGym= async () => {
+    try {
         const response = await api.get('vendor/venues/getAllVenueEventAndGym');
         return response?.data;
     } catch (error) {
@@ -11,6 +22,7 @@ export const fetchVendorVenueList = async () => {
 
     }
 }
+
 
 export const AddSportPrice = async (payload) => {
     try {

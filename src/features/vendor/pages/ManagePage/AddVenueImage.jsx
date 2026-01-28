@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Upload, Button, Form, Select, InputNumber, message, Spin } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useAddGalleryImage } from "../../../../hooks/vendor/galleryImage/useAddGalleryImage";
-import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+import { useFetchVendorAllList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchGalleryImage } from "../../../../hooks/vendor/galleryImage/useFetchGalleryImage";
 import { useSelector } from "react-redux";
 
@@ -15,7 +15,7 @@ const AddVenueImage = ({ isVisible, onClose, selectedVenueId, venueType }) => {
   const [nextDisplayOrder, setNextDisplayOrder] = useState(1);
   
   const user = useSelector((state) => state.auth.user);
-  const { data: venueList, loading: venueLoading } = useFetchVendorVenueList();
+  const { data: venueList, loading: venueLoading } = useFetchVendorAllList();
   const { data: galleryList } = useFetchGalleryImage({ venueId: selectedVenueId,  type: venueType,});
   const addImageMutation = useAddGalleryImage();
 

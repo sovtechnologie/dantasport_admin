@@ -4,7 +4,7 @@ import { Card, Button, Select, Pagination, message, Skeleton, Spin, Tooltip, Mod
 import { EditOutlined, DeleteOutlined, UserOutlined, PhoneOutlined, IdcardOutlined, EyeOutlined, PlusOutlined, MoreOutlined, CalendarOutlined, FileTextOutlined, SettingOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+import { useFetchVendorAllList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchMembers } from "../../../../hooks/vendor/members/useFetchMembers";
 import { useDeleteMember } from "../../../../hooks/vendor/members/useDeleteMember";
 import { useMemberPermissions } from "../../../../services/vendor/members/useMemberPermissions";
@@ -182,7 +182,7 @@ const [selectedVenueId, setSelectedVenueId] = useState(null);
   const [refreshingPermissions, setRefreshingPermissions] = useState(false);
 
   // Fetch venue list
-  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorVenueList();
+  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorAllList();
 
   // Fetch members list
   const { data: membersList, loading: membersLoading, error: membersError, refetch: refetchMembers } = useFetchMembers({

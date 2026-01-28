@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchVendorVenueList, fetchActiveAmenities, addGym, fetchGymList, fetchGymDetails, updateGym, deleteGym } from "../../../services/vendor/venueinfo/endpointApi";
+import { fetchVendorVenueList, fetchActiveAmenities, addGym, fetchGymList, fetchGymDetails, updateGym,fetchAllVenueEventAndGym, deleteGym } from "../../../services/vendor/venueinfo/endpointApi";
 import { useMutation } from "@tanstack/react-query";
 
 export const useFetchVendorVenueList = () => {
@@ -10,6 +10,16 @@ export const useFetchVendorVenueList = () => {
         cacheTime: 30 * 60 * 1000, // 30 minutes
     });
 }
+
+export const useFetchVendorAllList = () => {
+    return useQuery({
+        queryKey: ['vendorVenuesAll'],
+        queryFn: () => fetchAllVenueEventAndGym(),
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        cacheTime: 30 * 60 * 1000, // 30 minutes
+    });
+}
+
 
 export const useFetchActiveAmenities = () => {
     return useQuery({

@@ -9,7 +9,7 @@ import { DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, CameraOutlined
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+import { useFetchVendorAllList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchGalleryImage } from "../../../../hooks/vendor/galleryImage/useFetchGalleryImage";
 import { useDeleteGalleryImage } from "../../../../hooks/vendor/galleryImage/useDeleteGalleryImage";
 import { useUpdateGalleryImage } from "../../../../hooks/vendor/galleryImage/useUpdateGalleryImage";
@@ -287,7 +287,7 @@ const VenueImagesPage = () => {
   const [isReordering, setIsReordering] = useState(false);
   const [isVenueChanging, setIsVenueChanging] = useState(false);
   const navigate = useNavigate();
-  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorVenueList();
+  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorAllList();
 const selectedVenue = useMemo(() => {
   if (!selectedVenueKey) return null;
 

@@ -18,7 +18,7 @@ import {
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+import { useFetchVendorAllList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useCreateCoupon } from "../../../../hooks/vendor/coupons/useCreateCoupon";
 import {
   ArrowLeftOutlined,
@@ -49,7 +49,7 @@ const [selectedVenueType, setSelectedVenueType] = useState(null);
     data: venueList,
     loading: venueLoading,
     error: venueError,
-  } = useFetchVendorVenueList();
+  } = useFetchVendorAllList();
 
   // Fetch sports list
   // Fetch sports list by venueId
