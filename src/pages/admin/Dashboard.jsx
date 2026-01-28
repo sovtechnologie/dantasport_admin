@@ -8,6 +8,7 @@ import CouponUsageReport from "../../features/Component/CouponUsageReport";
 import BookingsAndRatings from "../../features/Component/BookingsAndRatings";
 import PeakHoursDistribution from "../../features/Component/PeakHoursDistribution";
 import "../../features/Component/admin.css";
+import GlobalTabs from "../../features/Component/GlobalTabs";
 
 
 const Dashboard = () => {
@@ -18,11 +19,10 @@ const Dashboard = () => {
       <section className="mb-4">
         <Container>
           <SearchBar />
-          <AdminCards/>
-          <SalesChart/>
-          <CouponUsageReport/>
-          <BookingsAndRatings/>
-          <PeakHoursDistribution/>
+          <div className="mt-4">
+            <GlobalTabs/>
+          </div>
+          
         </Container>
       </section>
     </>

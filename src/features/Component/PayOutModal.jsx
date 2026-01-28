@@ -56,11 +56,30 @@ function PayOutModal({ show, onClose, paymentData }) {
 
       {/* Body */}
       <Modal.Body>
+        <p>Total Number of selected: <strong style={{color: "#1163C7"}}>10</strong></p>
         <Form>
         
 
           {/* Gross, GST, Net Payable, UTR */}
           <Row className="g-3 mb-3">
+            <Col md={6}>
+              <Form.Label>Date End</Form.Label>
+              <Form.Control
+                type="date"
+                style={inputStyle}
+                value={payoutDate}
+                onChange={(e) => setPayoutDate(e.target.value)}
+              />
+            </Col>
+            <Col md={6}>
+              <Form.Label>End Date</Form.Label>
+              <Form.Control
+                type="date"
+                style={inputStyle}
+                value={payoutDate}
+                onChange={(e) => setPayoutDate(e.target.value)}
+              />
+            </Col>
             <Col className="col-6">
               <Form.Label>Total Taxable Value (₹)</Form.Label>
                <Form.Control

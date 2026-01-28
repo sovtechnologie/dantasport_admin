@@ -1,6 +1,7 @@
 import React from "react";
-import { Card, Container } from "react-bootstrap";
-import "../../stylesheet/vendor/dashboard.css"
+import { Card } from "react-bootstrap";
+import "../../stylesheet/vendor/dashboard.css";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,7 +13,6 @@ import {
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
-import "../../stylesheet/vendor/dashboard.css"; // Add your CSS here
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +48,11 @@ export default function ConversionFromCampaigns() {
         backgroundColor: "#1d69d4",
         tension: 0.45,
         borderWidth: 4,
+
+        // 🔑 Hover Fix
         pointRadius: 0,
+        pointHoverRadius: 6,
+        hitRadius: 12,
       },
       {
         label: "Promo code B",
@@ -57,7 +61,11 @@ export default function ConversionFromCampaigns() {
         backgroundColor: "#ff7f0e",
         tension: 0.45,
         borderWidth: 4,
+
+        // 🔑 Hover Fix
         pointRadius: 0,
+        pointHoverRadius: 6,
+        hitRadius: 12,
       },
     ],
   };
@@ -65,6 +73,12 @@ export default function ConversionFromCampaigns() {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+
     plugins: {
       legend: {
         position: "bottom",
@@ -78,11 +92,17 @@ export default function ConversionFromCampaigns() {
           },
         },
       },
+      tooltip: {
+        enabled: true,
+      },
     },
+
     scales: {
       y: {
         beginAtZero: true,
-        ticks: { stepSize: 100 },
+        ticks: {
+          stepSize: 100,
+        },
         grid: {
           display: true,
           color: "#eee",
@@ -97,14 +117,14 @@ export default function ConversionFromCampaigns() {
   };
 
   return (
-    
-    <>
-    <Card className="chart-card shadow-sm border-0 p-3" style={{ borderRadius: "12px" }}>
-        <h4 className="section_heading">Conversion From Campaigns</h4>
-        <div className="chart-container" style={{ height: "300px" }}>
-          <Line data={data} options={options} />
-        </div>
-      </Card>
-    </>
+    <Card
+      className="chart-card shadow-sm border-0 p-3"
+      style={{ borderRadius: "12px" }}
+    >
+      <h4 className="section_heading">Conversion From Campaigns</h4>
+      <div style={{ height: "300px" }}>
+        <Line data={data} options={options} />
+      </div>
+    </Card>
   );
 }

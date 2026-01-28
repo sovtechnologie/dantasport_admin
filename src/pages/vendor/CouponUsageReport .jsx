@@ -25,7 +25,7 @@ const CouponUsageReport = () => {
     <div className="bg-white shadow-md rounded-2xl p-6 w-full max-w-3xl  mt-10">
       <div className="flex justify-between items-center mb-4">
         <h2 className="section_heading">
-          Coupon Usage Report
+          Coupon Usage Report 
         </h2>
         <select className="border border-gray-300 text-sm rounded-md px-3 py-1 focus:outline-none">
           <option>Last Week</option>
