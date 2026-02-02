@@ -81,10 +81,10 @@ const GymCoachCard = ({
                         size="small"
                         disabled={isProcessing}
                         onClick={() => onView(coach)}
-                        aria-label="View gym coach details"
+                        aria-label="View coach coach details"
                     />
                 </Tooltip>,
-                <Tooltip title="Edit Gym Coach" key="edit">
+                <Tooltip title="Edit coach Coach" key="edit">
                     <Button
                         type="text"
                         icon={<EditOutlined />}
@@ -92,7 +92,7 @@ const GymCoachCard = ({
                         size="small"
                         disabled={isProcessing}
                         onClick={() => onEdit(coach)}
-                        aria-label="Edit gym coach"
+                        aria-label="Edit coach coach"
                     />
                 </Tooltip>
             ]}
@@ -147,7 +147,7 @@ export default function CoachList() {
     // Fetch gym coaches list
     const { data: coachesList, isLoading: coachesLoading, isFetching: coachesFetching, error: coachesError, refetch: refetchCoaches } = useFetchGymCoaches({
         gymId: selectedGymId,
-        type: "gym"
+        type: "coach"
     });
 
     // Set default gym when gym list loads
@@ -178,10 +178,10 @@ export default function CoachList() {
     // Handle errors
     useEffect(() => {
         if (gymError) {
-            message.error("Failed to load gym list");
+            message.error("Failed to load coach list");
         }
         if (coachesError) {
-            message.error("Failed to load gym coaches list");
+            message.error("Failed to load coach coaches list");
         }
     }, [gymError, coachesError]);
 
@@ -214,7 +214,7 @@ export default function CoachList() {
     // Enterprise-level memoized handlers for performance
     const handleAddCoach = useCallback(() => {
         if (!selectedGymId) {
-            message.warning("Please select a gym first");
+            message.warning("Please select a coach first");
             return;
         }
         navigate('/vendor/coach/add-coaches');
@@ -237,7 +237,7 @@ export default function CoachList() {
     }, [navigate, gymCoaches]);
 
     const handleViewCoach = useCallback((coach) => {
-        console.log("👁️ Viewing gym coach:", coach);
+        console.log("👁️ Viewing coach coach:", coach);
         setViewingCoach(coach);
         setShowCoachViewModal(true);
     }, []);
@@ -252,14 +252,14 @@ export default function CoachList() {
 
             const response = await updateGymCoach(formData);
             if (response.status === 200 || response.status === 201) {
-                message.success("Gym coach deleted successfully");
+                message.success("coach coach deleted successfully");
                 await refetchCoaches();
             } else {
-                message.error(response.message || "Failed to delete gym coach");
+                message.error(response.message || "Failed to delete coach coach");
             }
         } catch (error) {
             console.error("❌ Failed to delete coach:", error);
-            message.error(error?.response?.data?.message || "Failed to delete gym coach");
+            message.error(error?.response?.data?.message || "Failed to delete coach coach");
         } finally {
             setDeletingCoachId(null);
             setIsProcessing(false);
@@ -273,7 +273,7 @@ export default function CoachList() {
             <div className="venue-card">
                 <div className="page-loading-container">
                     <Spin size="large" />
-                    <div className="page-loading-text">Loading gyms...</div>
+                    <div className="page-loading-text">Loading coach...</div>
                 </div>
             </div>
         );
@@ -285,7 +285,7 @@ export default function CoachList() {
             <div className="venue-card">
                 <div className="venue-toolbar">
                     <Select
-                        placeholder="Select Gym"
+                        placeholder="Select coach"
                         className="venue-select"
                         loading={gymLoading}
                         onChange={handleGymChange}
@@ -309,18 +309,18 @@ export default function CoachList() {
                 </div>
 
                 <h3 className="venue-title">
-                    {selectedGym?.gym_name || "Select a gym to view coaches"}
+                    {selectedGym?.gym_name || "Select a coach to view coaches"}
                 </h3>
 
                 <div className="page-loading-container">
                     <Spin size="large" />
                     <div className="page-loading-text">
                         {!selectedGymId
-                            ? "Please select a gym to view coaches"
+                            ? "Please select a coach to view coaches"
                             : isGymChanging
-                                ? "Switching gym..."
+                                ? "Switching coach..."
                                 : selectedGymId && !coachesList
-                                    ? "Fetching gym coaches..."
+                                    ? "Fetching  coaches..."
                                     : "Loading coaches..."
                         }
                     </div>
@@ -333,7 +333,7 @@ export default function CoachList() {
         <div className="venue-card">
             <div className="venue-toolbar">
                 <Select
-                    placeholder="Select Gym"
+                    placeholder="Select coach"
                     className="venue-select"
                     loading={gymLoading}
                     onChange={handleGymChange}
@@ -360,7 +360,7 @@ export default function CoachList() {
             </div>
 
             <h3 className="venue-title">
-                {selectedGym?.gym_name || "Select a gym to view coaches"}
+                {selectedGym?.gym_name || "Select a coach to view coaches"}
                 {coachesFetching && !coachesLoading && (
                     <Spin size="small" style={{ marginLeft: 8 }} />
                 )}
@@ -456,7 +456,7 @@ export default function CoachList() {
                                                 className="action-btn view-btn"
                                             />
                                         </Tooltip>
-                                        <Tooltip title="Edit Gym Coach">
+                                        <Tooltip title="Edit  Coach">
                                             <Button
                                                 type="text"
                                                 icon={<EditOutlined />}
@@ -466,7 +466,7 @@ export default function CoachList() {
                                                 className="action-btn edit-btn"
                                             />
                                         </Tooltip>
-                                        <Tooltip title={deletingCoachId === record.id ? "Deleting..." : "Delete Gym Coach"}>
+                                        <Tooltip title={deletingCoachId === record.id ? "Deleting..." : "Delete  Coach"}>
                                             <Button
                                                 type="text"
                                                 danger
@@ -495,9 +495,9 @@ export default function CoachList() {
                             <div className="empty-state-icon">
                                 <TrophyOutlined />
                             </div>
-                            <h3 className="empty-state-title">No Gym Coaches Found</h3>
+                            <h3 className="empty-state-title">No  Coaches Found</h3>
                             <p className="empty-state-description">
-                                This gym doesn't have any coaches yet. Click the "ADD GYM COACH" button to add your first coach.
+                                This coach doesn't have any coaches yet. Click the "ADD  COACH" button to add your first coach.
                             </p>
                             <div className="empty-state-info">
                                 <div className="info-item">
@@ -535,7 +535,7 @@ export default function CoachList() {
                 title={
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <TrophyOutlined style={{ color: '#1163C7' }} />
-                        Gym Coach Details - {viewingCoach?.coaches_name}
+                        coach Coach Details - {viewingCoach?.coaches_name}
                     </div>
                 }
                 open={showCoachViewModal}

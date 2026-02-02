@@ -64,7 +64,7 @@ export default function AddCoach() {
             console.log('API Response:', response);
 
             if (response.status === 200 || response.status === 201) {
-                message.success('Gym coach added successfully!');
+                message.success('coach added successfully!');
                 form.resetFields();
                 setFileList([]);
                 // Navigate back to coaches list
@@ -73,7 +73,7 @@ export default function AddCoach() {
                 message.error(response.message || 'Failed to add coach');
             }
         } catch (error) {
-            console.error('Error adding gym coach:', error);
+            console.error('Error adding  coach:', error);
             message.error(error.response?.data?.message || 'Failed to add  coach. Please try again.');
         } finally {
             setLoading(false);
@@ -155,7 +155,7 @@ export default function AddCoach() {
                     <Form.Item 
                         name="selectGym" 
                         label="Select Coach" 
-                        rules={[{ required: true, message: 'Please select a gym' }]}
+                        rules={[{ required: true, message: 'Please select a coach' }]}
                     >
                         <Select 
                             placeholder="Select Gym" 
