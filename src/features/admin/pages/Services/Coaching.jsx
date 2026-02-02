@@ -29,7 +29,7 @@ const columns = [
     ),
   },
   {
-    title: "Classes Attended",
+    title: "No. of Gym Visit",
     dataIndex: "countGames",
     key: "countGames",
     render: (text) => <span className="gamePlayed">{text}</span>,

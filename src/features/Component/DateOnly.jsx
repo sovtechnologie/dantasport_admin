@@ -11,7 +11,9 @@ function DateOnly() {
   return (
     <>
       <div className="bg-white">
-       <Form.Label style={{ fontSize: 12 }}>  Date</Form.Label>
+      <div>
+         <Form.Label style={{ fontSize: 12 }}>  Date</Form.Label>
+      </div>
 
         <RangePicker
           format="YYYY-MM-DD"
