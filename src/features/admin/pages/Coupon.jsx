@@ -14,9 +14,11 @@ const couponData = [
     expiry: "30/12/2025",
     status: true,
     created: "04/10/2025",
+    width:200,
   },
   {
     code: "Welcome200",
+      width:200,
     description: "Satish",
     type: "Upto",
     value: "4.00%",
@@ -58,19 +60,22 @@ function Coupon() {
             <tbody>
               {couponData.map((coupon, index) => (
                 <tr key={index}>
-                  <td>
-                    <div className="fw-semibold">{coupon.code}</div>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>
+                    <div>{coupon.code}</div>
                     <small className="text-muted">{coupon.description}</small>
                   </td>
 
-                  <td>
-                    <Badge bg="info" className="mb-1">
+                  <td >
+                    <Badge bg="info" className="mb-1" style={{width: "100px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>
                       {coupon.type}
                     </Badge>
                     <div className="text-primary fw-semibold">{coupon.value}</div>
                   </td>
 
-                  <td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>
                     <Form.Check
                       inline
                       label="Yes"

@@ -36,13 +36,20 @@ function DisputesPage() {
             <tbody>
               {tableData.map((item, index) => (
                 <tr key={index} className="border-bottom">
-                  <td>{item.name}</td>
-                  <td>{item.vendorId}</td>
-                  <td>{item.phone}</td>
-                  <td>{item.email}</td>
-                  <td>{item.location}</td>
-                  <td className="text-muted small">{item.query}</td>
-                  <td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>{item.name}</td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>{item.vendorId}</td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>{item.phone}</td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>{item.email}</td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>{item.location}</td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>{item.query}</td>
+                  <td style={{width: "200px",whiteSpace: "normal",
+                        wordBreak: "break-word",}}>
                     <Dropdown>
                       <Dropdown.Toggle
                         size="sm"

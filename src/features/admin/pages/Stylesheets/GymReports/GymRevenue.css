@@ -1,8 +1,28 @@
 .revenue-page {
   background: #ffffff;
   border-radius: 12px;
-  padding: 20px;
+  padding: 16px;
 }
+
+/* RatingAdmin.css */
+ .ant-table-cell {
+  white-space: normal !important;   /* allow wrapping */
+  word-break: break-word;           /* break long words */
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Optional: better vertical alignment */
+ td {
+  vertical-align: top;
+}
+
+/* Reduce padding for table header + body */
+.ant-table-thead > tr > th,
+ .ant-table-tbody > tr > td {
+  padding: 5px !important;
+}
+
 
 .revenue-table .ant-table-thead > tr > th {
   background: #f9fafb;

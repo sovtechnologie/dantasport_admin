@@ -169,26 +169,33 @@ function PeakHoursList() {
         {/* ---------------- TABLE CARD ---------------- */}
         <Card className="border-0 shadow-sm mt-4">
           <Card.Body className="p-3">
-            <Table responsive hover className="mb-0 align-middle">
+            <Table
+              responsive
+              hover
+              className="mb-0 align-middle"
+              style={{ tableLayout: "fixed" }}
+            >
               <thead className="table-white">
                 <tr>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>Date</th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
+                  <th style={{ width: "120px", color: "#1163C7", fontWeight: 500 }}>
+                    Date
+                  </th>
+                  <th style={{ width: "220px", color: "#1163C7", fontWeight: 500 }}>
                     Day & Time Slot
                   </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
+                  <th style={{ width: "130px", color: "#1163C7", fontWeight: 500 }}>
                     Sport Type
                   </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
+                  <th style={{ width: "200px", color: "#1163C7", fontWeight: 500 }}>
                     Venue Name
                   </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
+                  <th style={{ width: "200px", color: "#1163C7", fontWeight: 500 }}>
                     Slots Booked / Total
                   </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
+                  <th style={{ width: "140px", color: "#1163C7", fontWeight: 500 }}>
                     Utilization %
                   </th>
-                  <th style={{ color: "#1163C7", fontWeight: 500 }}>
+                  <th style={{ width: "120px", color: "#1163C7", fontWeight: 500 }}>
                     Revenue
                   </th>
                 </tr>
@@ -197,13 +204,13 @@ function PeakHoursList() {
               <tbody>
                 {currentRows.map((row, index) => (
                   <tr key={index}>
-                    <td>{row.date}</td>
-                    <td>{row.slot}</td>
-                    <td>{row.sport}</td>
-                    <td>{row.venue}</td>
-                    <td>{row.slots}</td>
-                    <td>{row.utilization}</td>
-                    <td>{row.revenue}</td>
+                    <td style={{ width: "120px" }}>{row.date}</td>
+                    <td style={{ width: "220px" }}>{row.slot}</td>
+                    <td style={{ width: "130px" }}>{row.sport}</td>
+                    <td style={{ width: "200px" }}>{row.venue}</td>
+                    <td style={{ width: "200px" }}>{row.slots}</td>
+                    <td style={{ width: "140px" }}>{row.utilization}</td>
+                    <td style={{ width: "120px" }}>{row.revenue}</td>
                   </tr>
                 ))}
               </tbody>
@@ -232,9 +239,7 @@ function PeakHoursList() {
                 <Pagination className="mb-0">
                   <Pagination.Prev
                     disabled={currentPage === 1}
-                    onClick={() =>
-                      setCurrentPage(currentPage - 1)
-                    }
+                    onClick={() => setCurrentPage(currentPage - 1)}
                   />
 
                   {[...Array(totalPages)].map((_, i) => (
@@ -249,9 +254,7 @@ function PeakHoursList() {
 
                   <Pagination.Next
                     disabled={currentPage === totalPages}
-                    onClick={() =>
-                      setCurrentPage(currentPage + 1)
-                    }
+                    onClick={() => setCurrentPage(currentPage + 1)}
                   />
                 </Pagination>
               </Col>

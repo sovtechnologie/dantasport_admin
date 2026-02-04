@@ -54,6 +54,7 @@ const Banners = () => {
   const columns = [
     {
       title: "Start Date",
+      width: 170,
       dataIndex: "valid_from",
       key: "valid_from",
       render: (date) => (date ? dayjs(date).format("DD-MM-YYYY") : "-"),
@@ -61,11 +62,13 @@ const Banners = () => {
     {
       title: "End Date",
       dataIndex: "valid_to",
+       width: 170,
       key: "valid_to",
       render: (date) => (date ? dayjs(date).format("DD-MM-YYYY") : "-"),
     },
     {
       title: "Location",
+       width: 150,
       dataIndex: "location",
       key: "location",
       render: (loc) => {
@@ -94,9 +97,10 @@ const Banners = () => {
         return loc;
       },
     },
-    { title: "Link To Redirect", dataIndex: "url", key: "url" },
+    { title: "Link To Redirect", dataIndex: "url", key: "url", width: 330, },
     {
       title: "Status",
+       width: 110,
       dataIndex: "status",
       key: "status",
       render: (st) => (st === 1 ? "Active" : "Inactive"),
@@ -113,6 +117,7 @@ const Banners = () => {
       key: "action",
       render: (_, record) => (
         <Button
+         className="btn btn-outline-primary"
           type="primary"
           icon={<EditOutlined />}
           onClick={() => handleEdit(record)}

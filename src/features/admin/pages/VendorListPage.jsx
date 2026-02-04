@@ -1,11 +1,10 @@
 import './Stylesheets/VendorListPage.css';
 import React, { useEffect, useState } from 'react';
-import { Input, Select, Button, Table, Spin, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Select, Button, Table, Spin, message } from 'antd';
+import { PlusOutlined,EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useFetchVendorList } from '../../../hooks/admin/CreateVendor/useFetchVendorList';
 import { useStatusChange } from '../../../hooks/admin/CreateVendor/useStatusChange';
-import SearchBar from '../../Component/SearchBar';
 import SearchBox from '../../Component/SearchBox';
 
 const { Option } = Select;
@@ -23,7 +22,7 @@ export default function VendorPage() {
   const { mutate: changeStatus, isloading: statusloading } = useStatusChange();
 
   /* ============================
-     MAP API RESPONSE (UNCHANGED)
+     MAP API RESPONSE
   ============================= */
   useEffect(() => {
     if (vendorList && vendorList.result) {
@@ -45,7 +44,7 @@ export default function VendorPage() {
   }, [vendorList]);
 
   /* ============================
-     STATUS CHANGE (UNCHANGED)
+     STATUS CHANGE
   ============================= */
   const handleStatusChange = (key, vendorId, newStatus) => {
     setData(prev =>
@@ -76,31 +75,43 @@ export default function VendorPage() {
   };
 
   /* ============================
-     TABLE COLUMNS (DESIGN ONLY)
+     TABLE COLUMNS
   ============================= */
   const columns = [
     {
       title: 'Vendor Name',
       dataIndex: 'name',
       key: 'name',
-      className: 'vendor-name',
+      width:200,
     },
     {
       title: 'Vendor ID',
       dataIndex: 'vendorId',
       key: 'vendorId',
+       width:100,
+    },
+    {
+      title: 'Mobile Number',
+      dataIndex: ['credentials', 'username'],
+      key: 'mobile',
+    },
+    {
+      title: 'Password',
+      dataIndex: ['credentials', 'password'],
+      key: 'password',
     },
     {
       title: 'No. of Venues',
       dataIndex: 'venuesCount',
       key: 'venuesCount',
       align: 'center',
+      width:200,
     },
     {
       title: 'Venue Location',
       dataIndex: 'venueLocation',
       key: 'venueLocation',
-      render: text => <span className="location-text">{text}</span>,
+      width:300,
     },
     {
       title: 'Status',
@@ -123,22 +134,22 @@ export default function VendorPage() {
         </Select>
       ),
     },
-    {
-      title: 'Action',
-      key: 'action',
-      align: 'center',
-      render: (_, record) => (
-        <Button
-          type="text"
-          className="action-dots"
-          onClick={() =>
-            navigate(`/admin/vendors/edit-vendor/${record.id}`)
-          }
-        >
-          •••
-        </Button>
-      ),
-    },
+   {
+  title: 'Action',
+  key: 'action',
+  align: 'center',
+  render: (_, record) => (
+    <Button
+      type="text"
+      icon={<EditOutlined />}
+      className="edit-action-btn"
+      onClick={() =>
+        navigate(`/admin/vendors/edit-vendor/${record.id}`)
+      }
+    />
+  ),
+},
+
   ];
 
   const handleAddVendor = () => {
@@ -166,14 +177,14 @@ export default function VendorPage() {
   ============================= */
   return (
     <>
-      <SearchBox/>
+      <SearchBox />
 
       <div className="vendor-page-container">
         <div className="vendor-header-form">
           <Button
             type="primary"
             icon={<PlusOutlined />}
-            className="add-vendor-button "
+            className="add-vendor-button"
             onClick={handleAddVendor}
           >
             Add Vendor

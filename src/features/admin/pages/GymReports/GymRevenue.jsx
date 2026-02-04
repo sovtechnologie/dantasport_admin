@@ -69,45 +69,53 @@ export default function GymRevenueAdminPage() {
       title: "Txn. ID",
       dataIndex: "txnId",
       key: "txnId",
+      width: 200,
     },
     {
       title: "Gym Name",
       dataIndex: "gymName",
       key: "gymName",
+       width: 400,
     },
     {
       title: "Gym ID",
       dataIndex: "gymId",
       key: "gymId",
+       width: 200,
     },
     {
       title: "Customer Name",
       dataIndex: "customer",
       key: "customer",
+       width: 200,
     },
     {
       title: "Booking ID",
       dataIndex: "bookingId",
       key: "bookingId",
+       width: 200,
     },
     {
       title: "Date",
       dataIndex: "date",
       key: "date",
+       width: 200,
     },
     {
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
+       width: 200,
       render: (val) => `₹${val}`,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+       width: 200,
       render: (status) => (
         <span
-          className="status-pill"
+          className="status-pill rounded"
           style={{
             backgroundColor: statusStyle[status]?.bg,
             color: statusStyle[status]?.color,

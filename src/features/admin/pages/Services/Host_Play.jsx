@@ -17,18 +17,21 @@ const columns = [
   {
     title: <span style={headerStyle}>User Name</span>,
     dataIndex: "full_name",
+     width:200,
     key: "full_name",
     render: (text) => <span style={{ fontWeight: 400 }}>{text}</span>,
   },
   {
     title: <span style={headerStyle}>User ID</span>,
     dataIndex: "custom_id",
+     width:200,
     key: "custom_id",
-    render: (id) => <span style={{ color: "#6b7280" }}>#{id}</span>,
+    render: (id) => <span style={{ color: "#6b7280", fontWeight:"500" }}>#{id}</span>,
   },
   {
     title: <span style={headerStyle}>Phone Number</span>,
     dataIndex: "phone",
+      width:180,
     key: "phone",
     render: (phone) => <span>{phone}</span>,
   },
@@ -36,22 +39,26 @@ const columns = [
     title: <span style={headerStyle}>Email ID</span>,
     dataIndex: "email",
     key: "email",
+      width:200,
   },
   {
     title: <span style={headerStyle}>Location</span>,
     dataIndex: "location",
     key: "location",
+      width:320,
   },
   {
     title: <span style={headerStyle}>Event Type</span>,
     dataIndex: "event_type",
     key: "event_type",
+     width:200,
     render: (type) => <span>{type || "—"}</span>,
   },
   {
     title: <span style={headerStyle}>Status</span>,
     dataIndex: "status",
     key: "status",
+     width:200,
     render: (status) => {
       const isActive = status === 1;
       return (
@@ -78,6 +85,7 @@ const columns = [
     dataIndex: "booking_count",
     key: "booking_count",
     align: "center",
+     width:200,
     render: (count) => (
       <span
         style={{

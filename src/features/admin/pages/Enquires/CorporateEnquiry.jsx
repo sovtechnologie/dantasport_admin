@@ -204,34 +204,40 @@ export default function CorporateEnquiry() {
       title: <span className="corporate-header-blue">Organization Name</span>,
       dataIndex: "companyName",
       key: "companyName",
+      width:200,
       render: (text) => <span className="corporate-blue-text">{text}</span>,
     },
     {
       title: <span className="corporate-header-blue">Phone Number</span>,
       dataIndex: "phoneNumber",
       key: "phoneNumber",
+      width:200,
       render: (text) => <span className="corporate-blue-text">{text}</span>,
     },
     {
       title: <span className="corporate-header-blue">Email ID</span>,
       dataIndex: "email",
       key: "email",
+      width:200,
       render: (text) => <span className="corporate-blue-text">{text}</span>,
     },
     {
       title: <span className="corporate-header-blue">Location</span>,
       dataIndex: "location",
+      width:320,
       key: "location",
     },
     {
       title: <span className="corporate-header-blue">Remark</span>,
       dataIndex: "remark",
       key: "remark",
+      width:200,
     },
     {
       title: <span className="corporate-header-blue">Status</span>,
       dataIndex: "status",
       key: "status",
+      width:180,
       render: (val, record) => (
         <Select
           value={val}
@@ -249,6 +255,7 @@ export default function CorporateEnquiry() {
     {
       title: <span className="corporate-header-blue">Sub-Status</span>,
       dataIndex: "subStatus",
+      width:180,
       key: "subStatus",
       render: (val, record) => (
         <Select

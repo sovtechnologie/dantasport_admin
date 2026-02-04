@@ -101,53 +101,70 @@ export default function EventRevenueAdminPage() {
 
   /* ---------------- TABLE COLUMNS (UI MATCH) ---------------- */
 
-  const columns = [
-    {
-      title: "Txn. ID",
-      dataIndex: "txnId",
-      render: (val) => <strong>{val}</strong>,
-    },
-    {
-      title: "Vendor Name",
-      dataIndex: "vendorName",
-    },
-    {
-      title: "Venue Name",
-      dataIndex: "eventName",
-    },
-    {
-      title: "Customer Name",
-      dataIndex: "customer",
-    },
-    {
-      title: "Booking ID",
-      dataIndex: "bookingId",
-    },
-    {
-      title: "Date",
-      dataIndex: "bookingDate",
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      render: (status) => {
-        let cls = "";
-        if (status === "Completed") cls = "status-completed";
-        if (status === "Upcoming") cls = "status-upcoming";
-        if (status === "Canceled") cls = "status-canceled";
+const columns = [
+  {
+    title: "Txn. ID",
+    dataIndex: "txnId",
+    width: 220,
+    ellipsis: true,
+    render: (val) => <span>{val}</span>,
+  },
+  {
+    title: "Vendor Name",
+    dataIndex: "vendorName",
+    width: 220,
+    ellipsis: true,
+  },
+  {
+    title: "Venue Name",
+    dataIndex: "eventName",
+    width: 300,
+    ellipsis: true,
+  },
+  {
+    title: "Customer Name",
+    dataIndex: "customer",
+    width: 220,
+    ellipsis: true,
+  },
+  {
+    title: "Booking ID",
+    dataIndex: "bookingId",
+    width: 200,
+    ellipsis: true,
+  },
+  {
+    title: "Date",
+    dataIndex: "bookingDate",
+    width: 220,
+    ellipsis: true,
+  },
+  {
+    title: "Amount",
+    dataIndex: "amount",
+    width: 200,
+    ellipsis: true,
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    width: 200,
+    ellipsis: true,
+    render: (status) => {
+      let cls = "";
+      if (status === "Completed") cls = "status-completed";
+      if (status === "Upcoming") cls = "status-upcoming";
+      if (status === "Canceled") cls = "status-canceled";
 
-        return (
-          <span className={`status-pill ${cls}`}>
-            {status}
-          </span>
-        );
-      },
+      return (
+        <span className={`status-pill rounded ${cls}`}>
+          {status}
+        </span>
+      );
     },
-  ];
+  },
+];
+
 
   /* ---------------- RENDER ---------------- */
 

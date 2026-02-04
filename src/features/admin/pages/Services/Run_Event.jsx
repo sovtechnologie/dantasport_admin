@@ -10,6 +10,7 @@ import SearchBox from "../../../Component/SearchBox";
 const columns = [
   {
     title: "User Name",
+    width:200,
     dataIndex: "full_name",
     key: "full_name",
     render: (text) => (
@@ -18,14 +19,16 @@ const columns = [
   },
   {
     title: "User ID",
+     width:200,
     dataIndex: "custom_id",
     key: "custom_id",
     render: (id) => (
-      <span style={{ color: "#6b7280" }}>#{id}</span>
+      <span style={{ color: "#6b7280",fontWeight:"500" }}>#{id}</span>
     ),
   },
   {
     title: "Phone Number",
+     width:180,
     dataIndex: "mobile",
     key: "mobile",
     render: (mobile) => (
@@ -34,11 +37,13 @@ const columns = [
   },
   {
     title: "Email ID",
+     width:200,
     dataIndex: "email",
     key: "email",
   },
   {
     title: "Location",
+     width:320,
     dataIndex: "location",
     key: "location",
     render: (loc) => (
@@ -47,6 +52,7 @@ const columns = [
   },
   {
     title: "Event Type",
+     width:200,
     dataIndex: "event_type",
     key: "event_type",
     render: (type) => (
@@ -55,6 +61,7 @@ const columns = [
   },
   {
     title: "Status",
+     width:120,
     dataIndex: "status",
     key: "status",
     render: (status) => {
@@ -80,6 +87,7 @@ const columns = [
   },
   {
     title: "Events Attend",
+     width:120,
     dataIndex: "booking_count",
     key: "booking_count",
     align: "center",

@@ -157,32 +157,100 @@ function GymPeak() {
         <Card className="border-0 shadow-sm mt-4">
           <Card.Body className="p-3">
             <Table responsive hover className="mb-0 align-middle">
-              <thead>
-                <tr>
-                  <th className="text-primary fw-medium">Booking ID</th>
-                  <th className="text-primary fw-medium">Redeem Passes</th>
-                  <th className="text-primary fw-medium">Gym Name</th>
-                  <th className="text-primary fw-medium">User Details</th>
-                  <th className="text-primary fw-medium">
-                    Date of Purchase
-                  </th>
-                  <th className="text-primary fw-medium">Amount</th>
-                </tr>
-              </thead>
+  <thead>
+    <tr>
+      <th
+        className="text-primary fw-medium"
+        style={{ width: "140px", whiteSpace: "nowrap" }}
+      >
+        Booking ID
+      </th>
 
-              <tbody>
-                {currentRows.map((row, index) => (
-                  <tr key={index}>
-                    <td>{row.bookingId}</td>
-                    <td>{row.redeemPasses}</td>
-                    <td>{row.gymName}</td>
-                    <td>{row.userDetails}</td>
-                    <td>{row.purchaseDate}</td>
-                    <td className="fw-semibold">{row.amount}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+      <th
+        className="text-primary fw-medium"
+        style={{ width: "160px", whiteSpace: "normal" }}
+      >
+        Redeem Passes
+      </th>
+
+      <th
+        className="text-primary fw-medium"
+        style={{ width: "180px", whiteSpace: "normal" }}
+      >
+        Gym Name
+      </th>
+
+      <th
+        className="text-primary fw-medium"
+        style={{ width: "220px", whiteSpace: "normal" }}
+      >
+        User Details
+      </th>
+
+      <th
+        className="text-primary fw-medium"
+        style={{ width: "160px", whiteSpace: "nowrap" }}
+      >
+        Date of Purchase
+      </th>
+
+      <th
+        className="text-primary fw-medium text-end"
+        style={{ width: "120px", whiteSpace: "nowrap" }}
+      >
+        Amount
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {currentRows.map((row, index) => (
+      <tr key={index}>
+        <td style={{ whiteSpace: "normal",wordBreak: "break-word"}}>{row.bookingId}</td>
+
+        <td
+          style={{
+            whiteSpace: "normal",
+            wordBreak: "break-word",
+          }}
+        >
+          {row.redeemPasses}
+        </td>
+
+        <td
+          style={{
+            whiteSpace: "normal",
+            wordBreak: "break-word",
+          }}
+        >
+          {row.gymName}
+        </td>
+
+        <td
+          style={{
+            whiteSpace: "normal",
+            wordBreak: "break-word",
+          }}
+        >
+          {row.userDetails}
+        </td>
+
+        <td style={{ whiteSpace: "normal", wordBreak: "break-word", }}>
+          {row.purchaseDate}
+        </td>
+
+        <td className=" text-end"  style={{
+    whiteSpace: "normal",
+    wordBreak: "break-word",
+    width: "200px",
+  }}>
+          {row.amount}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</Table>
+
 
             {/* ================= PAGINATION ================= */}
             <Row className="align-items-center mt-3">

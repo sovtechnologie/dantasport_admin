@@ -1,3 +1,18 @@
+.ant-table-content {
+    padding: 10px;
+}
+/* RatingAdmin.css */
+ .ant-table-cell {
+  white-space: normal !important;   /* allow wrapping */
+  word-break: break-word;           /* break long words */
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Optional: better vertical alignment */
+ td {
+  vertical-align: top;
+}
 
 
 .revenue-page {

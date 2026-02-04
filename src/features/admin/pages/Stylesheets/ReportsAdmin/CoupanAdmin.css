@@ -1,3 +1,22 @@
+/* RatingAdmin.css */
+ .ant-table-cell {
+  white-space: normal !important;   /* allow wrapping */
+  word-break: break-word;           /* break long words */
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Optional: better vertical alignment */
+ td {
+  vertical-align: top;
+}
+
+/* Reduce padding for table header + body */
+.ant-table-thead > tr > th,
+ .ant-table-tbody > tr > td {
+  padding: 5px !important;
+}
+
 /* Search bar section */
 .search-bar-container {
   display: flex;
@@ -17,20 +36,8 @@
   max-width: 40vw;
 }
 
-.export-btn {
-  background: none;
-  border: 1px solid #ccc;
-  color: #333;
-  font-weight: bold;
-  border-radius: 8px;
-  height: 40px;
-  cursor: pointer;
-}
 
-.export-btn:hover {
-  background-color: #1163c7;
-  color: #fff;
-}
+
 
 .filter-item {
   min-width: 40vw;
@@ -53,7 +60,7 @@
 /* Coupon page section */
 .coupon-page {
   background: #fff;
-  padding: 24px;
+  padding: 16px;
   border-radius: 12px;
 }
 

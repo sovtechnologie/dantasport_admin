@@ -48,6 +48,7 @@ import EventsPaymentSettlement from "../features/admin/pages/EventsPaymentSettle
 import UserProfile from "../features/admin/pages/UserProfile.jsx";
 import CoachList from "../features/vendor/pages/Coach/CoachList.jsx";
 import AddCoach from "../features/vendor/pages/Coach/AddCoach.jsx";
+import ConvenienceFree from "../features/admin/pages/ConvenienceFree.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -345,6 +346,7 @@ const AppRoutes = () => {
              <Route path="/admin/profile" element={<UserProfile/>} />
             <Route path="/admin/sport-services" element={<AdmSportService />} />
              <Route path="/admin/notifications" element={<NotificationsPage/>} />
+             <Route path="/admin/convenience" element={<ConvenienceFree/>} />
               <Route path="/admin/disputes" element={<DisputesPage/>} />
                <Route path="/admin/payment-settlement" element={<PaymentSettlement/>} />
                <Route path="/admin/gym-payment-settlement" element={<GymPaymentSettlement/>} />
