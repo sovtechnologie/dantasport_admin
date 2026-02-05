@@ -23,6 +23,8 @@ import DayPassSales from "../../pages/vendor/DayPassSales";
 import UpcomingActivities from "../../pages/vendor/UpcomingActivities";
 import ClientChat from "../../pages/vendor/ClientChat";
 import ClientProgressTracker from "../../pages/vendor/ClientProgressTracker";
+import HostPlayAdmin from "./HostPlayAdmin";
+import PlayHostCards from "./PlayHostCards";
 
 /* ===============================
    Tab Components
@@ -180,7 +182,11 @@ const CoachCards = () => (
 
 const HostPlayCards = () => (
   <div style={{ padding: 20, background: "#e0f7fa", borderRadius: 8 }}>
-    <h6>Host / Play Cards</h6>
+    <div className="mb-3">
+       <PlayHostCards/>
+    </div>
+    <HostPlayAdmin/>
+   
   </div>
 );
 

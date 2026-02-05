@@ -58,17 +58,19 @@ export default function VenuePage() {
   };
 
   const columns = [
-    { title: "Vendor ID", dataIndex: "vendorId", key: "vendorId" },
-    { title: "Vendor Name", dataIndex: "name", key: "name" },
-    { title: "VenueId", dataIndex: "venueId", key: "venueId" },
-    { title: "Venue Name", dataIndex: "venueName", key: "venueName" },
+    { title: "Vendor ID", dataIndex: "vendorId", key: "vendorId", width: 120 },
+    { title: "Vendor Name", dataIndex: "name", key: "name",width: 200 },
+    { title: "VenueId", dataIndex: "venueId", key: "venueId",width: 120 },
+    { title: "Venue Name", dataIndex: "venueName", key: "venueName",width: 200 },
     {
       title: "Location",
+      width: 400,
       key: "location",
       render: (_, record) => `${record.area},${record.city}, ${record.state}`,
     },
     {
       title: "Status",
+      width: 120,
       dataIndex: "status",
       key: "status",
       render: (text, record) => (
@@ -88,6 +90,7 @@ export default function VenuePage() {
     {
       title: "Action",
       key: "action",
+      width: 100,
       render: (_, record) => (
         <Button
           type="text"

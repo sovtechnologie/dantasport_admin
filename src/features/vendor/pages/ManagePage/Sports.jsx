@@ -40,7 +40,7 @@ const SportsPage = () => {
     key: sport.id,
     venueId: sport.venue_id,
     sport: sport.sports_name,
-    description: sport.description,
+    // description: sport.description,
     slotsDuration: `${sport.slots_duration} min`,
     timing: `${moment(sport.from_time, "HH:mm:ss").format(
       "hh:mm A"
@@ -56,11 +56,11 @@ const SportsPage = () => {
       dataIndex: "sport",
       key: "sport",
     },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
+    // {
+    //   title: "Description",
+    //   dataIndex: "description",
+    //   key: "description",
+    // },
     {
       title: "Slots Duration",
       dataIndex: "slotsDuration",

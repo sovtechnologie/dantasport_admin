@@ -11,29 +11,35 @@ const columns = [
     title: "Customer Name",
     dataIndex: "name",
     key: "name",
+    width:200,
   },
   {
     title: "Enquiry Type",
     dataIndex: "type",
     key: "type",
+      width:200,
   },
   {
     title: "Phone Number",
     dataIndex: "phone",
     key: "phone",
+      width:200,
   },
   {
     title: "Email ID",
     dataIndex: "email",
     key: "email",
+      width:200,
   },
   {
     title: "Location",
     dataIndex: "location",
     key: "location",
+      width:320,
   },
   {
     title: "Remark",
+      width:220,
     dataIndex: "remark",
     key: "remark",
     width: 220,
@@ -43,7 +49,7 @@ const columns = [
     dataIndex: "status",
     key: "status",
     render: (value) => (
-      <Select defaultValue={value} size="small" style={{ width: 90 }}>
+      <Select defaultValue={value} size="small" >
         <Option value="RNR">RNR</Option>
         <Option value="Connected">Connected</Option>
         <Option value="Pending">Pending</Option>

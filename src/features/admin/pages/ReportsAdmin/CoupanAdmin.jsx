@@ -69,25 +69,37 @@ export default function CouponAdmin() {
   }, [searchText, data]);
 
   const columns = [
-    { title: "Coupon ID", dataIndex: "couponId", key: "couponId" },
-    { title: "Coupon Type", dataIndex: "couponType", key: "couponType" },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Venue Name", dataIndex: "venueName", key: "venueName" },
-    { title: "Sport", dataIndex: "sport", key: "sport" },
-    { title: "Date", dataIndex: "date", key: "date" },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (val) => (
-        <span
-          style={{ color: statusColors[val] || "black", fontWeight: "bold" }}
-        >
-          {val}
-        </span>
-      ),
-    },
-    { title: "Usage", dataIndex: "usage", key: "usage" },
+    { title: "Coupon ID", dataIndex: "couponId", key: "couponId",width:200 },
+    { title: "Coupon Type", dataIndex: "couponType", key: "couponType",width:200  },
+    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName",width:200  },
+    { title: "Venue Name", dataIndex: "venueName", key: "venueName",width:400  },
+    { title: "Sport", dataIndex: "sport", key: "sport",width:200  },
+    { title: "Date", dataIndex: "date", key: "date",width:200  },
+   {
+  title: "Status",
+  dataIndex: "status",
+  key: "status",
+  width: 200,
+  render: (val) => (
+    <span
+      style={{
+        padding: "4px 12px",
+        borderRadius: "6px",
+        fontSize: "13px",
+        fontWeight: 600,
+        color: val === "Active" ? "#1f9254" : "#d32f2f",
+        backgroundColor: val === "Active" ? "#e9f7ef" : "#fdecea",
+        display: "inline-block",
+        minWidth: "80px",
+        textAlign: "center",
+      }}
+    >
+      {val}
+    </span>
+  ),
+},
+
+    { title: "Usage", dataIndex: "usage", key: "usage",width:200 },
   ];
 
   return (

@@ -1,3 +1,16 @@
+/* RatingAdmin.css */
+ .ant-table-cell {
+  white-space: normal !important;   /* allow wrapping */
+  word-break: break-word;           /* break long words */
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Optional: better vertical alignment */
+ td {
+  vertical-align: top;
+}
+
 .ant-picker-input input::placeholder{
 
   color: #718096 !important;
@@ -17,7 +30,7 @@
 .boxdiv{
 
   background: #fff;
-    padding: 24px;
+    padding: 16px;
     border-radius: 12px;
 }
 /* 🔹 Search bar */

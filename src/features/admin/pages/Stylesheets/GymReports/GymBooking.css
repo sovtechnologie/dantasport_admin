@@ -4,6 +4,25 @@
   padding: 16px;
 }
 
+/* RatingAdmin.css */
+ .ant-table-cell {
+  white-space: normal !important;   /* allow wrapping */
+  word-break: break-word;           /* break long words */
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Optional: better vertical alignment */
+ td {
+  vertical-align: top;
+}
+
+/* Reduce padding for table header + body */
+.ant-table-thead > tr > th,
+ .ant-table-tbody > tr > td {
+  padding: 5px !important;
+}
+
 .booking-table .ant-table-thead > tr > th {
   background: #f9fafb;
   font-weight: 600;

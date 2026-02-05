@@ -575,6 +575,28 @@ const VendorSidebar = ({ onSelect }) => {
                   )}
                 </button>
                 <ul className={`sidebar-submenu ${openMenus.coach ? "open" : ""}`}>
+                    <li>
+                    <Link
+                      to="vendor/coach/coaches-academy-list"
+                      className={`sidebar-submenu-item ${isActive("vendor/coach/coaches-academy-list") ? "active" : ""
+                        }`}
+                      onClick={() => onSelect("Coaches/Academy-List")}
+                    >
+                      <ClockCircleOutlined className="sidebar-menu-icon" />
+                      Add Coaches/Academy 
+                    </Link>
+                  </li>
+                    <li>
+                    <Link
+                      to="/vendor/coach/coaches"
+                      className={`sidebar-submenu-item ${isActive("/vendor/coach/coaches") ? "active" : ""
+                        }`}
+                      onClick={() => onSelect("Coaches List")}
+                    >
+                      <ClockCircleOutlined className="sidebar-menu-icon" />
+                      Add Coaches 
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/vendor/coach/leadmanagement"
@@ -689,17 +711,7 @@ const VendorSidebar = ({ onSelect }) => {
                     </Link>
                   </li>
                    
-                   <li>
-                    <Link
-                      to="vendor/coach/coaches-academy-list"
-                      className={`sidebar-submenu-item ${isActive("vendor/coach/coaches-academy-list") ? "active" : ""
-                        }`}
-                      onClick={() => onSelect("Coaches/Academy-List")}
-                    >
-                      <ClockCircleOutlined className="sidebar-menu-icon" />
-                      Coaches/Academy Listing
-                    </Link>
-                  </li>
+                 
                   
                
                 </ul>

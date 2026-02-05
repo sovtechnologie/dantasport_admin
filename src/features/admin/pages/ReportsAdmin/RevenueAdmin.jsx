@@ -85,20 +85,22 @@ export default function RevenueAdmin() {
   }, [searchText, data]);
 
   const columns = [
-    { title: "Txn. ID", dataIndex: "txnId" },
-    { title: "Vendor Name", dataIndex: "vendorName" },
-    { title: "Venue Name", dataIndex: "venueName" },
-    { title: "Customer Name & Num", dataIndex: "customer" },
-    { title: "Booking ID", dataIndex: "bookingId" },
-    { title: "Date", dataIndex: "bookingDate" },
+    { title: "Txn. ID", dataIndex: "txnId",  width: 300 },
+    { title: "Vendor Name", dataIndex: "vendorName",width: 300 },
+    { title: "Venue Name", dataIndex: "venueName",width: 400 },
+    { title: "Customer Name & Num", dataIndex: "customer", width: 200 },
+    { title: "Booking ID", dataIndex: "bookingId",width: 200 },
+    { title: "Date", dataIndex: "bookingDate",width: 300 },
     {
       title: "Amount",
       dataIndex: "amount",
+      width: 200,
       render: (val) => <span className="amount-text">₹{val}</span>,
     },
     {
       title: "Status",
       dataIndex: "status",
+       width: 190,
       render: (val) => (
         <span className={`status-badge ${statusClass[val]}`}>
           {val}

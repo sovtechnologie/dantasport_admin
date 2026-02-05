@@ -61,13 +61,14 @@ export default function VendorEnquiryPage() {
     };
 
     const columns = [
-        { title: 'Vendor Name', dataIndex: 'vendorName', key: 'vendorName' },
-        { title: 'Phone Number', dataIndex: 'phoneNumber', key: 'phoneNumber' },
-        { title: 'Email ID', dataIndex: 'email', key: 'email' },
-        { title: 'Location', dataIndex: 'location', key: 'location' },
-        { title: 'Remark', dataIndex: 'remark', key: 'remark' },
+        { title: 'Vendor Name', dataIndex: 'vendorName', key: 'vendorName',width:200, },
+        { title: 'Phone Number', dataIndex: 'phoneNumber', key: 'phoneNumber',width:200, },
+        { title: 'Email ID', dataIndex: 'email', key: 'email',width:200, },
+        { title: 'Location', dataIndex: 'location', key: 'location',width:320, },
+        { title: 'Remark', dataIndex: 'remark', key: 'remark',width:200, },
         {
             title: 'Status',
+            width:200,
             dataIndex: 'status',
             key: 'status',
             render: (val, record) => (
@@ -86,6 +87,7 @@ export default function VendorEnquiryPage() {
         },
         {
             title: 'Sub‑Status',
+              width:200,
             dataIndex: 'subStatus',
             key: 'subStatus',
             render: (val, record) => (

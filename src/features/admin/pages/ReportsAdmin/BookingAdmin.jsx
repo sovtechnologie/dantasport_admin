@@ -156,79 +156,83 @@ export default function BookingAdminPage() {
   }, [selectedVendor, selectedVenue, searchText, dateRange, data]);
 
   /* ---------- TABLE COLUMNS (NEW DESIGN) ---------- */
-  const columns = [
-    {
-      title: "Booking ID",
-      dataIndex: "bookingId",
-      key: "bookingId",
-     render: (val) => (
-  <span style={{ fontWeight: 400 }}>
-    {val}
-  </span>
-),
+const columns = [
+  {
+    title: "Booking ID",
+    dataIndex: "bookingId",
+    key: "bookingId",
+    width: 120,
+    render: (val) => <span style={{ fontWeight: 400 }}>{val}</span>,
+  },
+  {
+    title: "Venue Name",
+    dataIndex: "venueName",
+    key: "venueName",
+    width: 420,
+    
+  },
+  {
+    title: "Sport",
+    dataIndex: "sports",
+    key: "sports",
+    width: 200,
+  },
+  {
+    title: "Customer Name",
+    key: "customer",
+    width: 240,
+    render: (_, record) => (
+      <div>
+        <div>{record.customer}</div>
+        <div className="fs-12 text-muted">{record.mobile}</div>
+      </div>
+    ),
+  },
+  {
+    title: "Booking Date",
+    dataIndex: "bookingDate",
+    key: "bookingDate",
+    width: 190,
+  },
+  {
+    title: "Event Date",
+    dataIndex: "eventDate",
+    key: "eventDate",
+    width: 200,
+  },
+  {
+    title: "Duration",
+    dataIndex: "duration",
+    key: "duration",
+    width: 120,
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    width: 150,
+    align: "center",
+    render: (status) => {
+      const s = statusConfig[status] || {};
+      return (
+        <span
+          style={{
+            padding: "6px 14px",
+            borderRadius: "6px",
+            fontSize: "13px",
+            fontWeight: 600,
+            color: s.color,
+            background: s.bg,
+            display: "inline-block",
+          }}
+        >
+          {status}
+        </span>
+      );
+    },
+  },
+];
 
-    },
-    {
-      title: "Venue Name",
-      dataIndex: "venueName",
-      key: "venueName",
-    },
-    {
-      title: "Sport",
-      dataIndex: "sports",
-      key: "sports",
-    },
-    {
-      title: "Customer Name",
-      key: "customer",
-      render: (_, record) => (
-     <div>
-  <div>{record.customer}</div>
-  <div className="fs-12 text-muted">
-    {record.mobile}
-  </div>
-</div>
-      ),
-    },
-    {
-      title: "Booking Date",
-      dataIndex: "bookingDate",
-      key: "bookingDate",
-    },
-    {
-      title: "Event Date",
-      dataIndex: "eventDate",
-      key: "eventDate",
-    },
-    {
-      title: "Duration",
-      dataIndex: "duration",
-      key: "duration",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => {
-        const s = statusConfig[status] || {};
-        return (
-          <span
-            style={{
-              padding: "6px 14px",
-              borderRadius: "6px",
-              fontSize: "13px",
-              fontWeight: 600,
-              color: s.color,
-              background: s.bg,
-              display: "inline-block",
-            }}
-          >
-            {status}
-          </span>
-        );
-      },
-    },
-  ];
 
   /* ---------- JSX ---------- */
   return (
