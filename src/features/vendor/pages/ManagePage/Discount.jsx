@@ -49,7 +49,7 @@ const DiscountPage = () => {
     error: couponsError,
     isFetching: couponsFetching,
     refetch: refetchCoupons,
-  } = useGetCouponList(id, 1);
+  } = useGetCouponList(id);
 
   // Delete coupon mutation
   const deleteCouponMutation = useDeleteCoupon();
@@ -62,9 +62,13 @@ const DiscountPage = () => {
 
   // Memoized coupons data source
   const dataSource = useMemo(() => {
-    if (!couponsData?.result) return [];
+  if (!couponsData?.result) return [];
 
-    return couponsData.result.map((coupon) => ({
+  return [...couponsData.result]
+    .sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at) // 🔥 latest first
+    )
+    .map((coupon) => ({
       key: coupon.id,
       id: coupon.id,
       venue: coupon.venue?.venue_name || "All Venues", // Since venue_id can be null for all venues
@@ -80,9 +84,8 @@ const DiscountPage = () => {
         ? new Date(coupon.expiry_date).toLocaleDateString("en-GB")
         : "N/A",
       status: coupon.status === 1 ? "Active" : "Inactive",
-      created_at: coupon.created_at
-        ? new Date(coupon.created_at).toLocaleDateString("en-GB")
-        : "N/A",
+     created_at: coupon.created_at || null,
+
       description: coupon.coupon_description || "No description",
       maxDiscount: coupon.maximum_discount_value,
       minBookingValue: coupon.minium_booking_value,
@@ -147,12 +150,13 @@ const DiscountPage = () => {
     [softDeleteCouponMutation, refetchCoupons]
   );
 
-  const handleEditCoupon = useCallback(
-    (coupon) => {
-      navigate("/vendor/manage/editcoupon", { state: { couponData: coupon } });
-    },
-    [navigate]
-  );
+ const handleEditCoupon = useCallback(
+  (record) => {
+    navigate(`/vendor/manage/editcoupon/${record.id}`); // ✅ use record.id
+  },
+  [navigate]
+);
+
 
   const handleStatusToggle = useCallback(
     async (coupon) => {
@@ -343,7 +347,7 @@ const DiscountPage = () => {
 
         return (
           <Space size="small">
-            <Tooltip title="Edit Coupon">
+            {/* <Tooltip title="Edit Coupon">
               <Button
                 type="text"
                 icon={<EditOutlined />}
@@ -352,7 +356,7 @@ const DiscountPage = () => {
                 onClick={() => handleEditCoupon(record)}
                 className="action-btn edit-btn"
               />
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip
               title={isDeletingThisCoupon ? "Deleting..." : "Delete Coupon"}
             >
@@ -456,19 +460,30 @@ const DiscountPage = () => {
           </div>
         )}
         {paginatedCoupons?.length > 0 ? (
-          <Table
-            columns={columns}
-            dataSource={paginatedCoupons}
-            pagination={false}
-            rowKey="id"
-            className="enterprise-coupons-table"
-            size="middle"
-            loading={
-              couponsLoading ||
-              updateCouponMutation.isPending ||
-              softDeleteCouponMutation.isPending
-            }
-          />
+        <Table
+  columns={columns}
+  dataSource={dataSource}
+  rowKey="id"
+  className="enterprise-coupons-table"
+  size="middle"
+  loading={
+    couponsLoading ||
+    updateCouponMutation.isPending ||
+    softDeleteCouponMutation.isPending
+  }
+  pagination={{
+    current: currentPage,
+    pageSize: pageSize,
+    total: dataSource.length,
+    showSizeChanger: true,
+    pageSizeOptions: [5, 8, 10, 20],
+    onChange: (page, size) => {
+      setCurrentPage(page);
+      setPageSize(size);
+    },
+  }}
+/>
+
         ) : (
           // Show empty state message
           <div className="empty-state-container">

@@ -5,7 +5,7 @@ import { useAddMember } from "../../../../hooks/vendor/members/useAddMember";
 
 const { Option } = Select;
 
-const AddMemberModal = ({ isVisible, onClose, selectedVenueId }) => {
+const AddMemberModal = ({ isVisible, onClose, selectedVenueId ,venueType}) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,7 +24,7 @@ const AddMemberModal = ({ isVisible, onClose, selectedVenueId }) => {
       formData.append("password", values.password);
       formData.append("document", values.document);
       formData.append("documentNumber", values.documentNumber);
-      formData.append("type", "1"); // Member type
+      formData.append("type", String(venueType)); // Member type
 
       // Add document file if uploaded
       if (fileList.length > 0 && fileList[0].originFileObj) {
@@ -59,7 +59,7 @@ const AddMemberModal = ({ isVisible, onClose, selectedVenueId }) => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [form, fileList, selectedVenueId, addMemberMutation, onClose]);
+  }, [form, fileList, selectedVenueId,venueType, addMemberMutation, onClose]);
 
   const handleCancel = useCallback(() => {
     form.resetFields();

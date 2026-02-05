@@ -4,7 +4,7 @@ import { Card, Button, Select, Pagination, message, Skeleton, Spin, Tooltip, Mod
 import { EditOutlined, DeleteOutlined, UserOutlined, PhoneOutlined, IdcardOutlined, EyeOutlined, PlusOutlined, MoreOutlined, CalendarOutlined, FileTextOutlined, SettingOutlined, DownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+import { useFetchVendorAllList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchMembers } from "../../../../hooks/vendor/members/useFetchMembers";
 import { useDeleteMember } from "../../../../hooks/vendor/members/useDeleteMember";
 import { useMemberPermissions } from "../../../../services/vendor/members/useMemberPermissions";
@@ -161,11 +161,15 @@ const MemberCard = ({
 export default function MembersPage() {
   const navigate = useNavigate();
   const id = useSelector((state) => state.auth.user.id);
-  const [selectedVenueId, setSelectedVenueId] = useState(null);
+  const [selectedVenueKey, setSelectedVenueKey] = useState(null);
+const [selectedVenueId, setSelectedVenueId] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(4);
   const [deletingMemberId, setDeletingMemberId] = useState(null);
   const [isVenueChanging, setIsVenueChanging] = useState(false);
+  const [selectedVenueType, setSelectedVenueType] = useState(null);
+
   const [showMemberViewModal, setShowMemberViewModal] = useState(false);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [showEditMemberModal, setShowEditMemberModal] = useState(false);
@@ -178,7 +182,7 @@ export default function MembersPage() {
   const [refreshingPermissions, setRefreshingPermissions] = useState(false);
 
   // Fetch venue list
-  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorVenueList();
+  const { data: venueList, loading: venueLoading, error: venueError } = useFetchVendorAllList();
 
   // Fetch members list
   const { data: membersList, loading: membersLoading, error: membersError, refetch: refetchMembers } = useFetchMembers({
@@ -193,11 +197,20 @@ export default function MembersPage() {
   const { loading: permissionServiceLoading, fetchMemberPermissions, updateMemberPermissions } = useMemberPermissions();
 
   // Set default venue when venue list loads
-  useEffect(() => {
-    if (venueList?.resutl?.length && !selectedVenueId) {
-      setSelectedVenueId(venueList.resutl[0].venue_id);
-    }
-  }, [venueList, selectedVenueId]);
+  
+
+ useEffect(() => {
+  if (venueList?.resutl?.length && !selectedVenueKey) {
+    const v = venueList.resutl[0];
+
+    const key = `${v.id}-${v.venue_type}`;
+
+    setSelectedVenueKey(key);
+    setSelectedVenueId(Number(v.id));          // ✅ ADD
+    setSelectedVenueType(Number(v.venue_type)); // ✅ ADD
+  }
+}, [venueList, selectedVenueKey]);
+
 
   // Reset expanded rows when venue changes to hide all permissions by default
   useEffect(() => {
@@ -214,15 +227,22 @@ export default function MembersPage() {
   }, [membersList]);
 
   // Handle venue change with loading state
-  const handleVenueChange = (venueId) => {
-    setIsVenueChanging(true);
-    setSelectedVenueId(venueId);
-    setCurrentPage(1); // Reset to first page when venue changes
-    // Reset loading state after a short delay to allow data to load
-    setTimeout(() => {
-      setIsVenueChanging(false);
-    }, 500);
-  };
+  const handleVenueChange = (value) => {
+  setIsVenueChanging(true);
+
+  // value = "43-3"
+  const [venueId, venueType] = value.split("-");
+
+  setSelectedVenueId(Number(venueId));
+  setSelectedVenueType(Number(venueType));
+
+  setCurrentPage(1);
+
+  setTimeout(() => {
+    setIsVenueChanging(false);
+  }, 500);
+};
+
 
   // Handle errors
   useEffect(() => {
@@ -234,10 +254,19 @@ export default function MembersPage() {
     }
   }, [venueError, membersError]);
 
-  // Memoized selected venue for performance
-  const selectedVenue = useMemo(() => {
-    return venueList?.resutl?.find(venue => venue.venue_id === selectedVenueId);
-  }, [venueList?.resutl, selectedVenueId]);
+ const selectedVenue = useMemo(() => {
+  if (!selectedVenueKey) return null;
+
+  const [id, venue_type] = selectedVenueKey.split("-");
+
+  return venueList?.resutl?.find(
+    v =>
+      Number(v.id) === Number(id) &&
+      Number(v.venue_type) === Number(venue_type)
+  );
+}, [venueList?.resutl, selectedVenueKey]);
+
+
 
   // Get members from API response (real fields mapping)
   const venueMembers = useMemo(() => {
@@ -517,15 +546,21 @@ export default function MembersPage() {
             placeholder="Select Venue"
             className="venue-select"
             loading={venueLoading}
-            onChange={handleVenueChange}
-            value={selectedVenueId || undefined}
+            onChange={(val) => {
+    setSelectedVenueKey(val);
+    handleVenueChange(val);
+  }}
+  value={selectedVenueKey}
             disabled={venueLoading || !venueList?.resutl?.length}
           >
-            {venueList?.resutl?.map((venue) => (
-              <Option key={venue.venue_id} value={venue.venue_id}>
-                {venue.venue_name}
-              </Option>
-            ))}
+             {venueList?.resutl?.map((venue) => (
+    <Option
+      key={`${venue.id}-${venue.venue_type}`}
+      value={`${venue.id}-${venue.venue_type}`}   // ✅ SAME FORMAT
+    >
+ {venue.name} - {venue.type} {venue.id}    </Option>
+  ))}
+            
           </Select>
           <Button 
             type="primary" 
@@ -537,7 +572,7 @@ export default function MembersPage() {
         </div>
 
         <h3 className="venue-title">
-          {selectedVenue?.venue_name || "Select a venue to view members"}
+          {selectedVenue?.name || "Select a venue to view members"}
         </h3>
 
         <div className="page-loading-container">
@@ -564,15 +599,20 @@ export default function MembersPage() {
           placeholder="Select Venue"
           className="venue-select"
           loading={venueLoading}
-          onChange={handleVenueChange}
-          value={selectedVenueId || undefined}
+          onChange={(val) => {
+    setSelectedVenueKey(val);
+    handleVenueChange(val);
+  }}
+  value={selectedVenueKey}
           disabled={venueLoading || !venueList?.resutl?.length}
         >
-          {venueList?.resutl?.map((venue) => (
-            <Option key={venue.venue_id} value={venue.venue_id}>
-              {venue.venue_name}
-            </Option>
-          ))}
+        {venueList?.resutl?.map((venue) => (
+    <Option
+      key={`${venue.id}-${venue.venue_type}`}
+      value={`${venue.id}-${venue.venue_type}`}   // ✅ SAME FORMAT
+    >
+ {venue.name} - {venue.type} {venue.id}    </Option>
+  ))}
         </Select>
         <Button 
           type="primary" 
@@ -588,7 +628,7 @@ export default function MembersPage() {
       </div>
 
       <h3 className="venue-title">
-        {selectedVenue?.venue_name || "Select a venue to view members"}
+        {selectedVenue?.name || "Select a venue to view members"}
       </h3>
 
       <div className="members-table-container">
@@ -1011,6 +1051,8 @@ export default function MembersPage() {
         isVisible={showAddMemberModal}
         onClose={() => setShowAddMemberModal(false)}
         selectedVenueId={selectedVenueId}
+  venueType={selectedVenueType}
+
       />
 
       {/* Edit Member Modal */}
@@ -1023,6 +1065,7 @@ export default function MembersPage() {
         selectedMember={editingMember}
         selectedVenueId={selectedVenueId}
         vendorId={id}
+
       />
     </div>
   );

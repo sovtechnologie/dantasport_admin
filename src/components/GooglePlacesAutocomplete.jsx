@@ -1,3 +1,104 @@
+import React, { useEffect, useRef } from "react";
+import { Input } from "antd";
+
+const GooglePlacesAutocomplete = ({ placeholder, onPlaceSelect }) => {
+  const inputRef = useRef(null);
+  const autocompleteRef = useRef(null);
+  const geocoderRef = useRef(null);
+
+  const getAddressComponent = (components, type) => {
+    const comp = components?.find(c => c.types.includes(type));
+    return comp ? comp.long_name : "";
+  };
+
+  // ✅ Init Autocomplete
+  useEffect(() => {
+    if (!window.google || !inputRef.current?.input) return;
+
+    geocoderRef.current = new window.google.maps.Geocoder();
+
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current.input,
+      {
+        componentRestrictions: { country: "in" },
+        fields: ["formatted_address", "geometry", "address_components"],
+        types: [], // 🔥 EMPTY = ANYTHING (house, shop, village, pincode)
+      }
+    );
+
+    autocompleteRef.current.addListener("place_changed", () => {
+      const place = autocompleteRef.current.getPlace();
+      if (!place.geometry) return;
+
+      selectPlace(place);
+    });
+
+    return () => {
+      if (autocompleteRef.current) {
+        window.google.maps.event.clearInstanceListeners(
+          autocompleteRef.current
+        );
+      }
+    };
+  }, []);
+
+  // ✅ Common selector
+  const selectPlace = place => {
+    const components = place.address_components || [];
+
+    onPlaceSelect({
+      address: place.formatted_address,
+      latitude: place.geometry.location.lat(),
+      longitude: place.geometry.location.lng(),
+      area:
+        getAddressComponent(components, "sublocality_level_1") ||
+        getAddressComponent(components, "sublocality") ||
+        "",
+      city:
+        getAddressComponent(components, "locality") ||
+        getAddressComponent(components, "administrative_area_level_2") ||
+        "",
+      state: getAddressComponent(components, "administrative_area_level_1"),
+      pincode: getAddressComponent(components, "postal_code") || "",
+    });
+  };
+
+  // ✅ ENTER key fallback (manual search)
+  const handleKeyDown = e => {
+    if (e.key !== "Enter") return;
+
+    e.preventDefault();
+    const query = e.target.value;
+    if (!query || !geocoderRef.current) return;
+
+    geocoderRef.current.geocode({ address: query }, (results, status) => {
+      if (
+        status === "OK" &&
+        results &&
+        results.length > 0 &&
+        results[0].geometry
+      ) {
+        selectPlace(results[0]);
+      } else {
+        console.warn("No result found for:", query);
+      }
+    });
+  };
+
+  return (
+    <Input
+      ref={inputRef}
+      placeholder={placeholder}
+      onKeyDown={handleKeyDown}
+      style={{ width: "100%" }}
+    />
+  );
+};
+
+export default GooglePlacesAutocomplete;
+
+
+
 // import { Input } from 'antd';
 // import React, { useEffect, useRef, useState } from 'react';
 
@@ -68,157 +169,157 @@
 // };
 
 // export default GooglePlacesAutocomplete;
-import React, { useEffect, useRef } from 'react';
-import { Input, Spin } from 'antd';
-import { useGoogleMapsLoader } from '../utils/useGoogleMapsLoader';
-import { parseGoogleMapsUrl } from '../utils/parseGoogleMapsUrl';
+// import React, { useEffect, useRef } from 'react';
+// import { Input, Spin } from 'antd';
+// import { useGoogleMapsLoader } from '../utils/useGoogleMapsLoader';
+// import { parseGoogleMapsUrl } from '../utils/parseGoogleMapsUrl';
 
-const GooglePlacesAutocomplete = ({ value, onChange, onPlaceSelect, placeholder }) => {
-  const inputRef = useRef(null);          // ref to AntD Input React instance
-  const autocompleteRef = useRef(null);
+// const GooglePlacesAutocomplete = ({ value, onChange, onPlaceSelect, placeholder }) => {
+  // const inputRef = useRef(null);          // ref to AntD Input React instance
+  // const autocompleteRef = useRef(null);
 
-  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
-  const loaded = useGoogleMapsLoader(apiKey);
+  // const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+  // const loaded = useGoogleMapsLoader(apiKey);
 
-  const getAddressComponent = (components, type) => {
-    const comp = components.find(c => c.types.includes(type));
-    return comp ? comp.long_name : '';
-  };
+  // const getAddressComponent = (components, type) => {
+  //   const comp = components.find(c => c.types.includes(type));
+  //   return comp ? comp.long_name : '';
+  // };
 
-  useEffect(() => {
-    if (!loaded) return;
-    if (!inputRef.current || !inputRef.current.input) {
-      // AntD Input or its internal input not yet assigned
-      return;
-    }
+  // useEffect(() => {
+  //   // if (!loaded) return;
+  //   if (!inputRef.current || !inputRef.current.input) {
+  //     // AntD Input or its internal input not yet assigned
+  //     return;
+  //   }
 
-    if (autocompleteRef.current) {
-      window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
-    }
+//     if (autocompleteRef.current) {
+//       window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+//     }
 
-    // Pass the native input element (inputRef.current.input) to Google Autocomplete
-    autocompleteRef.current = new window.google.maps.places.Autocomplete(
-      inputRef.current.input,
-      {
-        componentRestrictions: { country: 'in' },
-        fields: ['formatted_address', 'geometry', 'address_component'],
-        types: ['address'],
-      }
-    );
+//     // Pass the native input element (inputRef.current.input) to Google Autocomplete
+//     autocompleteRef.current = new window.google.maps.places.Autocomplete(
+//       inputRef.current.input,
+//       {
+//         componentRestrictions: { country: 'in' },
+//         fields: ['formatted_address', 'geometry', 'address_component'],
+//         types: ['address'],
+//       }
+//     );
 
-    autocompleteRef.current.addListener('place_changed', () => {
-      const place = autocompleteRef.current.getPlace();
-      if (!place.geometry) {
-        console.error("No geometry data for selected place");
-        return;
-      }
+//     autocompleteRef.current.addListener('place_changed', () => {
+//       const place = autocompleteRef.current.getPlace();
+//       if (!place.geometry) {
+//         console.error("No geometry data for selected place");
+//         return;
+//       }
 
-      const components = place.address_components;
+//       const components = place.address_components;
 
-      onPlaceSelect({
-        address: place.formatted_address,
-        latitude: place.geometry.location.lat(),
-        longitude: place.geometry.location.lng(),
-        area:
-          getAddressComponent(components, 'sublocality_level_1') ||
-          getAddressComponent(components, 'sublocality') ||
-          '',
-        city:
-          getAddressComponent(components, 'locality') ||
-          getAddressComponent(components, 'sublocality') ||
-          '',
-        state: getAddressComponent(components, 'administrative_area_level_1') || '',
-        pincode: getAddressComponent(components, 'postal_code') || '',
-      });
-    });
+//       onPlaceSelect({
+//         address: place.formatted_address,
+//         latitude: place.geometry.location.lat(),
+//         longitude: place.geometry.location.lng(),
+//         area:
+//           getAddressComponent(components, 'sublocality_level_1') ||
+//           getAddressComponent(components, 'sublocality') ||
+//           '',
+//         city:
+//           getAddressComponent(components, 'locality') ||
+//           getAddressComponent(components, 'sublocality') ||
+//           '',
+//         state: getAddressComponent(components, 'administrative_area_level_1') || '',
+//         pincode: getAddressComponent(components, 'postal_code') || '',
+//       });
+//     });
 
-    return () => {
-      if (autocompleteRef.current) {
-        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
-      }
-    };
-  }, [loaded, onPlaceSelect]);
+//     return () => {
+//       if (autocompleteRef.current) {
+//         window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
+//       }
+//     };
+//   }, [ onPlaceSelect]);
 
-  // Fetch place details by placeId or lat/lng
-  const fetchPlaceDetails = async ({ placeId, lat, lng }) => {
-    if (!window.google) return;
-    const service = new window.google.maps.places.PlacesService(document.createElement('div'));
-    if (placeId) {
-      service.getDetails({ placeId, fields: ['formatted_address', 'geometry', 'address_component'] }, (place, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          const components = place.address_components;
-          onPlaceSelect({
-            address: place.formatted_address,
-            latitude: place.geometry.location.lat(),
-            longitude: place.geometry.location.lng(),
-            area:
-              getAddressComponent(components, 'sublocality_level_1') ||
-              getAddressComponent(components, 'sublocality') ||
-              '',
-            city:
-              getAddressComponent(components, 'locality') ||
-              getAddressComponent(components, 'sublocality') ||
-              '',
-            state: getAddressComponent(components, 'administrative_area_level_1') || '',
-            pincode: getAddressComponent(components, 'postal_code') || '',
-          });
-        }
-      });
-    } else if (lat && lng) {
-      const geocoder = new window.google.maps.Geocoder();
-      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
-        if (status === 'OK' && results.length) {
-          const place = results[0];
-          const components = place.address_components;
-          onPlaceSelect({
-            address: place.formatted_address,
-            latitude: lat,
-            longitude: lng,
-            area:
-              getAddressComponent(components, 'sublocality_level_1') ||
-              getAddressComponent(components, 'sublocality') ||
-              '',
-            city:
-              getAddressComponent(components, 'locality') ||
-              getAddressComponent(components, 'sublocality') ||
-              '',
-            state: getAddressComponent(components, 'administrative_area_level_1') || '',
-            pincode: getAddressComponent(components, 'postal_code') || '',
-          });
-        }
-      });
-    }
-  };
+//   // Fetch place details by placeId or lat/lng
+//   const fetchPlaceDetails = async ({ placeId, lat, lng }) => {
+//     if (!window.google) return;
+//     const service = new window.google.maps.places.PlacesService(document.createElement('div'));
+//     if (placeId) {
+//       service.getDetails({ placeId, fields: ['formatted_address', 'geometry', 'address_component'] }, (place, status) => {
+//         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+//           const components = place.address_components;
+//           onPlaceSelect({
+//             address: place.formatted_address,
+//             latitude: place.geometry.location.lat(),
+//             longitude: place.geometry.location.lng(),
+//             area:
+//               getAddressComponent(components, 'sublocality_level_1') ||
+//               getAddressComponent(components, 'sublocality') ||
+//               '',
+//             city:
+//               getAddressComponent(components, 'locality') ||
+//               getAddressComponent(components, 'sublocality') ||
+//               '',
+//             state: getAddressComponent(components, 'administrative_area_level_1') || '',
+//             pincode: getAddressComponent(components, 'postal_code') || '',
+//           });
+//         }
+//       });
+//     } else if (lat && lng) {
+//       const geocoder = new window.google.maps.Geocoder();
+//       geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+//         if (status === 'OK' && results.length) {
+//           const place = results[0];
+//           const components = place.address_components;
+//           onPlaceSelect({
+//             address: place.formatted_address,
+//             latitude: lat,
+//             longitude: lng,
+//             area:
+//               getAddressComponent(components, 'sublocality_level_1') ||
+//               getAddressComponent(components, 'sublocality') ||
+//               '',
+//             city:
+//               getAddressComponent(components, 'locality') ||
+//               getAddressComponent(components, 'sublocality') ||
+//               '',
+//             state: getAddressComponent(components, 'administrative_area_level_1') || '',
+//             pincode: getAddressComponent(components, 'postal_code') || '',
+//           });
+//         }
+//       });
+//     }
+//   };
 
-  // Listen for change - check for Maps URL
-  const handleInputChange = e => {
-    onChange && onChange(e);
-    const urlInfo = parseGoogleMapsUrl(e.target.value);
-    console.log('Parsing result:', urlInfo);
-    if (urlInfo && loaded) {
-      fetchPlaceDetails(urlInfo);
-    }
-  };
+//   // Listen for change - check for Maps URL
+//   const handleInputChange = e => {
+//     onChange && onChange(e);
+//     const urlInfo = parseGoogleMapsUrl(e.target.value);
+//     console.log('Parsing result:', urlInfo);
+//     if (urlInfo && loaded) {
+//       fetchPlaceDetails(urlInfo);
+//     }
+//   };
 
-  if (!loaded) return <Spin />;
+//   // if (!loaded) return <Spin />;
 
-  return (
-    <Input
-      value={value}
-       onChange={handleInputChange}
-      placeholder={placeholder}
-      style={{
-        width: '100%',
-        padding: '6px 11px',
-        borderRadius: 4,
-        border: '1px solid #d9d9d9',
-        outline: 'none',
-      }}
-      onFocus={e => (e.target.style.borderColor = '#40a9ff')}
-      onBlur={e => (e.target.style.borderColor = '#d9d9d9')}
-      ref={inputRef}   // attach React ref here, NOT inputRef prop
-    />
-  );
-};
+//   return (
+//     <Input
+//       value={value}
+//        onChange={handleInputChange}
+//       placeholder={placeholder}
+//       style={{
+//         width: '100%',
+//         padding: '6px 11px',
+//         borderRadius: 4,
+//         border: '1px solid #d9d9d9',
+//         outline: 'none',
+//       }}
+//       onFocus={e => (e.target.style.borderColor = '#40a9ff')}
+//       onBlur={e => (e.target.style.borderColor = '#d9d9d9')}
+//       ref={inputRef}   // attach React ref here, NOT inputRef prop
+//     />
+//   );
+// };
 
-export default GooglePlacesAutocomplete;
+// export default GooglePlacesAutocomplete;
