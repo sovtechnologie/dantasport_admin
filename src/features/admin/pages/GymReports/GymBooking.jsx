@@ -71,21 +71,25 @@ export default function GymBookingAdminPage() {
       title: "Booking ID",
       dataIndex: "bookingId",
       key: "bookingId",
+      width: 160,
       render: (val) => <strong className="fw-light">#{val}</strong>,
     },
     {
       title: "Redeem Passes",
       dataIndex: "redeem",
       key: "redeem",
+      width: 140,
     },
     {
       title: "Gym Name",
       dataIndex: "gymName",
       key: "gymName",
+      width: 220,
     },
     {
       title: "User Details",
       key: "user",
+      width: 220,
       render: (_, record) => (
         <div>
           <div className="user-name">{record.customer}</div>
@@ -97,20 +101,23 @@ export default function GymBookingAdminPage() {
       title: "Date of Purchase",
       dataIndex: "purchaseDate",
       key: "purchaseDate",
+      width: 200,
     },
     {
       title: "Amount",
       dataIndex: "amount",
       key: "amount",
+      width: 120,
       render: (val) => `₹${val}`,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 140,
       render: (status) => (
         <span
-          className="status-pill"
+          className="status-pill rounded"
           style={{
             backgroundColor: statusMap[status]?.bg,
             color: statusMap[status]?.color,
@@ -139,6 +146,8 @@ export default function GymBookingAdminPage() {
               showSizeChanger: false,
             }}
             className="booking-table"
+            tableLayout="fixed"
+            scroll={{ x: "max-content" }}
           />
         </Spin>
       </div>

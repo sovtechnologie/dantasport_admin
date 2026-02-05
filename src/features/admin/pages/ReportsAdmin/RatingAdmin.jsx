@@ -90,14 +90,15 @@ export default function RatingAdmin() {
   };
 
   const columns = [
-    { title: "Customer Name", dataIndex: "customerName", key: "customerName" },
-    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName" },
-    { title: "Venue Name", dataIndex: "venueName", key: "venueName" },
-    { title: "Sport", dataIndex: "sport", key: "sport" },
+    { title: "Customer Name", dataIndex: "customerName", key: "customerName", width: 200 },
+    { title: "Vendor Name", dataIndex: "vendorName", key: "vendorName",width: 200 },
+    { title: "Venue Name", dataIndex: "venueName", key: "venueName",width: 200 },
+    { title: "Sport", dataIndex: "sport", key: "sport",width: 200 },
     {
       title: "Rating",
       dataIndex: "rating",
       key: "rating",
+      width: 200,
       render: (val) => renderStars(val),
     },
     { title: "Review", dataIndex: "review", key: "review" },

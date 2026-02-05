@@ -8,15 +8,16 @@ import SearchBar from "../../../Component/SearchBar";
 import SearchBox from "../../../Component/SearchBox";
 
 const columns = [
-  { title: "Coach Name", dataIndex: "name", key: "name" },
-  { title: "Coach Id", dataIndex: "userId", key: "userId" },
-  { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber" },
-  { title: "Email ID", dataIndex: "email", key: "email" },
-  { title: "Location", dataIndex: "venueLocation", key: "venueLocation" },
-  { title: "Coach Type", dataIndex: "coachType", key: "coachType" },
+  { title: "Coach Name", dataIndex: "name", key: "name", width:200, },
+  { title: "Coach Id", dataIndex: "userId", key: "userId", width:200, },
+  { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber",width:200, },
+  { title: "Email ID", dataIndex: "email", key: "email",width:200, },
+  { title: "Location", dataIndex: "venueLocation", key: "venueLocation",width:320, },
+  { title: "Coach Type", dataIndex: "coachType", key: "coachType",width:150, },
   {
     title: "Status",
     dataIndex: "status",
+    width:200,
     key: "status",
     render: (_, record) => (
       <span
@@ -29,7 +30,8 @@ const columns = [
     ),
   },
   {
-    title: "Classes Attended",
+    title: "No. of Gym Visit",
+    width:200,
     dataIndex: "countGames",
     key: "countGames",
     render: (text) => <span className="gamePlayed">{text}</span>,

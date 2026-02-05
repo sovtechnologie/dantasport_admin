@@ -147,18 +147,22 @@ export default function EventBookingAdminPage() {
     {
       title: "Booking ID",
       dataIndex: "bookingId",
-      render: (val) => <strong className="fw-light">{val}</strong>,
+      width:200,
+      render: (val) => <span >{val}</span>,
     },
     {
       title: "Event Name",
       dataIndex: "eventName",
+        width:300,
     },
     {
       title: "Event Type",
       dataIndex: "eventType",
+        width:200,
     },
     {
       title: "Customer Name",
+        width:200,
       render: (_, row) => (
         <div>
           <div className="customer-name">{row.customerName}</div>
@@ -168,18 +172,22 @@ export default function EventBookingAdminPage() {
     },
     {
       title: "Booking Date",
+        width:200,
       dataIndex: "bookingDate",
     },
     {
       title: "Event Date",
+        width:200,
       dataIndex: "eventDate",
     },
     {
       title: "Duration",
+        width:200,
       dataIndex: "duration",
     },
     {
       title: "Status",
+        width:200,
       dataIndex: "status",
       render: (status) => {
         let cls = "";

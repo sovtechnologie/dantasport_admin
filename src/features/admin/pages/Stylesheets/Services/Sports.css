@@ -9,6 +9,10 @@
     margin-bottom: 2rem;
 }
 
+.ant-table-content {
+    padding: 10px;
+}
+
  table thead.ant-table-thead tr th{
 
   background-color: #fff !important;

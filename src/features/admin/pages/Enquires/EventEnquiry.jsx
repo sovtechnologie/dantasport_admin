@@ -11,32 +11,37 @@ const columns = [
     title: "Customer Name",
     dataIndex: "name",
     key: "name",
+    width:200,
   },
   {
     title: "Enquiry Type",
     dataIndex: "type",
     key: "type",
+      width:200,
   },
   {
     title: "Phone Number",
     dataIndex: "phone",
     key: "phone",
+      width:200,
   },
   {
     title: "Email",
     dataIndex: "email",
     key: "email",
+      width:200,
   },
   {
     title: "Location",
     dataIndex: "location",
     key: "location",
+      width:320,
   },
   {
     title: "Remark",
     dataIndex: "remark",
     key: "remark",
-    width: 260,
+    width: 220,
   },
   {
     title: "Status",
@@ -46,7 +51,7 @@ const columns = [
       <Select
         defaultValue={value}
         size="small"
-        className="status-select"
+        className="status-select w-100"
       >
         <Option value="RNR">RNR</Option>
         <Option value="Connected">Connected</Option>

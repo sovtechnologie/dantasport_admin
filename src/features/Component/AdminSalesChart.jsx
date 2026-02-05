@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import DateOnly from "./DateOnly";
 
 const data = [
   { day: "Sunday", free: 1200, paid: 2200 },
@@ -23,10 +24,12 @@ const data = [
 const AdminSalesChart = () => {
   return (
     <Container className="mt-4 p-0">
+     
       <Card className="border-0" style={{ borderRadius: "16px" }}>
         <Card.Body>
           {/* Header */}
-          <div className="d-flex justify-content-between mb-4">
+           <DateOnly/>
+          <div className="d-flex justify-content-between my-4">
             <h5 className="fw-semibold text-primary mb-0">
               Sales details
             </h5>

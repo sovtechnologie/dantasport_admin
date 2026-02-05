@@ -61,9 +61,9 @@
 .add-vendor-button {
   background-color: #1163c7;
   color: #fff;
-  font-weight: bold;
+  font-weight: normal;
   padding: 20px 20px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .add-vendor-button:hover{

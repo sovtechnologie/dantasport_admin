@@ -85,17 +85,18 @@ export default function GymRatingAdminPage() {
   };
 
   const columns = [
-    { title: "Customer Name", dataIndex: "customerName", key: "customerName" },
-    { title: "Event Name", dataIndex: "eventName", key: "eventName" },
-    { title: "Event ID", dataIndex: "eventID", key: "eventID" },
-    { title: "Event Type", dataIndex: "eventtype", key: "eventtype" },
+    { title: "Customer Name", dataIndex: "customerName", key: "customerName",width:200 },
+    { title: "Event Name", dataIndex: "eventName", key: "eventName",width:300  },
+    { title: "Event ID", dataIndex: "eventID", key: "eventID",width:200  },
+    { title: "Event Type", dataIndex: "eventtype", key: "eventtype",width:200  },
     {
       title: "Rating",
       dataIndex: "rating",
       key: "rating",
+      width:190 ,
       render: (val) => renderStars(val),
     },
-    { title: "Review", dataIndex: "review", key: "review" },
+    { title: "Review", dataIndex: "review", key: "review",width:200  },
   ];
 
   return (

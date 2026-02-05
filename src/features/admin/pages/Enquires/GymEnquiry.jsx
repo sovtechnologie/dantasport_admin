@@ -11,27 +11,31 @@ const columns = [
     title: "GYM Name",
     dataIndex: "name",
     key: "name",
+    width:200,
   },
   {
     title: "Phone Number",
     dataIndex: "phone",
     key: "phone",
+     width:200,
   },
   {
     title: "Email ID",
     dataIndex: "email",
     key: "email",
+     width:200,
   },
   {
     title: "Location",
     dataIndex: "location",
     key: "location",
+     width:200,
   },
   {
     title: "Remark",
     dataIndex: "remark",
     key: "remark",
-    width: 260,
+    width: 220,
   },
   {
     title: "Status",

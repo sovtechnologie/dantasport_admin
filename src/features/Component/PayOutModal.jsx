@@ -63,7 +63,7 @@ function PayOutModal({ show, onClose, paymentData }) {
           {/* Gross, GST, Net Payable, UTR */}
           <Row className="g-3 mb-3">
             <Col md={6}>
-              <Form.Label>Date End</Form.Label>
+              <Form.Label>Start Date </Form.Label>
               <Form.Control
                 type="date"
                 style={inputStyle}

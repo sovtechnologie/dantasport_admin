@@ -8,13 +8,14 @@ import SearchBar from "../../../Component/SearchBar";
 import SearchBox from "../../../Component/SearchBox";
 
 const columns = [
-  { title: "User Name", dataIndex: "name", key: "name" },
-  { title: "User Id", dataIndex: "userId", key: "userId" },
-  { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber" },
-  { title: "Email ID", dataIndex: "email", key: "email" },
-  { title: "Location", dataIndex: "venueLocation", key: "venueLocation" },
+  { title: "User Name", dataIndex: "name", key: "name",width:200 },
+  { title: "User Id", dataIndex: "userId", key: "userId",width:200  },
+  { title: "Phone Number", dataIndex: "phoneNumber", key: "phoneNumber",width:200  },
+  { title: "Email ID", dataIndex: "email", key: "email",width:180  },
+  { title: "Location", dataIndex: "venueLocation", key: "venueLocation",width:320  },
   {
     title: "Status",
+    width:200,
     dataIndex: "status",
     key: "status",
     render: (_, record) => (
@@ -29,6 +30,7 @@ const columns = [
   },
   {
     title: "Passes",
+    width:200,
     dataIndex: "usedPasses",
     key: "passes",
     render: (_, record) => (

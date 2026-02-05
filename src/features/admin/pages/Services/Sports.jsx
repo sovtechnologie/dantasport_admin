@@ -14,30 +14,98 @@ export default function SportsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const columns = [
-    { title: "User Name", dataIndex: "full_name", key: "full_name" },
-    { title: "User Id", dataIndex: "custom_id", key: "custom_id" },
-    { title: "Email ID", dataIndex: "email", key: "email" },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => (
+ const columns = [
+  {
+    title: "User Name",
+    width:200,
+    dataIndex: "full_name",
+    key: "full_name",
+    render: (text) => (
+      <span style={{ fontWeight: 400 }}>{text}</span>
+    ),
+  },
+  {
+    title: "User ID",
+     width:200,
+    dataIndex: "custom_id",
+    key: "custom_id",
+    render: (id) => (
+      <span style={{ color: "#6b7280" }}>#{id}</span>
+    ),
+  },
+  {
+    title: "Phone Number",
+     width:160,
+    dataIndex: "mobile",
+    key: "mobile",
+    render: (mobile) => (
+      <span>+91 {mobile}</span>
+    ),
+  },
+  {
+    title: "Email ID",
+     width:200,
+    dataIndex: "email",
+    key: "email",
+  },
+  {
+    title: "Location",
+     width:220,
+    dataIndex: "location",
+    key: "location",
+    render: (loc) => <span>{loc || "—"}</span>,
+  },
+  {
+    title: "Status",
+      width:120,
+    dataIndex: "status",
+    key: "status",
+    render: (status) => {
+      const isActive = status === 1;
+      return (
         <span
-          className={`status-select ${status === 1 ? "active" : "inactive"}`}
+          style={{
+            padding: "6px 14px",
+            borderRadius: "8px",
+            fontSize: "13px",
+            fontWeight: 500,
+            backgroundColor: isActive ? "#e7f7ef" : "#eaf1ff",
+            color: isActive ? "#1a9b5d" : "#3b82f6",
+            display: "inline-block",
+            minWidth: "80px",
+            textAlign: "center",
+          }}
         >
-          {status === 1 ? "Active" : "Inactive"}
+          {isActive ? "Active" : "Inactive"}
         </span>
-      ),
+      );
     },
-    {
-      title: "Games Played",
-      dataIndex: "booking_count",
-      key: "booking_count",
-      render: (text) => <span className="gamePlayed">{text}</span>,
-    },
-    { title: "Created At", dataIndex: "created_at", key: "created_at" },
-  ];
+  },
+  {
+    title: "Game Played",
+    width:120,
+    dataIndex: "booking_count",
+    key: "booking_count",
+    align: "center",
+    render: (count) => (
+      <span
+        style={{
+          padding: "6px 16px",
+          border: "1px solid #3b82f6",
+          borderRadius: "8px",
+          color: "#3b82f6",
+          fontWeight: 500,
+          display: "inline-block",
+          minWidth: "40px",
+          textAlign: "center",
+        }}
+      >
+        {count}
+      </span>
+    ),
+  },
+];
+
 
   useEffect(() => {
     const fetchData = async () => {

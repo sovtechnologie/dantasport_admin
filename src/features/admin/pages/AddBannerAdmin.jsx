@@ -203,7 +203,7 @@ export default function AddBannerForm() {
             className="submit-btn"
             loading={updateLoading}
           >
-            UPDATE BANNER
+            Add BANNER ADMIN
           </Button>
         </Form.Item>
       </Form>

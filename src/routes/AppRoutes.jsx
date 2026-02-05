@@ -45,6 +45,10 @@ import PlayGameReports from "../features/admin/pages/PlayReports/PlayGameReports
 import PlayUserReports from "../features/admin/pages/PlayReports/PlayUserReports.jsx";
 import GymPaymentSettlement from "../features/admin/pages/GymPaymentSettlement.jsx";
 import EventsPaymentSettlement from "../features/admin/pages/EventsPaymentSettlement.jsx";
+import UserProfile from "../features/admin/pages/UserProfile.jsx";
+import CoachList from "../features/vendor/pages/Coach/CoachList.jsx";
+import AddCoach from "../features/vendor/pages/Coach/AddCoach.jsx";
+import ConvenienceFree from "../features/admin/pages/ConvenienceFree.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -165,6 +169,7 @@ const VenGymRating = lazy(() =>
 const VenGymCoaches = lazy(() =>
   import("../features/vendor/pages/Gym/GymCoaches")
 );
+
 const VenGymAddCoach = lazy(() =>
   import("../features/vendor/pages/Gym/AddGymCoach")
 );
@@ -338,8 +343,10 @@ const AppRoutes = () => {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             {/* Sport/Services */}
+             <Route path="/admin/profile" element={<UserProfile/>} />
             <Route path="/admin/sport-services" element={<AdmSportService />} />
              <Route path="/admin/notifications" element={<NotificationsPage/>} />
+             <Route path="/admin/convenience" element={<ConvenienceFree/>} />
               <Route path="/admin/disputes" element={<DisputesPage/>} />
                <Route path="/admin/payment-settlement" element={<PaymentSettlement/>} />
                <Route path="/admin/gym-payment-settlement" element={<GymPaymentSettlement/>} />
@@ -591,6 +598,8 @@ const AppRoutes = () => {
             <Route path="/vendor/gym/rating" element={<VenGymRating />} />
 
             <Route path="/vendor/gym/coaches" element={<VenGymCoaches />} />
+            <Route path="/vendor/coach/coaches" element={<CoachList />} />
+             <Route path="/vendor/coach/add-coaches" element={<AddCoach />} />
             <Route path="/vendor/gym/addcoach" element={<VenGymAddCoach />} />
             <Route
               path="/vendor/gym/editcoach/:id"

@@ -604,6 +604,20 @@ const AdminSidebar = () => {
 
         </li>
 
+        <li>
+          <Link
+            to="/admin/convenience "
+            className={`flex items-center gap-3 px-4 py-2 text-decoration-none rounded-lg ${isActive("/admin/convenience")
+              ? "bg-blue-600 text-white"
+              : "hover:bg-gray-100"
+              }`}
+          >
+            <AlertCircle size={18} />
+            Convenience Fees
+          </Link>
+
+        </li>
+
 
       </ul>
     </aside>
