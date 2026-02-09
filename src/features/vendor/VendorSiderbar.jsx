@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/Danta-sports1.png";
 // import logo from "../../assets/"
@@ -23,10 +23,14 @@ import {
   MessageOutlined,
   ControlOutlined,
 } from "@ant-design/icons";
+import { useGetCoaches } from "../../hooks/vendor/couches/useGetCoaches";
 
 const VendorSidebar = ({ onSelect }) => {
   const location = useLocation();
   const pathname = location.pathname;
+  const [isAcademy, setIsAcademy] = useState(false);
+const [loadingType, setLoadingType] = useState(true);
+
 
   const [openMenus, setOpenMenus] = useState({
     manage: false,
@@ -42,6 +46,26 @@ const VendorSidebar = ({ onSelect }) => {
     setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const isActive = (path) => pathname === path;
+
+const { data: coachData } = useGetCoaches();
+
+useEffect(() => {
+  if (coachData && coachData.length > 0) {
+
+    const vendorType = coachData[0].type;
+
+    console.log("Vendor Type:", vendorType);
+
+    if (vendorType === 2) {
+      setIsAcademy(true);
+    } else {
+      setIsAcademy(false);
+    }
+
+    setLoadingType(false);
+  }
+}, [coachData]);
+
 
   return (
     <aside className="vendor-sidebar">
@@ -587,15 +611,21 @@ const VendorSidebar = ({ onSelect }) => {
                     </Link>
                   </li>
                     <li>
-                    <Link
-                      to="/vendor/coach/coaches"
-                      className={`sidebar-submenu-item ${isActive("/vendor/coach/coaches") ? "active" : ""
-                        }`}
-                      onClick={() => onSelect("Coaches List")}
-                    >
-                      <ClockCircleOutlined className="sidebar-menu-icon" />
-                      Add Coaches 
-                    </Link>
+                  {isAcademy  && (
+  <li>
+    <Link
+      to="/vendor/coach/coaches"
+      className={`sidebar-submenu-item ${
+        isActive("/vendor/coach/coaches") ? "active" : ""
+      }`}
+      onClick={() => onSelect("Trainer List")}
+    >
+      <ClockCircleOutlined className="sidebar-menu-icon" />
+      Add Trainers
+    </Link>
+  </li>
+)}
+
                   </li>
                   <li>
                     <Link

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -7,6 +7,7 @@ import {
   Table,
   Button,
   Form,
+  Spinner,
 } from "react-bootstrap";
 import { FiFilter, FiCalendar } from "react-icons/fi";
 import "../../pages/Coach/LeadsManagement.css";
@@ -15,52 +16,125 @@ import ReplyModal from "./ReplyModal";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { getLeadMangementSystem, updateLeadMangmentSystem } from "../../../../services/vendor/coaches/endpointApi";
 
 function LeadManagement() {
   const [showModal, setShowModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
 
   const [dateRange, setDateRange] = useState([null, null]);
+  const [filterStatus, setFilterStatus] = useState(null);
+const [filterSubStatus, setFilterSubStatus] = useState(null);
+
   const [startDate, endDate] = dateRange;
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      name: "Sahil Khan",
-      contact: "9284578661",
-      message: "Hey! I would like to know more details",
-      date: "20-06-2025",
-      status: "Active",
-      remark: "Connect",
-    },
-    {
-      id: 2,
-      name: "Sahil Khan",
-      contact: "9284578661",
-      message: "Hey! I would like to know more details",
-      date: "20-06-2025",
-      status: "New",
-      remark: "Pending",
-    },
-    {
-      id: 3,
-      name: "Sahil Khan",
-      contact: "9284578661",
-      message: "Hey! I would like to know more details",
-      date: "20-06-2025",
-      status: "Converted",
-      remark: "Follow Up",
-    },
-    {
-      id: 4,
-      name: "Sahil Khan",
-      contact: "9284578661",
-      message: "Hey! I would like to know more details",
-      date: "20-06-2025",
-      status: "Inactive",
-      remark: "Closed",
-    },
-  ]);
+   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const STATUS_MAP = {
+  1: "New",
+  2: "Active",
+  3: "Converted",
+  4: "Inactive",
+  5: "Closed"
+};
+
+const STATUS_REVERSE_MAP = {
+  New: 1,
+  Active: 2,
+  Converted: 3,
+  Inactive: 4,
+  Closed: 5
+};
+
+
+const SUB_STATUS_MAP = {
+  0: "None",
+  1: "Connect",
+  2: "Pending",
+  3: "Follow Up",
+  4: "Closed"
+};
+
+
+
+
+ const fetchLeads = async (filters = {}) => {
+  try {
+    setLoading(true);
+
+    let payload = {};
+
+    if (filters.status || filterStatus) {
+      payload.status = filters.status ?? filterStatus;
+    }
+
+    if (filters.subStatus || filterSubStatus) {
+      payload.subStatus = filters.subStatus ?? filterSubStatus;
+    }
+
+    if (filters.startDate || startDate) {
+      payload.startDate =
+        filters.startDate ??
+        (startDate ? startDate.toISOString().split("T")[0] : null);
+    }
+
+    if (filters.endDate || endDate) {
+      payload.endDate =
+        filters.endDate ??
+        (endDate ? endDate.toISOString().split("T")[0] : null);
+    }
+
+    console.log("Final API Payload:", payload);
+
+    const response = await getLeadMangementSystem(
+      Object.keys(payload).length > 0 ? payload : undefined
+    );
+
+    if (response && response.result) {
+      const formatted = response.result.map((item) => ({
+  ...item,
+  status: Number(item.status) || 1,
+  remark: Number(item.sub_status) || 0
+}));
+
+
+      setData(formatted);
+    } else {
+      setData([]);
+    }
+  } catch (err) {
+    console.log("Lead API Error:", err);
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  fetchLeads();
+}, []);
+
+const updateLeadRow = (index, newStatus, newSubStatus) => {
+  const updated = [...data];
+
+  updated[index] = {
+    ...updated[index],
+    status: Number(newStatus),
+    remark: Number(newSubStatus)
+  };
+
+  setData(updated);
+
+  updateLeadStatus(
+    updated[index].id,
+    updated[index].status,
+    updated[index].remark
+  );
+};
+
+
 
   const openModal = (lead) => {
     setSelectedLead(lead);
@@ -69,17 +143,63 @@ function LeadManagement() {
 
   const closeModal = () => setShowModal(false);
 
-  const handleStatusChange = (index, value) => {
-    const updated = [...data];
-    updated[index].status = value;
-    setData(updated);
-  };
+const handleStatusChange = (index, value) => {
+  const statusValue = Number(value);
 
-  const handleSubStatusChange = (index, value) => {
-    const updated = [...data];
-    updated[index].remark = value;
-    setData(updated);
-  };
+  updateLeadRow(
+    index,
+    statusValue,
+    data[index].remark   // existing subStatus
+  );
+};
+
+
+const handleFilterStatus = (value) => {
+  setFilterStatus(value);
+
+  fetchLeads({
+    status: value,
+    subStatus: filterSubStatus,
+    startDate: startDate,
+    endDate: endDate,
+  });
+};
+
+
+const handleFilterSubStatus = (value) => {
+  setFilterSubStatus(value);
+
+  fetchLeads({
+    status: filterStatus,
+    subStatus: value,
+    startDate: startDate,
+    endDate: endDate,
+  });
+};
+
+const handleDateChange = (update) => {
+  setDateRange(update);
+
+  const [start, end] = update;
+
+  fetchLeads({
+    status: filterStatus,
+    subStatus: filterSubStatus,
+    startDate: start ? start.toISOString().split("T")[0] : null,
+    endDate: end ? end.toISOString().split("T")[0] : null,
+  });
+};
+
+
+ const handleSubStatusChange = (index, value) => {
+  const subStatusValue = Number(value);
+
+  updateLeadRow(
+    index,
+    data[index].status,   // existing status
+    subStatusValue
+  );
+};
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -98,6 +218,28 @@ function LeadManagement() {
     }
   };
 
+const updateLeadStatus = async (leadId, status, subStatus) => {
+  try {
+    const payload = {
+      QueryId: Number(leadId),
+      status: Number(status) || 0,
+      subStatus: Number(subStatus) || 0
+    };
+
+    console.log("Final Update Payload:", payload);
+
+    await updateLeadMangmentSystem(payload);
+
+    alert("Status Updated Successfully");
+
+  } catch (err) {
+    console.log("Update API Error:", err);
+    alert("Failed to update status");
+  }
+};
+
+
+
   return (
     <section className="lead-section">
       <Container className="container_wrapper">
@@ -111,13 +253,32 @@ function LeadManagement() {
                 Status
               </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Dropdown.Item>All</Dropdown.Item>
-                <Dropdown.Item>Active</Dropdown.Item>
-                <Dropdown.Item>New</Dropdown.Item>
-                <Dropdown.Item>Converted</Dropdown.Item>
-                <Dropdown.Item>Inactive</Dropdown.Item>
-              </Dropdown.Menu>
+           <Dropdown.Menu>
+  <Dropdown.Item onClick={() => handleFilterStatus(null)}>
+    All
+  </Dropdown.Item>
+
+  <Dropdown.Item onClick={() => handleFilterStatus(1)}>
+    New
+  </Dropdown.Item>
+
+  <Dropdown.Item onClick={() => handleFilterStatus(2)}>
+    Active
+  </Dropdown.Item>
+
+  <Dropdown.Item onClick={() => handleFilterStatus(3)}>
+    Converted
+  </Dropdown.Item>
+
+  <Dropdown.Item onClick={() => handleFilterStatus(4)}>
+    Inactive
+  </Dropdown.Item>
+
+  <Dropdown.Item onClick={() => handleFilterStatus(5)}>
+    Closed
+  </Dropdown.Item>
+</Dropdown.Menu>
+
             </Dropdown>
           </div>
 
@@ -128,11 +289,21 @@ function LeadManagement() {
                 Sub-Status
               </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Dropdown.Item>Sub Status 1</Dropdown.Item>
-                <Dropdown.Item>Sub Status 2</Dropdown.Item>
-                <Dropdown.Item>Sub Status 3</Dropdown.Item>
-              </Dropdown.Menu>
+           <Dropdown.Menu>
+  <Dropdown.Item onClick={() => handleFilterSubStatus(null)}>
+    All
+  </Dropdown.Item>
+
+  {Object.entries(SUB_STATUS_MAP).map(([key, value]) => (
+    <Dropdown.Item
+      key={key}
+      onClick={() => handleFilterSubStatus(Number(key))}
+    >
+      {value}
+    </Dropdown.Item>
+  ))}
+</Dropdown.Menu>
+
             </Dropdown>
           </div>
 
@@ -141,7 +312,7 @@ function LeadManagement() {
               selectsRange={true}
               startDate={startDate}
               endDate={endDate}
-              onChange={(update) => setDateRange(update)}
+onChange={handleDateChange}
               isClearable={true}
               placeholderText="Select Date Range"
               customInput={
@@ -155,7 +326,17 @@ function LeadManagement() {
             />
           </div>
         </div>
-
+{loading ? (
+  <div className="text-center my-5">
+    <Spinner animation="border" variant="primary" />
+    <p className="mt-2">Loading leads...</p>
+  </div>
+) : error ? (
+  <div className="text-center text-danger my-5">
+    Failed to load data
+  </div>
+) : (
+  <>
         {/* TABLE */}
         <Table bordered responsive className="align-middle coach_leads_table border-none">
           <thead>
@@ -172,40 +353,44 @@ function LeadManagement() {
             {data.map((row, i) => (
               <tr key={i}>
                 <td>
-                  {row.name}
+                  {row.full_name}
                   <br />
-                  <small>{row.contact}</small>
+                  <small>{row.mobile_number}</small>
                 </td>
 
-                <td>{row.date}</td>
+                <td>{row.quer_created_on}</td>
 
                 <td style={{width: "50px"}}>
-                  <Form.Select
-                    
-                    size="sm"
-                    value={row.status}
-                    className={getStatusClass(row.status)}
-                    onChange={(e) => handleStatusChange(i, e.target.value)}
-                  >
-                    <option value="Active">Active</option>
-                    <option value="New">New</option>
-                    <option value="Converted">Converted</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Closed">Closed</option>
-                  </Form.Select>
+           <Form.Select
+  size="sm"
+  value={row.status}
+  className={getStatusClass(STATUS_MAP[row.status])}
+  onChange={(e) => handleStatusChange(i, e.target.value)}
+>
+  {Object.entries(STATUS_MAP).map(([key, value]) => (
+    <option key={key} value={key}>
+      {value}
+    </option>
+  ))}
+</Form.Select>
+
+
                 </td>
 
                 <td>
-                  <Form.Select
-                    size="sm"
-                    value={row.remark}
-                    onChange={(e) => handleSubStatusChange(i, e.target.value)}
-                  >
-                    <option value="Connect">Connect</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Follow Up">Follow Up</option>
-                    <option value="Closed">Closed</option>
-                  </Form.Select>
+           <Form.Select
+  size="sm"
+  value={row.remark}
+  onChange={(e) => handleSubStatusChange(i, e.target.value)}
+>
+  {Object.entries(SUB_STATUS_MAP).map(([key, value]) => (
+    <option key={key} value={key}>
+      {value}
+    </option>
+  ))}
+</Form.Select>
+
+
                 </td>
 
                 {/* ⭐ MESSAGE WITH TEXT LIMIT */}
@@ -221,6 +406,8 @@ function LeadManagement() {
             ))}
           </tbody>
         </Table>
+          </>
+)}
 
         {/* PAGINATION */}
         <Row className="mt-3 align-items-center">

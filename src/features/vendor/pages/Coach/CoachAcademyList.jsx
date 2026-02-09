@@ -24,6 +24,19 @@ const handleDelete = (id) => {
   });
 };
 
+const getActiveDays = (item) => {
+  const days = [];
+
+  if (item.monday) days.push("Mon");
+  if (item.tuesday) days.push("Tue");
+  if (item.wednesday) days.push("Wed");
+  if (item.thursday) days.push("Thu");
+  if (item.friday) days.push("Fri");
+  if (item.saturday) days.push("Sat");
+  if (item.sunday) days.push("Sun");
+
+  return days.length ? days.join(", ") : "No Active Days";
+};
 
 
   const { data, isLoading, isError } = useGetCoaches();
@@ -52,14 +65,20 @@ const totalPages = Math.ceil(coachList.length / itemsPerPage);
         <Container className="container_wrapper">
           <div className="d-flex justify-between align-items-center ">
             <h5 className="my-4 sub_title">Coaches/Academy</h5>
+<Link
+  to="/vendor/coach/coaches-academy"
+  className={`btn btn-primary d-flex align-items-center gap-2 text-white ${
+    coachList.length >= 1 ? "disabled" : ""
+  }`}
+  style={{
+    pointerEvents: coachList.length >= 1 ? "none" : "auto",
+    opacity: coachList.length >= 1 ? 0.6 : 1,
+  }}
+>
+  <i className="bi bi-plus-lg"></i>
+  Add Services
+</Link>
 
-            <Link
-              to="/vendor/coach/coaches-academy"
-              className="btn btn-primary d-flex align-items-center gap-2 text-white"
-            >
-              <i className="bi bi-plus-lg"></i>
-              Add Services
-            </Link>
           </div>
 
           <Table
@@ -83,79 +102,72 @@ const totalPages = Math.ceil(coachList.length / itemsPerPage);
               </tr>
             </thead>
 
-            <tbody>
-              {currentData.map((item, index) => (
-                <tr key={index} className="bg-white">
-                  {/* USER NAME + ID */}
-                  <td>
-                    {item.name} <br />
-                    <small className="text-secondary">
-                      #{item.user_id}
-                    </small>
-                  </td>
+        <tbody>
+  {currentData.map((item, index) => (
+    <tr key={index} className="bg-white">
 
-                  {/* CREATED DATE */}
-                  <td>
-                    {new Date(item.created_at).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </td>
+      <td>
+        {item.full_name} <br />
+        <small className="text-secondary">
+          #{item.user_id}
+        </small>
+      </td>
 
-                  {/* TYPE */}
-                  <td>{item.type === 1 ? "Coach" : "Academy"}</td>
+      <td>
+        {new Date(item.created_at).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}
+      </td>
 
-                  {/* SERVICES (STATIC) */}
-                  <td>Football</td>
+      <td>{item.type === 1 ? "Coach" : "Academy"}</td>
 
-                  {/* ACTIVE DAYS (STATIC) */}
-                  <td>Mon, Wed, Fri</td>
+      {/* SERVICES DYNAMIC */}
+      <td>{item.sports?.join(", ") || "N/A"}</td>
 
-                  {/* LOCATIONS (STATIC) */}
-                  <td>Delhi, Noida</td>
+      {/* ACTIVE DAYS DYNAMIC */}
+      <td>{getActiveDays(item)}</td>
 
-                  {/* STATUS */}
-                  <td>
-                    {item.status === 1 ? (
-                      <span className="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2">
-                        Active
-                      </span>
-                    ) : (
-                      <span className="badge bg-danger bg-opacity-10 text-danger fw-bold px-3 py-2">
-                        Inactive
-                      </span>
-                    )}
-                  </td>
+      {/* LOCATIONS DYNAMIC */}
+      <td>
+        {item.service_location?.length
+          ? item.service_location.map(loc => loc.area).join(", ")
+          : "N/A"}
+      </td>
 
-                  {/* ACTION */}
-                  <td>
-                  <Link
-  to={`/vendor/coach/coaches-academy?id=${item.id}`}
-  className="btn btn-sm btn-light"
->
-  <i className="bi bi-pencil-square"></i>
-</Link>
+      <td>
+        {item.status === 1 ? (
+          <span className="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2">
+            Active
+          </span>
+        ) : (
+          <span className="badge bg-danger bg-opacity-10 text-danger fw-bold px-3 py-2">
+            Inactive
+          </span>
+        )}
+      </td>
 
-  <button
-  style={{marginLeft:"5%"}}
-    className="btn btn-sm btn-danger"
-    onClick={() => handleDelete(item.id)}
-  >
-    <i className="bi bi-trash"></i>
-  </button>
-                  </td>
-                </tr>
-              ))}
+      <td>
+        <Link
+          to={`/vendor/coach/coaches-academy?id=${item.id}`}
+          className="btn btn-sm btn-light"
+        >
+          <i className="bi bi-pencil-square"></i>
+        </Link>
 
-              {coachList.length === 0 && (
-                <tr>
-                  <td colSpan="8" className="text-center py-4">
-                    No data found
-                  </td>
-                </tr>
-              )}
-            </tbody>
+        <button
+          style={{ marginLeft: "5%" }}
+          className="btn btn-sm btn-danger"
+          onClick={() => handleDelete(item.id)}
+        >
+          <i className="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </Table>
           {coachList.length > itemsPerPage && (
   <div className="d-flex justify-content-end mt-3">

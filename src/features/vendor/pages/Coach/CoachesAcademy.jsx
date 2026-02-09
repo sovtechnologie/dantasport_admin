@@ -34,8 +34,10 @@ const isEditMode = !!editId;
 
 const { data: editData } = useGetCoachById(editId);
 
-const { mutate: updateCoach } = useUpdateCoachesAndAcademy();
-
+const { 
+  mutate: updateCoach, 
+  isPending: isUpdating 
+} = useUpdateCoachesAndAcademy();
 
   const navigate = useNavigate();
 
@@ -75,8 +77,10 @@ const { mutate: updateCoach } = useUpdateCoachesAndAcademy();
   const [errors, setErrors] = useState({});
 
   // === HOOK ===
-  const { mutate: createCoach, isLoading } = useCreateCoachesAndAcademy();
-
+const { 
+  mutate: createCoach, 
+  isPending: isCreating 
+} = useCreateCoachesAndAcademy();
   // === LOCATION HANDLERS ===
   const handleLocationChange = (index, key, value) => {
     const updated = [...locations];
@@ -393,7 +397,7 @@ if (data.sports) {
           <Row className="my-4">
             <Col className="col-6">
               <div className="mb-3">
-                <label className="form-label">Coaches Name*</label>
+                <label className="form-label">Name*</label>
                 <input
                   type="text"
                   className="form-control"
@@ -1032,9 +1036,14 @@ if (data.sports) {
           <Row className="d-flex justify-end my-5">
             <Col className='col-5 m-auto'>
               <div className="save_btn">
-                <button type="button" onClick={handleSave} disabled={isLoading}>
-                  {isLoading ? "Saving..." : "Save"}
-                </button>
+              <button
+  type="primary"
+  onClick={handleSave}
+  disabled={isCreating || isUpdating}
+>
+  {isCreating || isUpdating ? "Saving..." : "Save"}
+</button>
+
               </div>
             </Col>
           </Row>

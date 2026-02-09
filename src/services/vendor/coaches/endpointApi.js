@@ -43,3 +43,31 @@ export const updateCoachesAndAcademy = async (payload) => {
     throw error;
   }
 };
+
+export const getLeadMangementSystem = async (payload) => {
+  try {
+    const response = await api.post(
+      "vendor/coaches/leadMangementSystem",
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching lead management system data:", error);
+    throw error;
+  }
+};
+
+
+
+export const updateLeadMangmentSystem = async (payload) => {
+  try {
+    const response = await api.put(
+      "vendor/coaches/updateLeadMangmentSystem",
+      payload
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching lead management system data:", error);
+    throw error;
+  }
+};

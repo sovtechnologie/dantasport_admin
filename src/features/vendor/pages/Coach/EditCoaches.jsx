@@ -1,44 +1,63 @@
 import "../../styelsheets/Manage/addMember.css";
 import { Button, Form, Upload, Select, Input, message } from "antd";
 import { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { PlusOutlined, UploadOutlined, UserOutlined, TrophyOutlined, ArrowLeftOutlined } from "@ant-design/icons";
-import { useFetchGymList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
-import { addGymCoach } from "../../../../services/vendor/gym/endpointApi";
-import { useGetCoaches } from "../../../../hooks/vendor/couches/useGetCoaches";
+import { useNavigate, useLocation } from "react-router-dom";
+import { PlusOutlined, UserOutlined, TrophyOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import { updateGymCoach } from "../../../../services/vendor/gym/endpointApi";
 
 const { Option } = Select;
 
-export default function AddCoach() {
+export default function EditCoaches() {
     const [form] = Form.useForm();
     const navigate = useNavigate();
-    const id = useSelector((state) => state.auth.user.id);
-    const [selectedGymId, setSelectedGymId] = useState(null);
+    const location = useLocation();
     const [fileList, setFileList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [coachData, setCoachData] = useState(null);
+    
+    // Get coach data from location state or fallback to mock data
+    const coachId = location.state?.coachId || new URLSearchParams(location.search).get('id');
 
-    // Fetch gym list
-    const { data: gymList, loading: gymLoading, error: gymError } = useGetCoaches();
-
-    // Set default gym when gym list loads
-  useEffect(() => {
-    if (gymList?.length > 0) {
-        setSelectedGymId(gymList[0].id);
-
-        form.setFieldsValue({
-            selectGym: gymList[0].id
-        });
-    }
-}, [gymList, form]);
-
-
-    // Handle errors
+    // Set form values when coach data is available
     useEffect(() => {
-        if (gymError) {
-            message.error("Failed to load gym list");
+        if (coachData) {
+            form.setFieldsValue({
+                coacheName: coachData.coaches_name,
+                coacheType: coachData.coaches_type,
+            });
+            
+            // Set file list if coach image exists
+            if (coachData.coaches_image && coachData.coaches_image !== 'coachimage') {
+                setFileList([{
+                    uid: '-1',
+                    name: 'current-coach.jpg',
+                    status: 'done',
+                    url: coachData.coaches_image,
+                }]);
+            } else {
+                setFileList([]);
+            }
         }
-    }, [gymError]);
+    }, [coachData, form]);
+
+    // Get coach data from location state or use mock data as fallback
+    useEffect(() => {
+        if (location.state?.coachData) {
+            // Use data passed from the list
+            setCoachData(location.state.coachData);
+        } else if (coachId) {
+            // Fallback to mock data if no state data
+            const mockCoachData = {
+                id: coachId,
+                coaches_name: "John Doe",
+                coaches_type: "HEAD",
+                coaches_image: "https://example.com/coach.jpg",
+                status: 1,
+                created_at: "2025-01-01T00:00:00.000Z"
+            };
+            setCoachData(mockCoachData);
+        }
+    }, [location.state, coachId]);
 
     const onFinish = useCallback(async (values) => {
         try {
@@ -47,10 +66,9 @@ export default function AddCoach() {
 
             // Create FormData for file upload
             const formData = new FormData();
-            formData.append('gymId', selectedGymId);
+            formData.append('coachesId', coachId);
             formData.append('coacheName', values.coacheName);
             formData.append('coacheType', values.coacheType);
-            formData.append('type', 'trainer');
             
             // Add image file if uploaded
             if (fileList.length > 0 && fileList[0].originFileObj) {
@@ -58,46 +76,45 @@ export default function AddCoach() {
             }
 
             console.log('FormData payload:', {
-                gymId: selectedGymId,
+                coachesId: coachId,
                 coacheName: values.coacheName,
                 coacheType: values.coacheType,
-                type: 'gym',
                 image: fileList.length > 0 ? fileList[0].name : 'No file'
             });
 
             // Call API
-            const response = await addGymCoach(formData);
+            const response = await updateGymCoach(formData);
             console.log('API Response:', response);
 
             if (response.status === 200 || response.status === 201) {
-                message.success('Trainer added successfully!');
+                message.success('Gym coach updated successfully!');
                 form.resetFields();
                 setFileList([]);
                 // Navigate back to coaches list
                 navigate('/vendor/coach/coaches');
             } else {
-                message.error(response.message || 'Failed to add coach');
+                message.error(response.message || 'Failed to update trainer');
             }
         } catch (error) {
-            console.error('Error adding  Trainer:', error);
-            message.error(error.response?.data?.message || 'Failed to add  Trainer. Please try again.');
+            console.error('Error updating gym coach:', error);
+            message.error(error.response?.data?.message || 'Failed to update trainer. Please try again.');
         } finally {
             setLoading(false);
         }
-    }, [selectedGymId, fileList, navigate]);
+    }, [coachId, fileList, navigate]);
 
     const handleFileChange = useCallback(({ fileList: newFileList }) => {
         setFileList(newFileList);
         
         // Update form field value for validation
         if (newFileList.length > 0 && newFileList[0].originFileObj) {
-            form.setFieldValue('Trainer Image', newFileList[0].originFileObj);
+            form.setFieldValue('coacheImage', newFileList[0].originFileObj);
         } else {
-            form.setFieldValue('TrainerImage', undefined);
+            form.setFieldValue('coacheImage', undefined);
         }
         
         // Trigger validation for the coacheImage field
-        form.validateFields(['TrainerImage']).catch(() => {
+        form.validateFields(['coacheImage']).catch(() => {
             // Ignore validation errors, just trigger the validation
         });
     }, [form]);
@@ -116,14 +133,28 @@ export default function AddCoach() {
         return false; // Prevent auto upload
     };
 
-    const handleGymChange = (gymId) => {
-        setSelectedGymId(gymId);
-        form.setFieldsValue({ selectGym: gymId });
-    };
-
     const handleBack = () => {
         navigate('/vendor/coach/coaches');
     };
+
+    // Delete functionality removed per request
+
+    if (!coachData) {
+        return (
+            <div className="add-member-container">
+                <div style={{ textAlign: 'center', padding: '50px' }}>
+                    <div style={{ marginBottom: '20px' }}>
+                        {coachId ? 'Loading coach data...' : 'No coach data available'}
+                    </div>
+                    {!coachId && (
+                        <Button type="primary" onClick={() => navigate('/vendor/gym/coaches')}>
+                            Back to Coaches List
+                        </Button>
+                    )}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="add-member-container">
@@ -140,7 +171,7 @@ export default function AddCoach() {
                         height: 'auto'
                     }}
                 >
-                    Back to Trainer List
+                    Back to trainer
                 </Button>
             </div>
 
@@ -149,39 +180,27 @@ export default function AddCoach() {
                 onFinish={onFinish}
                 form={form}
                 initialValues={{
-                    selectGym: selectedGymId,
-                    coacheType: 'HEAD'
+                    coacheName: coachData.coaches_name,
+                    coacheType: coachData.coaches_type
                 }}
             >
                 <h2 className="member-title">
-                    ADD Trainer 
+                    EDIT TRAINER {coachData?.id && `#${coachData.id}`}
                 </h2>
                 
                 <div className="member-form-row">
-                 <Form.Item 
-    label="Academy Name"
->
-    <Input
-        value={gymList?.length ? gymList[0].name : "Loading..."}
-        disabled
-    />
-</Form.Item>
-
-                    
                     <Form.Item 
                         name="coacheName" 
                         label="Enter Trainer Name" 
-                        rules={[{ required: true, message: 'Please enter Trainer name' }]}
+                        rules={[{ required: true, message: 'Please enter trainer name' }]}
                     >
-                        <Input placeholder="Enter Trainer full name" />
+                        <Input placeholder="Enter trainer full name" />
                     </Form.Item>
-                </div>
-
-                <div className="member-form-row">
+                    
                     <Form.Item 
                         name="coacheType" 
                         label="Select Trainer Type" 
-                        rules={[{ required: true, message: 'Please select coach type' }]}
+                        rules={[{ required: true, message: 'Please select Trainer type' }]}
                     >
                         <Select placeholder="Select Trainer Type" className="member-Select">
                             <Option value="HEAD">Head Trainer</Option>
@@ -192,42 +211,47 @@ export default function AddCoach() {
                             <Option value="STRENGTH">Strength Trainer</Option>
                         </Select>
                     </Form.Item>
-                    
+                </div>
+
+                <div className="member-form-row">
                     <Form.Item 
                         label="Upload Trainer Photo" 
                         name="coacheImage" 
                         rules={[
                             { 
-                                required: true, 
-                                message: 'Please upload Trainer photo',
+                                required: false, // Make it optional for edit
+                                message: 'Please upload trainer photo',
                                 validator: (_, value) => {
                                     if (fileList.length > 0 && fileList[0].originFileObj) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error('Please upload Trainer photo'));
+                                    return Promise.resolve(); // Allow empty for edit
                                 }
                             }
                         ]}
                     >
-                        <Upload
-                            listType="picture-card"
-                            fileList={fileList}
-                            onChange={handleFileChange}
-                            beforeUpload={beforeUpload}
-                            maxCount={1}
-                            accept="image/*"
-                        >
-                            {fileList.length >= 1 ? null : (
-                                <div>
-                                    <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>Upload Photo</div>
-                                </div>
-                            )}
-                        </Upload>
-                        <div className="upload-hint">
-                            <p>• Upload a clear photo of the Trainer</p>
-                            <p>• Supported formats: JPG, PNG, GIF</p>
-                            <p>• Maximum file size: 10MB</p>
+                        <div>
+                            <Upload
+                                listType="picture-card"
+                                fileList={fileList}
+                                onChange={handleFileChange}
+                                beforeUpload={beforeUpload}
+                                maxCount={1}
+                                accept="image/*"
+                            >
+                                {fileList.length >= 1 ? null : (
+                                    <div>
+                                        <PlusOutlined />
+                                        <div style={{ marginTop: 8 }}>Upload Photo</div>
+                                    </div>
+                                )}
+                            </Upload>
+                            <div className="upload-hint">
+                                <p>• Upload a clear photo of the trainer</p>
+                                <p>• Supported formats: JPG, PNG, GIF</p>
+                                <p>• Maximum file size: 10MB</p>
+                                <p>• Leave empty to keep current photo</p>
+                            </div>
                         </div>
                     </Form.Item>
                 </div>
@@ -237,9 +261,9 @@ export default function AddCoach() {
                         type="primary" 
                         htmlType="submit" 
                         loading={loading}
-                        disabled={!selectedGymId || loading}
+                        disabled={loading}
                     >
-                        {loading ? 'ADDING Trainer...' : 'Add Trainer'}
+                        {loading ? 'UPDATING TRAINER...' : 'UPDATE GYM TRAINER'}
                     </Button>
                 </Form.Item>
             </Form>

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Table, Spin, Tag, message } from "antd";
+import { Table, Spin, Tag, message, Button } from "antd";
 import "../../styelsheets/EventPage/EventList.css";
 import { getEventList } from "../../../../services/vendor/eventRun/endpointApi";
 import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
-
+import {  PlusOutlined, } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
 export default function EventListPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-
+const navigate = useNavigate();
   const {
     data: venueList,
     isLoading: vendorloading,
@@ -40,7 +41,7 @@ export default function EventListPage() {
           name: event.event_title || "N/A",
           type: "-",
           startDate: event.start_date
-            ? new Date(event.start_date).toLocaleDateString()
+            ? new Date(event.created_at).toLocaleDateString()
             : "N/A",
           endDate: event.end_date
             ? new Date(event.end_date).toLocaleDateString()
@@ -92,7 +93,11 @@ export default function EventListPage() {
     <div className="event-list-page">
       <div className="event-header">
         <h2>Event Lists</h2>
-        <div className="calendar-display">oct 11 - oct 30</div>
+      
+        {/* <div className="calendar-display">oct 11 - oct 30</div> */}
+           <Button type="primary" icon={<PlusOutlined  />} onClick={() => navigate('/vendor/runEvent/createEvent')}>
+                        Add Events/Run
+                    </Button>
       </div>
 
       {loading || vendorloading ? (
