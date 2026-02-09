@@ -575,7 +575,7 @@ const AppRoutes = () => {
             <Route path="/vendor/gym/list" element={<VenGymList />} />
             <Route path="/vendor/coach/leadmanagement" element={<LeadManagement/>} />
             <Route path="/vendor/coach/reviews" element={<Reviews/>} />
-             <Route path="vendor/coach/plans" element={<Plans/>} />
+             <Route path="/vendor/coach/plans" element={<Plans/>} />
              <Route path="/vendor/coach/diteplans" element={<DitePlans/>} />
                <Route path="/vendor/coach/coaches-academy" element={<CoachesAcademy/>} />
             <Route path="vendor/coach/coaches-academy-list" element={<CoachAcademyList/>} />

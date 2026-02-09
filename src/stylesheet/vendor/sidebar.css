@@ -109,10 +109,10 @@
     box-shadow: 0 4px 12px rgba(17, 99, 199, 0.3);
 }
 
-.sidebar-menu-item.active::before {
+/* .sidebar-menu-item.active::before {
     width: 4px;
     background: #ffffff;
-}
+} */
 
 /* Menu Icons */
 .sidebar-menu-icon {
@@ -121,14 +121,14 @@
     margin-right: 0.75rem;
     opacity: 0.7;
     transition: all 0.2s ease;
-    color: #6b7280;
+    /* color: #6b7280; */
 }
 
-.sidebar-menu-item:hover .sidebar-menu-icon {
+/* .sidebar-menu-item:hover .sidebar-menu-icon {
     opacity: 1;
     transform: scale(1.1);
     color: #1163C7;
-}
+} */
 
 .sidebar-menu-item.active .sidebar-menu-icon {
     opacity: 1;
@@ -166,7 +166,7 @@
     z-index: -1;
 }
 
-.sidebar-submenu-toggle:hover {
+/* .sidebar-submenu-toggle:hover {
     color: #1163C7;
     background: rgba(17, 99, 199, 0.1);
     transform: translateX(4px);
@@ -174,7 +174,7 @@
 
 .sidebar-submenu-toggle:hover::before {
     width: 4px;
-}
+} */
 
 .sidebar-submenu-toggle.active {
     background: linear-gradient(135deg, #1163C7, #0ea5e9);
@@ -238,7 +238,7 @@
     width: calc(100% - 0.5rem);
 }
 
-.sidebar-submenu-item::before {
+/* .sidebar-submenu-item::before {
     content: '';
     position: absolute;
     left: -1rem;
@@ -249,7 +249,7 @@
     background: #d1d5db;
     border-radius: 50%;
     transition: all 0.2s ease;
-}
+} */
 
 .sidebar-submenu-item:hover {
     color: #1163C7;

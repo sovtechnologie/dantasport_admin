@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { BsStarFill } from "react-icons/bs";
 import "../../pages/Coach/LeadsManagement.css";
+import ExportFilter from "../../../Component/ExportFilter";
 
 function Reviews() {
   const [showModal, setShowModal] = useState(false);
@@ -19,6 +20,7 @@ function Reviews() {
   const data = [
     {
       customer: "Mihir Saha",
+      width: 200,
       training: "Yoga",
       type: "Individual",
       rating: 4.0,
@@ -29,6 +31,7 @@ function Reviews() {
       customer: "Mihir Saha",
       training: "Yoga",
       type: "Academy",
+      width: 200,
       rating: 4.0,
       review:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry...",
@@ -48,29 +51,16 @@ function Reviews() {
     <>
       <section>
         <Container className="container_wrapper py-4">
-          <Row className="d-flex justify-content-between mb-3 align-items-center">
-            <Col></Col>
-            <Col className="d-flex justify-content-end gap-2">
-              <Button  variant="outline-primary" className="top-btn">
-                Export
-              </Button>
-              <Dropdown>
-                <Dropdown.Toggle variant="outline-primary" className="top-btn">
-                  Last Week
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item>This Week</Dropdown.Item>
-                  <Dropdown.Item>Last Month</Dropdown.Item>
-                  <Dropdown.Item>Last 3 Months</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Col>
-          </Row>
+          <ExportFilter />
 
           {/* Table */}
           <Table responsive bordered={false} className="reviews-table">
-            <thead>
-              <tr>
+
+            {/* Column Width Control */}
+
+
+            <thead >
+              <tr >
                 <th>Customer Name</th>
                 <th>Training Name</th>
                 <th>Event Type</th>
@@ -82,18 +72,57 @@ function Reviews() {
             <tbody>
               {data.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.customer}</td>
-                  <td>{item.training}</td>
-                  <td>{item.type}</td>
+                  <td
+                    style={{
+                      width: "200px",
 
-                  <td className="rating-col">
+                      whiteSpace: "normal",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {item.customer}
+                  </td>
+
+                  <td
+                    style={{
+                      width: "200px",
+
+                      whiteSpace: "normal",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {item.training}
+                  </td>
+
+                  <td
+                    style={{
+                      width: "200px",
+
+                      whiteSpace: "normal",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {item.type}
+                  </td>
+
+
+                  <td className="rating-col" style={{
+                    width: "200px",
+                    maxWidth: "120px",
+                    whiteSpace: "normal",
+                    wordBreak: "break-word",
+                  }}>
                     <BsStarFill className="star-icon" /> {item.rating}
                   </td>
 
-                  {/* Clickable Review Text */}
                   <td
                     className="review-text"
-                    style={{ cursor: "pointer" }}
+                    style={{
+                      cursor: "pointer",
+                      whiteSpace: "normal",
+                      wordBreak: "break-word",
+
+                    }}
                     onClick={() => handleOpenModal(item.review)}
                   >
                     {limitText(item.review, 50)}
@@ -102,6 +131,7 @@ function Reviews() {
               ))}
             </tbody>
           </Table>
+
         </Container>
       </section>
 
@@ -111,7 +141,7 @@ function Reviews() {
           <Modal.Title>Full Review</Modal.Title>
         </Modal.Header>
         <Modal.Body>{selectedReview}</Modal.Body>
-        
+
       </Modal>
     </>
   );

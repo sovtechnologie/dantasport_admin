@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../../assets/Siderbarlogo/Danta-sports.png";
 import { LayoutDashboard, Wallet, Ticket, AlertCircle, ClipboardList, IndianRupee, BarChart3, Dumbbell, Bell, CalendarDays, MessageCircleQuestion, LineChart, Store, MapPin, ListChecks, Image, ConciergeBell } from "lucide-react";
@@ -8,6 +8,7 @@ import { LayoutDashboard, Wallet, Ticket, AlertCircle, ClipboardList, IndianRupe
 const AdminSidebar = () => {
   const location = useLocation();
   const pathname = location.pathname;
+  console.log(pathname, "satish");
 
   const [openMenus, setOpenMenus] = useState({
     reports: false,
@@ -18,10 +19,48 @@ const AdminSidebar = () => {
     eventReports: false,
   });
 
+
   const toggleMenu = (key) =>
-    setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
+    // setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
+    setOpenMenus((prev) => {
+      const newState = Object.keys(prev).reduce((acc, curr) => {
+        acc[curr] = false; // close all
+        return acc;
+      }, {});
+
+      newState[key] = !prev[key]; // toggle clicked key
+      return newState;
+    });
 
   const isActive = (path) => pathname === path;
+
+
+  useEffect(() => {
+    const resetMenus = {
+      reports: false,
+      enquires: false,
+      banners: false,
+      services: false,
+      gymReports: false,
+      eventReports: false,
+    };
+
+    if (pathname.includes("ReportsAdmin")) {
+      resetMenus.reports = true;
+    } else if (pathname.includes("GymReports")) {
+      resetMenus.gymReports = true;
+    } else if (pathname.includes("EventReports")) {
+      resetMenus.eventReports = true;
+    } else if (pathname.includes("Enquires")) {
+      resetMenus.enquires = true;
+    } else if (pathname.includes("Services")) {
+      resetMenus.services = true;
+    } else if (pathname.includes("Banners")) {
+      resetMenus.banners = true;
+    }
+
+    setOpenMenus(resetMenus);
+  }, []);
 
   return (
     <aside className="w-64 bg-white  shadow-sm  px-2 py-6 admin_asidebar">
@@ -62,133 +101,8 @@ const AdminSidebar = () => {
         </li>
 
 
-        {/* Reports - Submenu */}
-        <li>
-          <button
-            onClick={() => toggleMenu("reports")}
-            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
-          >
-            <div className="flex items-center gap-3">
-              <LineChart size={18} />
-              Turf Reports
-            </div>
+       
 
-          </button>
-          {openMenus.reports && (
-            <ul className="ml-8 mt-1 space-y-1">
-              <li>
-                <Link
-                  to="/admin/ReportsAdmin/bookings"
-                  className="block px-2 py-1 rounded hover:bg-gray-100 txt"
-                >
-                  Bookings
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/ReportsAdmin/revenue"
-                  className="block px-2 py-1 rounded hover:bg-gray-100"
-                >
-                  Revenue
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/ReportsAdmin/rating"
-                  className="block px-2 py-1 rounded hover:bg-gray-100"
-                >
-                  Rating
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/ReportsAdmin/coupan"
-                  className="block px-2 py-1 rounded hover:bg-gray-100"
-                >
-                  Coupon
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/admin/reports/peakHours"
-                  className="block px-2 py-1 rounded hover:bg-gray-100"
-                >
-                  Turf Peak Hours
-                </Link>
-              </li>
-            </ul>
-          )}
-        </li>
-
-
-        <li>
-          <button
-            onClick={() => toggleMenu("gymReports")}
-            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
-          >
-            <div className="flex items-center gap-3">
-              <Dumbbell size={18} />
-              Gym Reports
-            </div>
-          </button>
-
-          {openMenus.gymReports && (
-            <ul className="ml-8 mt-2 space-y-2">
-              <li>
-                <Link to="/admin/GymReports/gym-booking">Gym Booking</Link>
-              </li>
-              <li>
-                <Link to="/admin/GymReports/gym-revenue">Gym Revenue</Link>
-              </li>
-              <li>
-                <Link to="/admin/GymReports/gym-rating">Gym Rating</Link>
-              </li>
-              <li>
-                <Link to="/admin/GymReports/gym-coupon">Gym Coupon</Link>
-              </li>
-              <li>
-                <Link to="/admin/GymReports/gym-peak-hours">Gym Peak Hours</Link>
-              </li>
-            </ul>
-          )}
-        </li>
-
-        {/* Event Reports */}
-        <li>
-          <button
-            onClick={() => toggleMenu("eventReports")}
-            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
-          >
-            <div className="flex items-center gap-3">
-              <CalendarDays size={18} />
-              Event Reports
-            </div>
-          </button>
-
-          {openMenus.eventReports && (
-            <ul className="ml-8 mt-2 space-y-2">
-              <li>
-                <Link to="/admin/EventReports/event-booking">
-                  Event Booking
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin/EventReports/event-revenue">
-                  Event Revenue
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin/EventReports/event-rating">Event Rating</Link>
-              </li>
-              <li>
-                <Link to="/admin/EventReports/event-coupon">Event Coupon</Link>
-              </li>
-              {/* <li>
-                <Link to="/admin/EventReports/event-peak-hours">Event Peak Hours</Link>
-              </li> */}
-            </ul>
-          )}
-        </li>
         {/* Enquires - Submenu */}
         <li>
           <button
@@ -477,9 +391,6 @@ const AdminSidebar = () => {
           )}
         </li>
 
-
-
-
         {/* Banners - Submenu */}
         <li>
           <button
@@ -513,9 +424,6 @@ const AdminSidebar = () => {
             </ul>
           )}
         </li>
-
-
-
 
         {/* Vendors */}
         <li>
@@ -612,10 +520,137 @@ const AdminSidebar = () => {
               : "hover:bg-gray-100"
               }`}
           >
-            <AlertCircle size={18} />
+            <IndianRupee size={18} />
             Convenience Fees
           </Link>
 
+        </li>
+         {/* Reports - Submenu */}
+        <li>
+          <button
+            onClick={() => toggleMenu("reports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              <LineChart size={18} />
+              Turf Reports
+            </div>
+
+          </button>
+          {openMenus.reports && (
+            <ul className="ml-8 mt-1 space-y-1">
+              <li>
+                <Link
+                  to="/admin/ReportsAdmin/bookings"
+                  className="block px-2 py-1 rounded hover:bg-gray-100 txt"
+                >
+                  Bookings
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/ReportsAdmin/revenue"
+                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                >
+                  Revenue
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/ReportsAdmin/rating"
+                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                >
+                  Rating
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/ReportsAdmin/coupan"
+                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                >
+                  Coupon
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/admin/reports/peakHours"
+                  className="block px-2 py-1 rounded hover:bg-gray-100"
+                >
+                  Turf Peak Hours
+                </Link>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Gym Reports */}
+        <li>
+          <button
+            onClick={() => toggleMenu("gymReports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              <Dumbbell size={18} />
+              Gym Reports
+            </div>
+          </button>
+
+          {openMenus.gymReports && (
+            <ul className="ml-8 mt-2 space-y-2">
+              <li>
+                <Link to="/admin/GymReports/gym-booking">Gym Booking</Link>
+              </li>
+              <li>
+                <Link to="/admin/GymReports/gym-revenue">Gym Revenue</Link>
+              </li>
+              <li>
+                <Link to="/admin/GymReports/gym-rating">Gym Rating</Link>
+              </li>
+              <li>
+                <Link to="/admin/GymReports/gym-coupon">Gym Coupon</Link>
+              </li>
+              <li>
+                <Link to="/admin/GymReports/gym-peak-hours">Gym Peak Hours</Link>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Event Reports */}
+        <li>
+          <button
+            onClick={() => toggleMenu("eventReports")}
+            className="flex w-full items-center justify-between px-4 py-2 rounded-lg hover:bg-gray-100"
+          >
+            <div className="flex items-center gap-3">
+              <CalendarDays size={18} />
+              Event Reports
+            </div>
+          </button>
+
+          {openMenus.eventReports && (
+            <ul className="ml-8 mt-2 space-y-2">
+              <li>
+                <Link to="/admin/EventReports/event-booking">
+                  Event Booking
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/EventReports/event-revenue">
+                  Event Revenue
+                </Link>
+              </li>
+              <li>
+                <Link to="/admin/EventReports/event-rating">Event Rating</Link>
+              </li>
+              <li>
+                <Link to="/admin/EventReports/event-coupon">Event Coupon</Link>
+              </li>
+              {/* <li>
+                <Link to="/admin/EventReports/event-peak-hours">Event Peak Hours</Link>
+              </li> */}
+            </ul>
+          )}
         </li>
 
 

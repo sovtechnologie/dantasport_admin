@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container, Table, Button, Modal, Row, Col } from "react-bootstrap";
 import "../../pages/Coach/LeadsManagement.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { Trash2 } from "lucide-react";
 import CustomDatePicker from "./customDatePicker";
 
 function Plans() {
@@ -10,69 +9,26 @@ function Plans() {
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
+  const [mealType, setMealType] = useState("");
 
   const data = [
     {
       id: "8429813814",
-      name: "satsih sahu",
+      name: "satish sahu",
       date: "06-12-25",
-      dis: "Football (Soccer), Cricket, Basketball, Volleyball, Tennis, ",
     },
     {
       id: "8429813814",
-      name: "satsih sahu",
+      name: "satish sahu",
       date: "06-12-25",
-      dis: "Football (Soccer), Cricket, Basketball, Volleyball",
     },
     {
       id: "8429813814",
-      name: "satsih sahu",
+      name: "satish sahu",
       date: "06-12-25",
-      dis: "Volleyball, Tennis, Table Tennis, Badminton, Softball, Handball",
     },
   ];
 
-  // ------------------ Diet & Activity Forms ------------------
-  const [dietForms, setDietForms] = useState([
-    { client: "", date: "", title: "", desc: "" },
-  ]);
-
-  const [activityForms, setActivityForms] = useState([
-    { client: "", date: "", title: "", desc: "" },
-  ]);
-
-  // Update Diet
-  const updateDiet = (i, field, value) => {
-    const copy = [...dietForms];
-    copy[i][field] = value;
-    setDietForms(copy);
-  };
-
-  // Update Activity
-  const updateActivity = (i, field, value) => {
-    const copy = [...activityForms];
-    copy[i][field] = value;
-    setActivityForms(copy);
-  };
-
-  // Add More
-  const addMoreDiet = () =>
-    setDietForms([...dietForms, { client: "", date: "", title: "", desc: "" }]);
-
-  const addMoreActivity = () =>
-    setActivityForms([
-      ...activityForms,
-      { client: "", date: "", title: "", desc: "" },
-    ]);
-
-  // Delete
-  const deleteDiet = (i) =>
-    setDietForms(dietForms.filter((_, index) => index !== i));
-
-  const deleteActivity = (i) =>
-    setActivityForms(activityForms.filter((_, index) => index !== i));
-
-  // Modal open / close
   const handleOpenAdd = (plan) => {
     setSelectedPlan(plan);
     setShowAddModal(true);
@@ -87,10 +43,6 @@ function Plans() {
   const handleCloseAdd = () => setShowAddModal(false);
   const handleCloseView = () => setShowViewModal(false);
 
-  // Truncate text
-  const truncateText = (text, limit = 50) =>
-    text.length > limit ? text.substring(0, limit) + "..." : text;
-
   return (
     <section>
       <Container className="container_wrapper">
@@ -100,7 +52,7 @@ function Plans() {
             <tr>
               <th>Client Details</th>
               <th>Onboarding Date</th>
-              <th>Services</th>
+              <th></th>
             </tr>
           </thead>
 
@@ -111,29 +63,19 @@ function Plans() {
                   {row.name} <br /> {row.id}
                 </td>
                 <td>{row.date}</td>
-                <td>
-                  <div className="d-flex justify-between align-items-center">
-                    <span
-                      className="wrap-text"
-                      style={{ whiteSpace: "normal", wordBreak: "break-word" }}
-                    >
-                      {truncateText(row.dis, 80)}
-                    </span>
+                <td className="text-end1 d-flex justify-between">
+                  
+                  <button size="sm"
+                    className="w-100 me-3 btn btn-outline-primary"
+                    onClick={() => handleOpenView(row)}>
+                    View Plan
+                  </button>
 
-                    <span className="text-end ms-auto">
-                      <Button
-                        size="sm"
-                        className="me-3"
-                        onClick={() => handleOpenView(row)}
-                      >
-                        View Plan
-                      </Button>
 
-                      <Button size="sm" onClick={() => handleOpenAdd(row)}>
+                  <button size="sm" onClick={() => handleOpenAdd(row)}    className="w-100 btn btn-outline-primary">
                         Add Plan
-                      </Button>
-                    </span>
-                  </div>
+                  </button>
+                 
                 </td>
               </tr>
             ))}
@@ -141,7 +83,13 @@ function Plans() {
         </Table>
 
         {/* --------------------- Add Plan Modal --------------------- */}
-        <Modal show={showAddModal} onHide={handleCloseAdd} centered dialogClassName="modal-lg">
+        <Modal
+          show={showAddModal}
+          onHide={handleCloseAdd}
+          centered
+          dialogClassName="modal-lg"
+
+        >
           <Modal.Body className="p-0">
             <button
               type="button"
@@ -153,24 +101,30 @@ function Plans() {
             {/* Tabs */}
             <ul className="nav nav-tabs px-3 pt-4">
               <li className="nav-item">
-                <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#diet-tab">
+                <button
+                  className="nav-link active"
+                  data-bs-toggle="tab"
+                  data-bs-target="#diet-tab"
+                >
                   Diet
                 </button>
               </li>
 
               <li className="nav-item">
-                <button className="nav-link" data-bs-toggle="tab" data-bs-target="#activity-tab">
+                <button
+                  className="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#activity-tab"
+                >
                   Activity
                 </button>
               </li>
             </ul>
 
             <div
-              className="tab-content p-3"
+              className="tab-content p-4"
               style={{
-                maxHeight: "60vh",
-                minHeight: "50vh",
-                overflowY: "auto",
+                minHeight: "40vh",
               }}
             >
               {/* ------------------- Diet Tab ------------------- */}
@@ -179,71 +133,30 @@ function Plans() {
                 id="diet-tab"
                 style={{ border: "1px solid #ccc" }}
               >
-                <h5 className="mb-3 mt-2"> Add Diet Plans </h5>
-
-                {dietForms.map((item, index) => (
-                  <div key={index} className="position-relative p-3 mb-4 border rounded bg-white">
-                    {dietForms.length > 1 && (
-                      <button
-                        className="btn position-absolute p-0"
-                        style={{ top: "10px", right: "10px" }}
-                        onClick={() => deleteDiet(index)}
-                      >
-                        <Trash2 size={18} color="red" />
-                      </button>
-                    )}
-
-                    {/* Date Picker */}
-                    <Row>
-                      <Col className="col-12 mb-3">
-                        <label>Select Date*</label>
-                        <CustomDatePicker
-                          value={item.date}
-                          onChange={(date) => updateDiet(index, "date", date)}
-                        />
-                      </Col>
-                    </Row>
-
-                    {/* Show title & description ONLY after date selection */}
-                    {item.date && (
-                      <Row className="gy-3">
-                        <Col className="col-12">
-                          <label className="form-label">Enter Title</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={item.title}
-                            onChange={(e) => updateDiet(index, "title", e.target.value)}
-                          />
-                        </Col>
-
-                        <Col className="col-12">
-                          <label className="form-label">Enter Description</label>
-                          <textarea
-                            className="form-control"
-                            rows="4"
-                            value={item.desc}
-                            onChange={(e) => updateDiet(index, "desc", e.target.value)}
-                          ></textarea>
-                        </Col>
-
-                        {/* Only last block gets Save + Add More */}
-                        {index === dietForms.length - 1 && (
-                          <Col className="col-6">
-                            <button className="btn btn-outline-primary me-3">save</button>
-
-                            <button
-                              className="btn btn-outline-primary"
-                              onClick={addMoreDiet}
-                            >
-                              + add more
-                            </button>
-                          </Col>
-                        )}
-                      </Row>
-                    )}
+                <h5 className="mb-3">Diet Plan Information</h5>
+                <div class="row g-3">
+                  <div className="col-6">
+                     <label className="form-label">Selct Date</label>
+                     <input type="date" className="form-control" />
                   </div>
-                ))}
+                  <div className="col-6">
+                    <label className="form-label">Meal type</label>
+
+                   <input type="text" className="form-control" />
+                  </div>
+                  <div className="col-12">
+                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                  </div>
+                </div>
+                <div className="row mt-3 justify-end">
+                  <div className="col-2">
+                    <button className="btn btn-primary w-100">Save</button>
+                  </div>
+                  <div className="col-3">
+                    <button className="btn btn-primary w-100">+ Add More</button>
+                  </div>
+                </div>
               </div>
 
               {/* ------------------- Activity Tab ------------------- */}
@@ -252,77 +165,42 @@ function Plans() {
                 id="activity-tab"
                 style={{ border: "1px solid #ccc" }}
               >
-                <h5 className="mb-3 mt-2">Add Activity  Plans</h5>
-
-                {activityForms.map((item, index) => (
-                  <div key={index} className="position-relative p-3 mb-4 border rounded bg-white">
-                    {activityForms.length > 1 && (
-                      <button
-                        className="btn position-absolute p-0"
-                        style={{ top: "10px", right: "10px" }}
-                        onClick={() => deleteActivity(index)}
-                      >
-                        <Trash2 size={18} color="red" />
-                      </button>
-                    )}
-
-                    {/* Date Picker */}
-                    <Row>
-                      <Col className="col-12 mb-3">
-                        <label>Select Date*</label>
-                        <CustomDatePicker
-                          value={item.date}
-                          onChange={(date) => updateActivity(index, "date", date)}
-                        />
-                      </Col>
-                    </Row>
-
-                    {/* Show only after date selection */}
-                    {item.date && (
-                      <Row className="gy-3">
-                        <Col className="col-12">
-                          <label className="form-label">Enter Title</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={item.title}
-                            onChange={(e) => updateActivity(index, "title", e.target.value)}
-                          />
-                        </Col>
-
-                        <Col className="col-12">
-                          <label className="form-label">Enter Description</label>
-                          <textarea
-                            className="form-control"
-                            rows="4"
-                            value={item.desc}
-                            onChange={(e) => updateActivity(index, "desc", e.target.value)}
-                          ></textarea>
-                        </Col>
-
-                        {index === activityForms.length - 1 && (
-                          <Col className="col-6">
-                            <button className="btn btn-outline-primary me-3">save</button>
-
-                            <button
-                              className="btn btn-outline-primary"
-                              onClick={addMoreActivity}
-                            >
-                              + add more
-                            </button>
-                          </Col>
-                        )}
-                      </Row>
-                    )}
+                <h5 className="mb-3">Activity Plan Information</h5>
+                <div class="row g-3">
+                  <div className="col-6">
+                     <label className="form-label">Selct Date</label>
+                     <input type="date" className="form-control" />
                   </div>
-                ))}
+                  <div className="col-6">
+                    <label className="form-label">Training Type</label>
+
+                   <input type="text" className="form-control" placeholder="Training Type" />
+                  </div>
+                  <div className="col-12">
+                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                  </div>
+                </div>
+                <div className="row mt-3 justify-end">
+                  <div className="col-2">
+                    <button className="btn btn-primary w-100">Save</button>
+                  </div>
+                  <div className="col-3">
+                    <button className="btn btn-primary w-100">+ Add More</button>
+                  </div>
+                </div>
               </div>
             </div>
           </Modal.Body>
         </Modal>
 
         {/* --------------------- View Plan Modal --------------------- */}
-        <Modal show={showViewModal} onHide={handleCloseView} centered dialogClassName="modal-lg">
+        <Modal
+          show={showViewModal}
+          onHide={handleCloseView}
+          centered
+          dialogClassName="modal-lg"
+        >
           <Modal.Body className="p-0">
             <button
               type="button"
@@ -331,16 +209,23 @@ function Plans() {
               onClick={handleCloseView}
             ></button>
 
-            {/* TABS */}
             <ul className="nav nav-tabs px-3 pt-4">
               <li className="nav-item">
-                <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#diet-details">
+                <button
+                  className="nav-link active"
+                  data-bs-toggle="tab"
+                  data-bs-target="#diet-details"
+                >
                   Diet Details
                 </button>
               </li>
 
               <li className="nav-item">
-                <button className="nav-link" data-bs-toggle="tab" data-bs-target="#activity-details">
+                <button
+                  className="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#activity-details"
+                >
                   Activity Details
                 </button>
               </li>
@@ -348,92 +233,30 @@ function Plans() {
 
             <div
               className="tab-content p-3"
-              style={{
-                maxHeight: "40vh",
-                minHeight: "40vh",
-                overflowY: "auto",
-              }}
+              // style={{ maxHeight: "40vh", overflowY: "auto" }}
             >
-              {/* TAB 1 — Diet Details */}
               <div
-                className="tab-pane fade show active container_wrapper"
+                className="tab-pane fade show active container_wrapper shadow-sm"
                 id="diet-details"
-                style={{ border: "1px solid #ccc" }}
+               
               >
-                <h5 className="mb-3 mt-2">View Diet Details</h5>
-
-                <Row>
-                  <Col className="col-12">
-                    <label>Select Date*</label>
-                    <CustomDatePicker value={selectedDate} onChange={setSelectedDate} />
-                  </Col>
-                </Row>
-
-                {selectedDate && (
-                  <Row className="mt-3 details_box">
-                    <Col className="col-12 mb-3">
-                      <div
-                        className="d-flex justify-between align-items-center p-3 rounded-2xl mb-3"
-                        style={{ border: "1px solid #dcdcdc" }}
-                      >
-                        <div className="pe-4">
-                          <h2 style={{ color: "#000", fontSize: "20px" }}>
-                            Lorem Ipsum is simply printing and typesetting industry.
-                          </h2>
-                          <p>
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry.
-                          </p>
-                        </div>
-
-                        <div className="form-check">
-                          <input className="form-check-input" type="checkbox" />
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                )}
+                <label className="text-center">Select Date*</label>
+                <CustomDatePicker
+                  value={selectedDate}
+                  onChange={setSelectedDate}
+                />
               </div>
 
-              {/* TAB 2 — Activity Details */}
               <div
                 className="tab-pane fade container_wrapper"
                 id="activity-details"
-                style={{ border: "1px solid #ccc" }}
+                  
               >
-                <h5 className="mb-3 mt-2"> View Activity Details</h5>
-
-                <Row>
-                  <Col className="col-12">
-                    <label>Select Date*</label>
-                    <CustomDatePicker value={selectedDate} onChange={setSelectedDate} />
-                  </Col>
-                </Row>
-
-                {selectedDate && (
-                  <Row className="mt-3 details_box">
-                    <Col className="col-12 mb-3">
-                      <div
-                        className="d-flex justify-between align-items-center p-3 rounded-2xl mb-3"
-                        style={{ border: "1px solid #dcdcdc" }}
-                      >
-                        <div className="pe-4">
-                          <h2 style={{ color: "#000", fontSize: "20px" }}>
-                            Lorem Ipsum is simply printing and typesetting industry.
-                          </h2>
-                          <p>
-                            Lorem Ipsum is simply dummy text of the printing and
-                            typesetting industry.
-                          </p>
-                        </div>
-
-                        <div className="form-check">
-                          <input className="form-check-input" type="checkbox" />
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                )}
+                <label>Select Date*</label>
+                <CustomDatePicker
+                  value={selectedDate}
+                  onChange={setSelectedDate}
+                />
               </div>
             </div>
           </Modal.Body>

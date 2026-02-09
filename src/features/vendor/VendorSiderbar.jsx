@@ -38,8 +38,17 @@ const VendorSidebar = ({ onSelect }) => {
     eventReport: false,
   });
 
-  const toggleMenu = (key) =>
-    setOpenMenus((prev) => ({ ...prev, [key]: !prev[key] }));
+ const toggleMenu = (key) => {
+  setOpenMenus((prev) => {
+    const newState = Object.keys(prev).reduce((acc, curr) => {
+      acc[curr] = false; // close all
+      return acc;
+    }, {});
+
+    newState[key] = !prev[key]; // open clicked (or close if already open)
+    return newState;
+  });
+};
 
   const isActive = (path) => pathname === path;
 
@@ -690,8 +699,8 @@ const VendorSidebar = ({ onSelect }) => {
               </li> */}
                   <li>
                     <Link
-                      to="vendor/coach/reviews"
-                      className={`sidebar-submenu-item ${isActive("vendor/coach/reviews") ? "active" : ""
+                      to="/vendor/coach/reviews"
+                      className={`sidebar-submenu-item ${isActive("/vendor/coach/reviews") ? "active" : ""
                         }`}
                       onClick={() => onSelect("Reviews")}
                     >
@@ -701,8 +710,8 @@ const VendorSidebar = ({ onSelect }) => {
                   </li>
                   <li>
                     <Link
-                      to="vendor/coach/plans"
-                      className={`sidebar-submenu-item ${isActive("vendor/coach/plans") ? "active" : ""
+                      to="/vendor/coach/plans"
+                      className={`sidebar-submenu-item ${isActive("/vendor/coach/plans") ? "active" : ""
                         }`}
                       onClick={() => onSelect("Plans")}
                     >

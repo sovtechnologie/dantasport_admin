@@ -1,49 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button, Container } from "react-bootstrap";
+import dayjs from "dayjs";
 import "../../pages/Coach/LeadsManagement.css";
 
 const CustomDatePicker = () => {
-  const month = 11; // December
-  const year = 2025;
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  // 🔹 current month state (dynamic)
+  const [currentMonth, setCurrentMonth] = useState(dayjs());
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const today = dayjs().format("YYYY-MM-DD");
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  const today = new Date().toISOString().split("T")[0]; // current date
-  const [selectedDate, setSelectedDate] = useState(null); // initially hidden
+  // 🔹 Generate dates dynamically (keeps your old logic style)
+  const dates = useMemo(() => {
+    const daysInMonth = currentMonth.daysInMonth();
+    const year = currentMonth.year();
+    const month = currentMonth.month();
 
-  const dates = [];
-  for (let i = 1; i <= daysInMonth; i++) {
-    const date = new Date(year, month, i);
-    dates.push({
-      day: i,
-      weekDay: weekDays[date.getDay()],
-      fullDate: date.toISOString().split("T")[0],
-    });
-  }
+    const temp = [];
+    for (let i = 1; i <= daysInMonth; i++) {
+      const date = dayjs(new Date(year, month, i));
+      temp.push({
+        day: i,
+        weekDay: weekDays[date.day()],
+        fullDate: date.format("YYYY-MM-DD"),
+      });
+    }
+    return temp;
+  }, [currentMonth]);
 
   return (
-    <Container className="mt-3">
-      {/* Month Navigation */}
-      <div className="d-flex align-items-center justify-center mb-2">
-        <Button variant="link">&lt;</Button>
-        <strong className="mx-2 fs-4 text-primary">December 2025</strong>
-        <Button variant="link">&gt;</Button>
+    <Container className="mt-3" >
+      {/* 🔹 Month Navigation */}
+      <div className="d-flex align-items-center justify-content-center mb-4">
+        <Button
+          variant=""
+          style={{border: "1px solid #B1B1B1"}}
+          onClick={() => setCurrentMonth(currentMonth.subtract(1, "month"))}
+        >
+          &lt;
+        </Button>
+
+        <strong className="mx-2 fs-4 text-primary">
+          {currentMonth.format("MMMM YYYY")}
+        </strong>
+
+        <Button
+          variant=""
+           style={{border: "1px solid #B1B1B1"}}
+          onClick={() => setCurrentMonth(currentMonth.add(1, "month"))}
+        >
+          &gt;
+        </Button>
       </div>
 
-      {/* Dates */}
+      {/* 🔹 Dates (YOUR UI KEPT SAME) */}
       <div className="d-flex overflow-auto custom-scrollbar pb-2">
         {dates.map((date) => {
           let variant = "outline-secondary";
 
           if (date.fullDate === today) {
-            variant = "primary"; // today = blue
+            variant = "primary"; // today
           }
           if (date.fullDate === selectedDate) {
-            variant = "primary"; // selected date = red
+            variant = "primary"; // selected
           }
 
           return (
             <Button
+              
               key={date.fullDate}
               variant={variant}
               className="flex-shrink-0 mx-1 text-center custm_btns"
@@ -57,7 +82,7 @@ const CustomDatePicker = () => {
         })}
       </div>
 
-      {/* Title Box - shows only when a date is selected */}
+      {/* 🔹 Title Box (UNCHANGED LOGIC) */}
       {selectedDate && (
         <div
           className="title_box mb-3 p-3 rounded-2xl mt-3"
@@ -77,11 +102,11 @@ const CustomDatePicker = () => {
                 Accusantium, aut! Rerum, pariatur.
               </p>
             </div>
+
             <div className="form-check">
               <input
                 className="form-check-input"
                 type="checkbox"
-                value=""
                 id="flexCheckDefault"
               />
             </div>
