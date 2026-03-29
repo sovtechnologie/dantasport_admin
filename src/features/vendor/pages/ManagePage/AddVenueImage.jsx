@@ -2,23 +2,32 @@ import React, { useState, useEffect } from "react";
 import { Modal, Upload, Button, Form, Select, InputNumber, message, Spin } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useAddGalleryImage } from "../../../../hooks/vendor/galleryImage/useAddGalleryImage";
-import { useFetchVendorVenueList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
+import { useFetchVendorAllList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchGalleryImage } from "../../../../hooks/vendor/galleryImage/useFetchGalleryImage";
 import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
-const AddVenueImage = ({ isVisible, onClose, selectedVenueId }) => {
+const AddVenueImage = ({ isVisible, onClose, selectedVenueId, venueType }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [nextDisplayOrder, setNextDisplayOrder] = useState(1);
   
   const user = useSelector((state) => state.auth.user);
-  const { data: venueList, loading: venueLoading } = useFetchVendorVenueList();
-  const { data: galleryList } = useFetchGalleryImage({ venueId: selectedVenueId, type: 1 });
+  const { data: venueList, loading: venueLoading } = useFetchVendorAllList();
+  const { data: galleryList } = useFetchGalleryImage({ venueId: selectedVenueId,  type: venueType,});
   const addImageMutation = useAddGalleryImage();
 
+useEffect(() => {
+  console.log("🟢 AddVenueImage PROPS CHECK", {
+    selectedVenueId,
+    venueType,
+    venueTypeType: typeof venueType
+  });
+}, [selectedVenueId, venueType]);
+
+  
   // Calculate next display order based on existing images
   useEffect(() => {
     if (galleryList?.result && galleryList.result.length > 0) {
@@ -30,6 +39,8 @@ const AddVenueImage = ({ isVisible, onClose, selectedVenueId }) => {
       setNextDisplayOrder(1);
     }
   }, [galleryList, selectedVenueId]);
+
+  
 
   const handleUpload = async () => {
     try {
@@ -66,10 +77,22 @@ const AddVenueImage = ({ isVisible, onClose, selectedVenueId }) => {
         type: fileToUpload.type,
         hasOriginFileObj: !!fileList[0].originFileObj
       });
+
+if (!selectedVenueId || !venueType) {
+  message.error("Please select a valid venue first");
+  return;
+}
+
+console.log("🟡 BEFORE FormData append", {
+  venueId_from_form: values.venueId,
+  venueId_from_prop: selectedVenueId,
+  venueType_from_prop: venueType
+});
+
       
       formData.append("image", fileToUpload, fileToUpload.name);
       formData.append("venueId", values.venueId.toString());
-      formData.append("type", "1");
+formData.append("type", String(venueType));
       formData.append("displayOrder", nextDisplayOrder.toString());
 
       console.log("📤 FormData contents:");

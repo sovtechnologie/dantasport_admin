@@ -294,7 +294,7 @@ export default function GymCoachesPage() {
           >
             {gymList?.result?.map((gym) => (
               <Option key={gym.Id} value={gym.Id}>
-                {gym.gym_name}
+                {gym.gym_name}  {gym.Id}
               </Option>
             ))}
           </Select>
@@ -342,7 +342,7 @@ export default function GymCoachesPage() {
         >
           {gymList?.result?.map((gym) => (
             <Option key={gym.Id} value={gym.Id}>
-              {gym.gym_name}
+              {gym.gym_name}  {gym.Id}
             </Option>
           ))}
         </Select>

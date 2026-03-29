@@ -49,6 +49,7 @@ import UserProfile from "../features/admin/pages/UserProfile.jsx";
 import CoachList from "../features/vendor/pages/Coach/CoachList.jsx";
 import AddCoach from "../features/vendor/pages/Coach/AddCoach.jsx";
 import ConvenienceFree from "../features/admin/pages/ConvenienceFree.jsx";
+import EditCoaches from "../features/vendor/pages/Coach/EditCoaches.jsx";
 // import EventLocation from "../features/vendor/pages/runEvent/EventLocation.jsx";
 // const VendorLayout = lazy(() => import('../layouts/VendorLayout'));
 const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
@@ -554,7 +555,7 @@ const AppRoutes = () => {
               element={<VenManAddDiscount />}
             />
             <Route
-              path="/vendor/manage/editcoupon"
+              path="/vendor/manage/editcoupon/:couponId"
               element={<VenManEditDiscount />}
             />
             <Route
@@ -575,6 +576,8 @@ const AppRoutes = () => {
             <Route path="/vendor/gym/list" element={<VenGymList />} />
             <Route path="/vendor/coach/leadmanagement" element={<LeadManagement/>} />
             <Route path="/vendor/coach/reviews" element={<Reviews/>} />
+                         <Route path="/vendor/coach/editcoaches/:id" element={<EditCoaches />} />
+
              <Route path="vendor/coach/plans" element={<Plans/>} />
              <Route path="/vendor/coach/diteplans" element={<DitePlans/>} />
                <Route path="/vendor/coach/coaches-academy" element={<CoachesAcademy/>} />

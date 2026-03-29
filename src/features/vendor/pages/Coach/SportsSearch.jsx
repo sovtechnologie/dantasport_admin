@@ -1,34 +1,50 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Container } from "react-bootstrap";
+import { useFetchSportsByCategory } from "../../../../hooks/vendor/sports/useFetchSportsByCategory";
 
-const allSports = [
-  "Football (Soccer)",
-  "Cricket",
-  "Basketball",
-  "Volleyball",
-  "Tennis",
-  "Badminton",
-  "Hockey",
-  "Swimming",
-  "Table Tennis",
-  "Baseball",
-  "Rugby",
-  "Boxing",
-  "Wrestling",
-  "Athletics",
-];
+function SportsMultiSelect({ selectedIds = [], setSelectedSportsIds }){
 
-function SportsMultiSelect() {
   const [search, setSearch] = useState("");
   const [selectedSports, setSelectedSports] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const wrapperRef = useRef(null);
 
-  const filteredSports = allSports.filter((item) =>
-    item.toLowerCase().includes(search.toLowerCase())
+  // --- Fetch sports dynamically ---
+  const { data: sportsResponse, isLoading, isError } = useFetchSportsByCategory(); 
+ const sportsList = useMemo(() => {
+  return Array.isArray(sportsResponse?.result)
+    ? sportsResponse.result.map((item) => ({
+        id: item.id,
+        name: item.sports_name,
+        image: item.sports_images,
+      }))
+    : [];
+}, [sportsResponse]);
+
+useEffect(() => {
+  if (!selectedIds.length || !sportsList.length) return;
+
+  setSelectedSports((prev) => {
+    const preSelected = sportsList.filter((sport) =>
+      selectedIds.includes(sport.id)
+    );
+
+    // agar data same hai to state update mat karo
+    if (JSON.stringify(prev) === JSON.stringify(preSelected)) {
+      return prev;
+    }
+
+    return preSelected;
+  });
+}, [selectedIds, sportsList]);
+
+
+  // --- Filter sports based on search safely ---
+  const filteredSports = sportsList.filter(
+    (item) => item.name?.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Close on outside click ONLY
+  // --- Close dropdown on outside click ---
   useEffect(() => {
     function handleClickOutside(e) {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -39,18 +55,25 @@ function SportsMultiSelect() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // --- Select sport ---
   const handleSelect = (sport) => {
-    if (!selectedSports.includes(sport)) {
-      setSelectedSports([...selectedSports, sport]); // Add sport
+    if (!selectedSports.find((s) => s.id === sport.id)) {
+      const updated = [...selectedSports, sport];
+      setSelectedSports(updated);
+
+      // Pass selected IDs to parent (dynamic)
+      setSelectedSportsIds(updated.map((s) => s.id));
     }
 
-    // Clear search but DO NOT close dropdown
     setSearch("");
     setShowDropdown(true);
   };
 
+  // --- Remove selected sport ---
   const removeSport = (sport) => {
-    setSelectedSports(selectedSports.filter((s) => s !== sport));
+    const updated = selectedSports.filter((s) => s.id !== sport.id);
+    setSelectedSports(updated);
+    setSelectedSportsIds(updated.map((s) => s.id));
   };
 
   return (
@@ -60,14 +83,14 @@ function SportsMultiSelect() {
 
         {/* Selected Tags */}
         <div className="mb-2 d-flex flex-wrap">
-          {selectedSports.map((sport, index) => (
+          {selectedSports.map((sport) => (
             <span
-              key={index}
+              key={sport.id}
               className="badge bg-primary me-2 mb-2 p-2"
               style={{ cursor: "pointer" }}
               onClick={() => removeSport(sport)}
             >
-              {sport} ✕
+              {sport.name} ✕
             </span>
           ))}
         </div>
@@ -102,13 +125,14 @@ function SportsMultiSelect() {
           <input
             type="text"
             className="form-control ps-5"
-            placeholder="Search sports…"
+            placeholder={isLoading ? "Loading sports…" : "Search sports…"}
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               setShowDropdown(true);
             }}
             onClick={() => setShowDropdown(true)}
+            disabled={isLoading || isError}
           />
 
           {/* Dropdown */}
@@ -123,17 +147,20 @@ function SportsMultiSelect() {
               }}
             >
               {filteredSports.length === 0 && (
-                <div className="text-muted">No sports found</div>
+                <div className="text-muted">
+                  {isLoading ? "Loading…" : "No sports found"}
+                </div>
               )}
 
-              {filteredSports.map((sport, index) => (
+              {filteredSports.map((sport) => (
                 <div
-                  key={index}
-                  className="p-2 hover-bg"
+                  key={sport.id}
+                  className="p-2 hover-bg d-flex align-items-center"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleSelect(sport)}
                 >
-                  {sport}
+                 
+                  {sport.name}
                 </div>
               ))}
             </div>

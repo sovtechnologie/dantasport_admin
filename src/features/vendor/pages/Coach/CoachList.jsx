@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useFetchGymList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchGymCoaches } from "../../../../hooks/vendor/gym/useFetchGymCoaches";
 import { updateGymCoach } from "../../../../services/vendor/gym/endpointApi";
+import { useGetCoaches } from "../../../../hooks/vendor/couches/useGetCoaches";
 
 const { Option } = Select;
 
@@ -142,20 +143,24 @@ export default function CoachList() {
     const [deletingCoachId, setDeletingCoachId] = useState(null);
 
     // Fetch gym list
-    const { data: gymList, isLoading: gymLoading, isFetching: gymFetching, error: gymError } = useFetchGymList(id);
+    const {  data, isLoading } = useGetCoaches();
+   const gymList = data|| [];
+
+   console.log("gymListgymListgymListgymListgymList",gymList);
 
     // Fetch gym coaches list
     const { data: coachesList, isLoading: coachesLoading, isFetching: coachesFetching, error: coachesError, refetch: refetchCoaches } = useFetchGymCoaches({
         gymId: selectedGymId,
-        type: "coach"
+        type: "trainer"
     });
 
     // Set default gym when gym list loads
-    useEffect(() => {
-        if (gymList?.result?.length && !selectedGymId) {
-            setSelectedGymId(gymList.result[0].Id);
-        }
-    }, [gymList, selectedGymId]);
+   useEffect(() => {
+    if (gymList?.length > 0) {
+        setSelectedGymId(gymList[0].id);
+    }
+}, [gymList]);
+
 
     // Refetch coaches data when component mounts (for refresh after add)
     useEffect(() => {
@@ -176,14 +181,14 @@ export default function CoachList() {
     };
 
     // Handle errors
-    useEffect(() => {
-        if (gymError) {
-            message.error("Failed to load coach list");
-        }
-        if (coachesError) {
-            message.error("Failed to load coach coaches list");
-        }
-    }, [gymError, coachesError]);
+    // useEffect(() => {
+    //     if (gymError) {
+    //         message.error("Failed to load coach list");
+    //     }
+    //     if (coachesError) {
+    //         message.error("Failed to load coach coaches list");
+    //     }
+    // }, [gymError, coachesError]);
 
     // Memoized selected gym for performance
     const selectedGym = useMemo(() => {
@@ -224,7 +229,7 @@ export default function CoachList() {
         // Find the coach data from the current list
         const coachData = gymCoaches.find(coach => coach.id === coachId);
         if (coachData) {
-            navigate(`/vendor/coach/add-coaches/${coachId}`, {
+            navigate(`/vendor/coach/editcoaches/${coachId}`, {
                 state: {
                     coachData: coachData,
                     coachId: coachId
@@ -267,56 +272,48 @@ export default function CoachList() {
     }, [refetchCoaches]);
 
 
-    // Show loading state for entire page when gyms are loading
-    if (gymLoading) {
-        return (
-            <div className="venue-card">
-                <div className="page-loading-container">
-                    <Spin size="large" />
-                    <div className="page-loading-text">Loading coach...</div>
-                </div>
-            </div>
-        );
-    }
+    // // Show loading state for entire page when gyms are loading
+    // if (gymLoading) {
+    //     return (
+    //         <div className="venue-card">
+    //             <div className="page-loading-container">
+    //                 <Spin size="large" />
+    //                 <div className="page-loading-text">Loading coach...</div>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     // Show loading state when no gym is selected, when gym is changing, or when coaches are loading
     if (!selectedGymId || isGymChanging || (selectedGymId && coachesLoading) || (selectedGymId && !coachesList)) {
         return (
             <div className="venue-card">
                 <div className="venue-toolbar">
-                    <Select
-                        placeholder="Select coach"
-                        className="venue-select"
-                        loading={gymLoading}
-                        onChange={handleGymChange}
-                        value={selectedGymId || undefined}
-                        disabled={gymLoading || !gymList?.result?.length}
-                    >
-                        {gymList?.result?.map((gym) => (
-                            <Option key={gym.Id} value={gym.Id}>
-                                {gym.gym_name}
-                            </Option>
-                        ))}
-                    </Select>
+                  <div className="venue-select" style={{ width: "250px" }}>
+    <Typography.Text strong>
+        {gymList?.length ? gymList[0].name : "Loading Academy..."}
+    </Typography.Text>
+</div>
+
                     <Button
                         type="primary"
                         className="add-btn"
                         disabled={!selectedGymId}
                         onClick={handleAddCoach}
                     >
-                        + Add  Coach
+                        + Add  Trainer
                     </Button>
                 </div>
 
                 <h3 className="venue-title">
-                    {selectedGym?.gym_name || "Select a coach to view coaches"}
+                    {selectedGym?.name || "Select a Academy to view Trainers"}
                 </h3>
 
                 <div className="page-loading-container">
                     <Spin size="large" />
                     <div className="page-loading-text">
                         {!selectedGymId
-                            ? "Please select a coach to view coaches"
+                            ? "Please Academy a coach to view Trainers"
                             : isGymChanging
                                 ? "Switching coach..."
                                 : selectedGymId && !coachesList
@@ -332,27 +329,19 @@ export default function CoachList() {
     return (
         <div className="venue-card">
             <div className="venue-toolbar">
-                <Select
-                    placeholder="Select coach"
-                    className="venue-select"
-                    loading={gymLoading}
-                    onChange={handleGymChange}
-                    value={selectedGymId || undefined}
-                    disabled={gymLoading || !gymList?.result?.length}
-                >
-                    {gymList?.result?.map((gym) => (
-                        <Option key={gym.Id} value={gym.Id}>
-                            {gym.gym_name}
-                        </Option>
-                    ))}
-                </Select>
+               <div className="venue-select" style={{ width: "250px" }}>
+    <Typography.Text strong>
+        {gymList?.length ? gymList[0].name : "Loading Academy..."}
+    </Typography.Text>
+</div>
+
                 <Button
                     type="primary"
                     className="add-btn"
                     disabled={!selectedGymId || isProcessing || coachesFetching}
                     onClick={handleAddCoach}
                 >
-                    + Add  Coach
+                    + Add  Trainer
                     {isProcessing && (
                         <span className="processing-indicator"> (Processing...)</span>
                     )}
@@ -360,7 +349,7 @@ export default function CoachList() {
             </div>
 
             <h3 className="venue-title">
-                {selectedGym?.gym_name || "Select a coach to view coaches"}
+                {selectedGym?.gym_name}
                 {coachesFetching && !coachesLoading && (
                     <Spin size="small" style={{ marginLeft: 8 }} />
                 )}
@@ -495,9 +484,9 @@ export default function CoachList() {
                             <div className="empty-state-icon">
                                 <TrophyOutlined />
                             </div>
-                            <h3 className="empty-state-title">No  Coaches Found</h3>
+                            <h3 className="empty-state-title">No  Trainers Found</h3>
                             <p className="empty-state-description">
-                                This coach doesn't have any coaches yet. Click the "ADD  COACH" button to add your first coach.
+                                This Academy doesn't have any Trainers yet. Click the "ADD  Trainer" button to add your first Trainer.
                             </p>
                             <div className="empty-state-info">
                                 <div className="info-item">

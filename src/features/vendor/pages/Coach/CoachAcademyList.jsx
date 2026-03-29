@@ -1,41 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Link } from "react-router-dom";
+import { useGetCoaches } from "../../../../hooks/vendor/couches/useGetCoaches";
+import { useUpdateCoachesAndAcademy } from "../../../../hooks/vendor/couches/useUpdateCoaches";
 
 function CoachAcademyList() {
-  const userData = [
-    {
-      userName: "Rohan Sharma",
-      userId: "USR12345",
-      createdDate: "12-Dec-2025",
-      coachType: "Coach",
-       services: "Football",
-      activeDays: "Mon, Tue, Thu, Sat",
-      locations: "Lucknow, Kanpur",
-      status: "Active",
+  const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 10;
+const { mutate: deleteCoach } = useUpdateCoachesAndAcademy();
+
+const handleDelete = (id) => {
+  const formData = new FormData();
+
+  formData.append("coachesAcaademyId", id);
+  formData.append("status", 0);
+
+  deleteCoach(formData, {
+    onSuccess: () => {
+      message.success("Deleted Successfully!");
     },
-    {
-      userName: "Priya Verma",
-      userId: "USR77890",
-      createdDate: "01-Dec-2025",
-      coachType: "Academy",
-       services: "Football",
-      activeDays: "Mon, Wed, Fri",
-      locations: "Delhi, Noida",
-      status: "Inactive",
-    },
-    {
-      userName: "Amit Gupta",
-      userId: "USR99112",
-      createdDate: "05-Dec-2025",
-      coachType: "Coach",
-      services: "Football",
-      activeDays: "Tue, Thu, Sat, Sun",
-      locations: "Mumbai, Thane",
-      status: "Active",
-    },
-  ];
+    onError: () => message.error("Delete failed!"),
+  });
+};
+
+const getActiveDays = (item) => {
+  const days = [];
+
+  if (item.monday) days.push("Mon");
+  if (item.tuesday) days.push("Tue");
+  if (item.wednesday) days.push("Wed");
+  if (item.thursday) days.push("Thu");
+  if (item.friday) days.push("Fri");
+  if (item.saturday) days.push("Sat");
+  if (item.sunday) days.push("Sun");
+
+  return days.length ? days.join(", ") : "No Active Days";
+};
+
+
+  const { data, isLoading, isError } = useGetCoaches();
+
+  // API result array
+  const coachList = data || [];
+  console.log("API RAW DATA 👉", coachList);
+  // console.log("RESULT 👉", data?.result);
+const indexOfLast = currentPage * itemsPerPage;
+const indexOfFirst = indexOfLast - itemsPerPage;
+
+const currentData = coachList.slice(indexOfFirst, indexOfLast);
+
+const totalPages = Math.ceil(coachList.length / itemsPerPage);
+  if (isLoading) {
+    return <p className="text-center py-5">Loading...</p>;
+  }
+
+  if (isError) {
+    return <p className="text-center py-5 text-danger">Something went wrong</p>;
+  }
 
   return (
     <>
@@ -43,14 +65,20 @@ function CoachAcademyList() {
         <Container className="container_wrapper">
           <div className="d-flex justify-between align-items-center ">
             <h5 className="my-4 sub_title">Coaches/Academy</h5>
+<Link
+  to="/vendor/coach/coaches-academy"
+  className={`btn btn-primary d-flex align-items-center gap-2 text-white ${
+    coachList.length >= 1 ? "disabled" : ""
+  }`}
+  style={{
+    pointerEvents: coachList.length >= 1 ? "none" : "auto",
+    opacity: coachList.length >= 1 ? 0.6 : 1,
+  }}
+>
+  <i className="bi bi-plus-lg"></i>
+  Add Services
+</Link>
 
-            <Link
-              to="/vendor/coach/coaches-academy"
-              className="btn btn-primary d-flex align-items-center gap-2 text-white"
-            >
-              <i className="bi bi-plus-lg"></i>
-              Add Services
-            </Link>
           </div>
 
           <Table
@@ -58,7 +86,6 @@ function CoachAcademyList() {
             responsive
             className="table align-middle table-borderless shadow-sm"
           >
-            {/* LIGHT BLUE HEADER */}
             <thead className="bg-primary bg-opacity-10">
               <tr>
                 <th className="fw-semibold">
@@ -75,41 +102,119 @@ function CoachAcademyList() {
               </tr>
             </thead>
 
-            <tbody>
-              {userData.map((item, index) => (
-                <tr key={index} className="bg-white">
-                  <td>
-                    {item.userName} <br />
-                    <small className="text-secondary">#{item.userId}</small>
-                  </td>
-                  <td>{item.createdDate}</td>
-                  <td>{item.coachType}</td>
-                  <td>{item.services}</td>
-                  <td>{item.activeDays}</td>
-                  <td>{item.locations}</td>
+        <tbody>
+  {currentData.map((item, index) => (
+    <tr key={index} className="bg-white">
 
-                  <td>
-                    {item.status === "Active" ? (
-                      <span className="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2">
-                        Active
-                      </span>
-                    ) : (
-                      <span className="badge bg-danger bg-opacity-10 text-danger fw-bold px-3 py-2">
-                        Inactive
-                      </span>
-                    )}
-                  </td>
+      <td>
+        {item.full_name} <br />
+        <small className="text-secondary">
+          #{item.user_id}
+        </small>
+      </td>
 
-                  {/* EDIT ICON BUTTON */}
-                  <td>
-                    <button className=" px-3 d-flex align-items-center gap-1">
-                      <i className="bi bi-pencil-square"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+      <td>
+        {new Date(item.created_at).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}
+      </td>
+
+      <td>{item.type === 1 ? "Coach" : "Academy"}</td>
+
+      {/* SERVICES DYNAMIC */}
+      <td>{item.sports?.join(", ") || "N/A"}</td>
+
+      {/* ACTIVE DAYS DYNAMIC */}
+      <td>{getActiveDays(item)}</td>
+
+      {/* LOCATIONS DYNAMIC */}
+      <td>
+        {item.service_location?.length
+          ? item.service_location.map(loc => loc.area).join(", ")
+          : "N/A"}
+      </td>
+
+      <td>
+        {item.status === 1 ? (
+          <span className="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2">
+            Active
+          </span>
+        ) : (
+          <span className="badge bg-danger bg-opacity-10 text-danger fw-bold px-3 py-2">
+            Inactive
+          </span>
+        )}
+      </td>
+
+      <td>
+        <Link
+          to={`/vendor/coach/coaches-academy?id=${item.id}`}
+          className="btn btn-sm btn-light"
+        >
+          <i className="bi bi-pencil-square"></i>
+        </Link>
+
+        <button
+          style={{ marginLeft: "5%" }}
+          className="btn btn-sm btn-danger"
+          onClick={() => handleDelete(item.id)}
+        >
+          <i className="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </Table>
+          {coachList.length > itemsPerPage && (
+  <div className="d-flex justify-content-end mt-3">
+    <nav>
+      <ul className="pagination">
+        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+          <button
+            className="page-link"
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+        </li>
+
+        {[...Array(totalPages)].map((_, i) => (
+          <li
+            key={i}
+            className={`page-item ${
+              currentPage === i + 1 ? "active" : ""
+            }`}
+          >
+            <button
+              className="page-link"
+              onClick={() => setCurrentPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          </li>
+        ))}
+
+        <li
+          className={`page-item ${
+            currentPage === totalPages ? "disabled" : ""
+          }`}
+        >
+          <button
+            className="page-link"
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+)}
+
         </Container>
       </section>
     </>

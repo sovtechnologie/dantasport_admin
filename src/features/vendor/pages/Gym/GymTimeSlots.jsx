@@ -2,7 +2,7 @@ import "../../styelsheets/Manage/Member.css";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Card, Button, Select, Pagination, message, Skeleton, Spin, Tooltip, Badge, Table, Tag, Space, Typography, Row, Col, Statistic, Progress, Divider } from "antd";
 import { EditOutlined, ClockCircleOutlined, PlusOutlined, CalendarOutlined, DeleteOutlined, ThunderboltOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useFetchGymList } from "../../../../hooks/vendor/venue/useFetchvendorVenues";
 import { useFetchGymTimeSlots } from "../../../../hooks/vendor/gym/useFetchGymTimeSlots";
@@ -143,12 +143,27 @@ export default function GymTimeSlotsPage() {
     gymId: selectedGymId
   });
 
-  // Set default gym when gym list loads
-  useEffect(() => {
-    if (gymList?.result?.length && !selectedGymId) {
-      setSelectedGymId(gymList.result[0].Id);
-    }
-  }, [gymList, selectedGymId]);
+  const location = useLocation();
+
+useEffect(() => {
+  if (location.state?.gymId) {
+    setSelectedGymId(location.state.gymId);
+    form.setFieldsValue({ selectGym: location.state.gymId });
+  }
+}, [location.state]);
+
+
+
+ useEffect(() => {
+  if (
+    gymList?.result?.length &&
+    !selectedGymId &&
+    !location.state?.gymId
+  ) {
+    setSelectedGymId(gymList.result[0].Id);
+  }
+}, [gymList, selectedGymId, location.state]);
+
 
   // Refetch time slots data when component mounts (for refresh after add)
   useEffect(() => {
@@ -237,24 +252,31 @@ export default function GymTimeSlotsPage() {
       message.warning("Please select a gym first");
       return;
     }
-    navigate('/vendor/gym/addtimeslot');
+   navigate('/vendor/gym/addtimeslot', {
+  state: { gymId: selectedGymId }
+});
+
   }, [selectedGymId, navigate]);
 
   const handleEditTimeSlot = useCallback((timeSlotId) => {
-    // Find the time slot data from the current list
-    const timeSlotData = gymTimeSlots.find(timeSlot => timeSlot.id === timeSlotId);
-    if (timeSlotData) {
-      navigate(`/vendor/gym/edittimeslot/${timeSlotId}`, {
-        state: {
-          timeSlotData: timeSlotData,
-          timeSlotId: timeSlotId
-        }
-      });
-    } else {
-      // Fallback to URL-only navigation if time slot data not found
-      navigate(`/vendor/gym/edittimeslot/${timeSlotId}`);
+  const timeSlotData = gymTimeSlots.find(
+    slot => slot.id === timeSlotId
+  );
+
+  if (!timeSlotData) {
+    message.error("Time slot data not found");
+    return;
+  }
+
+  navigate("/vendor/gym/addtimeslot", {
+    state: {
+      mode: "edit",              // 🔥 ye flag sab decide karega
+      timeSlotData: timeSlotData, // 🔥 poora object
+      gymId: selectedGymId        // 🔥 selected gym
     }
-  }, [navigate, gymTimeSlots]);
+  });
+}, [gymTimeSlots, selectedGymId, navigate]);
+
 
 
   const handleDeleteTimeSlot = useCallback(async (timeSlot) => {
@@ -308,9 +330,10 @@ export default function GymTimeSlotsPage() {
             disabled={gymLoading || !gymList?.result?.length}
           >
             {gymList?.result?.map((gym) => (
-              <Option key={gym.Id} value={gym.Id}>
-                {gym.gym_name}
-              </Option>
+          <Option key={gym.Id} value={gym.Id}>
+  {gym.gym_name} {gym.Id}
+</Option>
+
             ))}
           </Select>
           <Button 
@@ -364,9 +387,10 @@ export default function GymTimeSlotsPage() {
             }}
           >
             {gymList?.result?.map((gym) => (
-              <Option key={gym.Id} value={gym.Id}>
-                {gym.gym_name}
-              </Option>
+            <Option key={gym.Id} value={gym.Id}>
+  {gym.gym_name} {gym.Id}
+</Option>
+
             ))}
           </Select>
         </div>

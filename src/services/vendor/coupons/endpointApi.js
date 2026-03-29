@@ -63,3 +63,17 @@ export const deleteCoupon = async (couponId) => {
         throw error;
     }
 };
+
+// 🔹 Get single coupon by ID
+export const getSingleCoupon = async (couponId) => {
+  try {
+    const response = await api.post(
+      `vendor/coupon/getSingleCoupon`,
+      { couponId }  // ✅ send in POST body
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching single coupon:", error);
+    throw error;
+  }
+};

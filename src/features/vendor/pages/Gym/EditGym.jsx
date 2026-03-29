@@ -6,6 +6,7 @@ import GooglePlacesAutocomplete from '../../../../components/GooglePlacesAutocom
 import { useFetchActiveAmenities, useFetchGymDetails, useUpdateGym } from '../../../../hooks/vendor/venue/useFetchvendorVenues';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { useUpdateGyme } from '../../../../hooks/vendor/gym/useUpdateGyme';
 
 const { TextArea } = Input;
 
@@ -33,7 +34,7 @@ export default function EditGym() {
     const { data: amenitiesData } = useFetchActiveAmenities();
     const amenitiesOptions = amenitiesData?.resutl || [];
     const { data: gymResp, isLoading } = useFetchGymDetails(id);
-    const updateGymMutation = useUpdateGym();
+    const updateGymMutation = useUpdateGyme();
 
     const extractGym = (resp) => {
         console.log('Raw API response:', resp); // Debug log
@@ -429,10 +430,12 @@ export default function EditGym() {
                 formData.append('desktopImage', webFileList[0].originFileObj);
             }
 
-            // Map gym-specific fields to API - exactly same as AddGym
+            // Map gym-specific fields to API - exactly same as AddGy
+
             formData.append('gymName', values.gymName);
             formData.append('aboutGym', values.aboutGym || '');
-            formData.append('onlyWomen', values.onlyWomen === 'yes');
+formData.append('onlyWomen', Number(values.onlyWomen === 'yes'));
+formData.append('isBookable', values.isBookable === 'yes' ? true : false);
             formData.append('lat', values.latitude || '');
             formData.append('lng', values.longitude || '');
             formData.append('fullAddress', values.fullAddress || '');
@@ -449,7 +452,7 @@ export default function EditGym() {
                 formData.append('startTime', values.timing[0].format('HH:mm'));
                 formData.append('endTime', values.timing[1].format('HH:mm'));
             }
-            formData.append('isBookable', values.isBookable === 'yes');
+            // formData.append('isBookable', values.isBookable === 'yes');
 
             // Single fixed pass name with user-provided price - same as AddGym
             const gymPasses = [
@@ -458,9 +461,11 @@ export default function EditGym() {
             formData.append('gymPasses', JSON.stringify(gymPasses));
 
             // Amenities IDs as single array similar to gymPasses - same as AddGym
-            if (values.amenities?.length) {
-                formData.append('amenities', JSON.stringify(values.amenities));
-            }
+           formData.append(
+  'amenities',
+  JSON.stringify(values.amenities || [])
+);
+
 
             const res = await updateGymMutation.mutateAsync({ gymId: id, formData });
             if (res?.status === 200) {

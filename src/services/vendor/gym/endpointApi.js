@@ -9,7 +9,7 @@ export const getBookingGymList = async (payload) => {
     return response?.data;
   } catch (error) {
     console.error("Failed to fetch gym booking list", error);
-    throw error;
+    throw error
   }
 };
 
@@ -23,6 +23,40 @@ export const getGymRevenueGymList = async (payload) => {
     throw error;
   }
 };
+
+export const addGyme = async (formData) => {
+    try {
+        const response = await api.post('vendor/gym/addGym', formData);
+        return response?.data;
+    } catch (error) {
+        console.error("Error adding gym:", error);
+        throw error;
+    }
+}
+
+export const updateGyme = async ({ gymId, formData }) => {
+  try {
+    // IMPORTANT: gymId body / FormData me bhejna hai
+    formData.append("gymId", gymId);
+
+    const response = await api.put(
+      "/vendor/gym/updateGym",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response?.data;
+  } catch (error) {
+    console.error("Error updating gym:", error);
+    throw error;
+  }
+};
+
+
 
 //  Gym Rating List
 export const getGymRatingList = async (payload) => {
